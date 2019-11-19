@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+    app:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/var/www
+        ports:
+            - "8889:80" # web
+        links:
+            - database
+        environment:
+            - "DB_PORT=3306"
+            - "DB_HOST=database"
+        container_name: kryptos-app
+    database:
+        image: mysql:5.5
+        environment:
+            - "MYSQL_ROOT_PASSWORD=root"
+            - "MYSQL_DATABASE=kryptosdb"
+        ports:
+            - "3316:3306"
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+        command: mysqld --sql_mode=""
+        container_name: kryptos-db
