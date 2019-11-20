@@ -1,0 +1,43 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td>&nbsp;</td>
+                {foreach $params.attributes.col_options as $rowTitle}
+                <td>{$rowTitle}</td>
+                {/foreach}
+            </tr>
+            {foreach $params.attributes.row_options as $rowId => $rowTitle}
+            <tr>
+                <td>{$rowTitle}</td>
+                {foreach $params.attributes.col_options as $colId => $rowTitle}
+                    {assign var="radioValue" value=$rowId|cat:'-'|cat:$colId}
+                    <td>
+                        <input type="radio" name="{$attributes.name}[]" class="form-check-input" value="{$radioValue}"
+                            {foreach $attributes.value as $selectedValuesStr}
+                            {assign var="selectedValues" value=explode('-', $selectedValuesStr)}
+                            {if in_array($rowId, $selectedValues) and in_array($colId, $selectedValues)}
+                            checked="checked"
+                            {/if}
+                            {/foreach}
+                        />
+                    </td>
+                {/foreach}
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>
+
+<style>
+    .iradio_square-aero.hover, .iradio_square-aero {
+        display: inline-block !important;
+    }
+</style>

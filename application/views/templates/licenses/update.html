@@ -1,0 +1,100 @@
+{$message}
+<form name="f_data" id="f_data" method="POST" action="/licenses/save">
+    <fieldset>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2">Name:</label>
+            <div class="col-sm-4">
+                <input type="text" name="name" id="name" class="form-control validate[required]" value="{$data['name']}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="description" class="col-sm-2">Description:</label>
+            <div class="col-sm-4">
+                <textarea name="description" id="description" class="form-control validate[required]" rows="10">{$data['description']}</textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2">External ID:</label>
+            <div class="col-sm-4">
+                <input type="text" name="external_id" id="external_id" class="form-control validate[required]" value="{$data['external_id']}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="account_type" class="col-sm-2">User type:</label>
+            <div class="col-sm-4">
+                {foreach from=$userTypes key=typeId item=typeTitle }
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="user_type" id="accountType{$typeId}" value="{$typeId}" {if $data['user_type'] == $typeId}checked="checked"{/if}/>
+                            {$typeTitle}
+                        </label>
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="period" class="col-sm-2">Period:</label>
+            <div class="col-sm-2">
+                <input type="number" name="period" id="period" class="form-control validate[required]" value="{$data['period']}">
+            </div>
+            <div class="col-sm-2">
+                <select name="period_unit" id="period_unit" class="form-control validate[required]">
+                    {foreach from=$periodUnits key=unitId item=unitTitle }
+                    <option value="{$unitId}" {if $data['period_unit'] == $unitId}selected="selected"{/if}>{$unitTitle}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="trial_period" class="col-sm-2">Trial period:</label>
+            <div class="col-sm-2">
+                <input type="number" name="trial_period" id="trial_period" class="form-control validate[required]" value="{$data['trial_period']}">
+            </div>
+            <div class="col-sm-2">
+                <select name="trial_period_unit" id="trial_period_unit" class="form-control validate[required]">
+                    {foreach from=$trialPeriodUnits key=unitId item=unitTitle }
+                        <option value="{$unitId}" {if $data['trial_period_unit'] == $unitId}selected="selected"{/if}>{$unitTitle}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="price" class="col-sm-2">Price:</label>
+            <div class="col-sm-2">
+                <input type="number" name="price" id="price" class="form-control validate[required]" value="{$data['price']}">
+            </div>
+            <div class="col-sm-2">
+                <select name="currency" id="currency" class="form-control validate[required]">
+                    {foreach from=$currencies key=currency item=currencyTitle }
+                    <option value="{$currency}" {if $data['currency'] == $currency}selected="selected"{/if}>{$currencyTitle}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="status" class="col-sm-2">Active:</label>
+            <div class="col-sm-4">
+                <input type="checkbox" name="status" id="status" value="1" {if $data['status']}checked="checked"{/if}/>
+            </div>
+        </div>
+        <!-- Yug code starts -->
+        <div class="form-group row">
+        	<label for="is_trial" class="col-sm-2">Trial Version:</label>
+        	<div class="col-sm-4">
+        		<input type="checkbox" name="is_trial" id="is_trial" value="1" {if $data['is_trial']}checked="checked"{/if}/>
+        	</div>
+        </div>
+        <!-- Yug code end -->
+        <div id="globalMessage"></div>
+        <div class="">
+            <a href="/licenses/"><input type="button" value="Powrót"  class="btn"  ></a>
+            <input type="submit" value="Zapisz"  class="btn btn-info"/>
+            <input type="hidden" name="id" id="id" value="{$data.id}"/>
+        </div>
+    </fieldset>
+</form>
+<style>
+    #f_data .iradio_square-aero {
+        display: inline-block !important;
+    }
+</style>

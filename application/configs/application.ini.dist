@@ -1,0 +1,90 @@
+[production]
+
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 0
+
+includePaths.library = APPLICATION_PATH "/../library"
+includePaths.smarty  = APPLICATION_PATH "/../library/Ext/Smarty/Smarty.class.php"
+
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 1
+
+url = "http://dev-kryptos.com/"
+
+dev.spoof.app.hq_data = 'dev-kryptos.com'
+dev.spoof.app.hq_notifications = 'dev-kryptos.com'
+dev.spoof.app.hq_courses = 'dev-kryptos.com'
+dev.disable_ftp_documents_upload = 1
+dev.spoof.login = 0
+dev.authorization.reload = 0;
+app.type = 'client'
+app.id = 003
+
+[development : production]
+;; Set this option to 1 to see errors
+phpSettings.display_errors = 0
+
+resources.log.stream.writerName = "Stream"
+resources.log.stream.writerParams.stream = APPLICATION_PATH "/../logs/application.log"
+resources.log.stream.writerParams.mode = "a"
+resources.log.stream.filterName = "Priority"
+resources.log.stream.filterParams.priority = 4
+
+[db]
+adapter            = PDO_MYSQL
+
+;; Set "database" for docker
+host               = "localhost"
+
+;; Set "root" "root" for docker
+username           = "test"       
+password           = "test"
+
+dbname             = "kryptosdb"
+profiler.enabled   = true
+profiler.class     = Zend_Db_Profiler_Firebug
+charset            = "utf8"
+
+[smarty]
+compile_dir   = APPLICATION_PATH "/../cache/template_c/"
+cache_dir     = APPLICATION_PATH "/../cache/cache_smarty/"
+template_dir  = APPLICATION_PATH "/views/templates/"
+config_dir    = APPLICATION_PATH "/configs/"
+
+caching        = 0
+cache_lifetime = 1
+
+[view]
+helpers       = APPLICATION_PATH "/views/helpers/"
+
+[session]
+gc_maxlifetime  =   5200
+namespace       =   "user"
+
+[images]
+noimage     =  "/gfx/nouser.jpg"
+thumb       =  "phpthumb/phpThumb.php?src="
+
+[recaptcha]
+publicKey  = "6LcW4roSAAAAAK3Wc1o7Z3Y8Upncuo0vbQdTyJzd"
+privateKey = "6LcW4roSAAAAAPLusYjhkSIFTALQ0cj5zEDyvWZu"
+
+[translation]
+path = APPLICATION_PATH "/../translations/"
+
+[sessiondb]
+name                =   "session"
+primary             =   "id"
+modifiedColumn      =   "modified"
+dataColumn          =   "data"
+lifetimeColumn      =   "lifetime"
+
+[mcrypt]
+
+key = "E4HD9h4DhS23DYfhHemkS3Nf"
+iv = "fYfhHeDm"
+bit_check = 8

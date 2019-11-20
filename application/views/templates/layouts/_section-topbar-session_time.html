@@ -1,0 +1,14 @@
+<style type="text/css">
+	.session-time-out {
+		color: white !important;
+	    vertical-align: middle !important;
+	    text-align: center !important;
+	    line-height: 3.5 !important;
+	}
+</style>
+<div class="session-time-out">
+    <span class="pull-left" class="session-time-out">
+        {'Koniec sesji za'|translate}: <b id="time_session">50:00</b>
+        <script>time_session.innerHTML = getTimeFromLogoutDate()</script>
+    </span>
+</div>

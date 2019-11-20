@@ -1,0 +1,56 @@
+<table cellspacing="0" cellpadding="0" border="0" class="table table-striped table-bordered" id="elements-registry-permission">
+    <thead>
+        <tr>
+            <th width="30%">Rejestry</th>
+            <th>Akcja</th>
+            <th>Dostęp</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        <!-- {foreach from=$registries key=moduleName item=moduleConfig}
+        {foreach from=$moduleConfig.permissions item=configItem}
+        {if !empty($typeRightsPermissions[$configItem.name])}
+
+        <tr {if $configItem.basePermission} class="relative-element" data-relation-base="permission-{$configItem.basePermission|md5}"
+            data-relation-id="1" {/if}>
+            <td>{if $configItem.basePermission} <span class="fa fa-long-arrow-up"></span>
+                {else}{$moduleConfig.label}{/if}</td>
+            <td>{$configItem.label}</td>
+            <td>
+                <input type="hidden" id="permission-{$configItem.name|md5}" name="rightspermissionsExpert[{$configItem.name}]"
+                    class="toggle-relative" value="{if !empty($rightspermissionsExpertExtended[$configItem.name])}1{else}0{/if}">
+                <div class="icheckbox_square-aero js-checkbox" data-target-id="rightspermissionsExpert[{$configItem.name}]"><ins
+                        class="iCheck-helper"></ins></div>
+            </td>
+        </tr>
+        {/if}
+
+        {/foreach}
+        {/foreach}
+ -->
+
+            
+        {foreach from=$registries key=moduleName item=moduleConfig}
+        {foreach from=$moduleConfig.permissions item=configItem}
+        
+        {if !empty($typeRightsPermissions[$configItem.name])}
+            
+        <tr {if $configItem.basePermission} class="relative-element" data-relation-base="permission-{$configItem.basePermission|md5}"
+            data-relation-id="1" {/if}>
+            <td>{if $configItem.basePermission} <span class="fa fa-long-arrow-up"></span>
+                {else}{$moduleConfig.label}{/if}</td>
+            <td>{$configItem.label}</td>
+            <td>
+                <input type="hidden" id="permission-{$configItem.name|md5}" name="rightsPermissions[{$configItem.name}]" class="toggle-relative"
+                    value="{if !empty($rightsPermissionsArray[$configItem.name])}1{else}0{/if}">
+                <div class="icheckbox_square-aero js-checkbox" data-target-id="rightsPermissions[{$configItem.name}]"><ins class="iCheck-helper"></ins></div>
+            </td>
+        </tr>
+        {/if}
+        {/foreach}
+        {/foreach}
+
+    </tbody>
+</table>

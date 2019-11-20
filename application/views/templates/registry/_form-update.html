@@ -1,0 +1,57 @@
+{if $data.id}<input type="hidden" name="id" value="{$data.id}"/>{/if}
+{if $menuId}<input type="hidden" name="menuId" value="{$menuId}"/>{/if}
+
+<div class="form-group row">
+    <label for="title" class="col-sm-2">{'Nazwa'|translate}:</label>
+    <div class="col-sm-9 input-group">
+        <input type="text" name="title" id="title" class="form-control validate[required]" value="{$data.title}">
+        <div class="input-group-btn">
+            <button type="button" id="myEditor_icon" class="btn btn-default" data-iconset="glyphicon" data-search="false" data-arrow-class="btn-success"></button>
+        </div>
+        <input type="hidden" name="icon" class="item-menu" value="glyphicon-">
+    </div>
+
+</div>
+
+<div class="form-group row">
+    <label for="authorize_user_id_typeahead" class="col-sm-2">Autor:</label>
+    <div class="col-sm-9 input-group">
+        <input type="hidden" name="author_id" id="author_id" value="{$data.author_id}"/>
+        <input type="text" id="authorize_user_id_typeahead" class="form-control typeaheadElement validate[required]" data-source-variable="storageUsers" data-target-element="#author_id"/>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label for="authorize_user_id_typeahead" class="col-sm-2">Steps mode:</label>
+    <div class="col-sm-9 input-group">
+    {assign var=allStepModes value=[Application_Model_Registry::STEPS_MODE_WIZARD=>'Wizard', Application_Model_Registry::STEPS_MODE_TABS=>'Tabs']}
+    {foreach from=$allStepModes item=radioTitle key=radioValue}
+        <label class="radio-inline"> <input type="radio" name="steps_mode" value="{$radioValue}" {if $data.steps_mode==$radioValue}checked="checked"{/if}> {$radioTitle} </label>
+    {/foreach}
+    </div>
+</div>
+
+{*{element tag="bs.varchar" attributes=[
+    'name' => 'label_schema',
+    'label' => 'Schemat etykiety',
+    'required' => true,
+    'value' => $data.label_schema
+]}
+
+<div class="alert alert-info">
+    Możesz korzystać z następujących tagów specjalnych:<br>
+    <br>
+    {foreach $data.entities as $entity}
+        {ldelim}{$entity.system_name}{rdelim} - {$entity.title}<br>
+    {/foreach}
+</div>*}
+
+<script type="text/javascript">
+    var storageUsers = objectsStorage.init({$users|json_encode nofilter});
+</script>
+
+<style>
+    .iradio_square-aero.hover, .iradio_square-aero {
+        display: inline-block !important;
+    }
+</style>

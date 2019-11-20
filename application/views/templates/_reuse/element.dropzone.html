@@ -1,0 +1,51 @@
+{assign var="sectionId" value="ta"|set_id}
+<div class="form-group row">
+    <label class="col-sm-4">{$element.label}:</label>
+    <div class="col-sm-12">
+        <input type="hidden" name="{$element.name}_uploaded" class="uploaded-files-input">
+        <div class="row">
+            <div class="col-sm-12 portlets ui-sortable">
+                <!-- Your awesome content goes here -->
+                <div class="widget messages-dropzone">
+                    <div id="attachments-dropzone-{$sectionId}" class="dropzone">
+                        <div class="dz-default dz-message"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+    </div>
+</div>
+
+{literal}
+<script>
+    (function() {
+        var dropzoneId = '#attachments-dropzone-{/literal}{$sectionId}{literal}';
+        documentDropzone = enableDropzoneWidget(dropzoneId, {
+            url: '/upload.php',
+            params: {
+                dirname: 'default'
+            }
+        });
+
+        var row = $(dropzoneId).closest('.form-group'),
+            form = $(dropzoneId).closest('form');
+
+
+
+        form.on('submit', function() {
+            var uploadedFiles = documentDropzone.getAcceptedFiles(),
+                filesData = [];
+
+            $.each(uploadedFiles, function() {
+                filesData.push({
+                    name: this.name,
+                    uploadedUri: this.xhr.response
+                });
+            });
+
+            row.find('.uploaded-files-input').val(JSON.stringify(filesData));
+        });
+    })();
+</script>
+{/literal}

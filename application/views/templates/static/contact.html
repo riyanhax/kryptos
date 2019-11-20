@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <div class="widget">
+            <div class="widget-header">
+                <h2><i class="fa fa-comments"></i> <strong>Kontakt</strong></h2>
+            </div>
+
+            <div class="widget-content">
+                <div class="user-profile-content">
+                    <p>
+                        Od świtu po zachód słońca...<br>
+                        Nasza siedziba w Warszawie czynna jest w zwyczajnych zupełnie godzinach od 8:00 do 15:00..<br>
+                        Dlaczego więc warto do nas przyjść, zadzwonić, czy wysłać e-mail?<br>
+                        Potrafimy bowiem słuchać i chętnie dzielimy się doświadczeniami. Jesteśmy ciekawi ciekawych ludzi. Tak po prostu...
+                    </p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5><strong>Skontaktuj się z nami:</strong></h5>
+                            <address>
+                                <strong>Email</strong><br>
+                                <a href="mailto:info@kryptos72.com">info@kryptos72.com</a><br>
+                            </address>
+                            <address>
+                                <strong>Infolinia</strong><br>
+                                <p>+48 22 60 22 340</p>
+                            </address>
+                            <address>
+                                <strong>Website</strong><br>
+                                <a href="http://kryptos72.com">kryptos72.com</a>
+                            </address>
+                            <address>
+                                <strong>Siedziba firmy</strong><br>
+                                <abbr>
+                                    Kryptos72 Sp. z o.o.<br>
+                                    ul. Domaniewska 37<br>
+                                    02-672 Warszawa<br>
+                                    NIP: 5272812329, REGON: 367702841, KRS: 0000684905
+                                </abbr>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 portlets ui-sortable">
+        <div class="widget">
+            <div id="contact-gmap-1" style="height:400px"></div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 portlets ui-sortable">
+        <div class="widget">
+            <div id="contact-gmap-2" style="height:400px"></div>
+        </div>
+    </div>
+</div>
+
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="/assets/plugins/jquery-gmap3/gmap3.min.js"></script>
+<script>
+    $('#contact-gmap-1').gmap3({
+        marker:{
+            latLng: [49.624920, 20.690312]
+        },
+        map:{
+            options:{
+                zoom: 17,
+                streetViewControl: false
+            }
+        },
+        streetviewpanorama:{
+            options:{
+                container: $('#contact-gmap-2'),
+                opts:{
+                    position: [49.624920, 20.690312],
+                    pov: {
+                        heading: 256,
+                        pitch: 7,
+                        zoom: 0.5
+                    }
+                }
+            }
+        }
+    });
+</script>

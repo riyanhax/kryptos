@@ -1,0 +1,15 @@
+{if $statusValue == 0}
+<span class="label label-warning">Oczekuje</span>
+<!-- <span>Oczekuje</span> -->
+{elseif $statusValue == 1}
+<!-- <span>aktywny</span> -->
+<span class="label label-success">aktywny</span>
+{elseif $statusValue == 2}
+<span class="label" style="background-color: rgb(51, 62, 223);" -->
+  >Zarchiwizowany</span
+>
+<!-- <span>Zarchiwizowany</span> -->
+{elseif $statusValue == 3}
+<span class="label label-danger">Wycofany</span>
+<!-- <span>Wycofany</span> -->
+{/if}

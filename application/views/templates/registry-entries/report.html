@@ -1,0 +1,103 @@
+ 
+{foreach $paginator as $d} 
+    {assign var="sr_no" value=1}
+    {assign var="i" value=1}
+    <htmlpageheader name="MyHeader_[i]">
+        <div style="font-size:12px;margin-top:25px;">
+            <h3 style="margin-left: 10%;">{$title}<br><span style="font-size:10px;">Raport szczegółowy:</span></h3>
+            
+        </div>
+    </htmlpageheader>
+
+    <htmlpagefooter name="MyFooter_[i]">
+        <table style="font-size: 12px;width:100%;border:0;text-align: left;border-collapse: collapse;margin:0px 0;">
+            <tr>
+              <td colspan="4" style="border-bottom:1px solid #333;">Na wszelkie pytania lub wątpliwości związane z interpretacją treści dokumentu odpowiada Inspektor Ochrony Danych Osobowych.</td>
+            </tr>
+            <tr>
+              <td>
+                 <div>Company of employees  S.A</div> 
+                 <div>ul. Krupówki 48</div>
+                 <div>34-550 birma</div>
+              </td>
+              <td>
+                 <div>NIP:	7361588849</div> 
+                 <div>REGON:	499038835</div>
+              </td>
+              <td>
+                 <div>Autor dokumentu: Patryk Makoszewski</div> 
+                 <div>Właściciel dokumentu: Zarząd</div>
+                 <div>Klauzula bezpieczeństwa: tajemnica przedsiębiorstwa</div>
+              </td>
+              <td>
+                 <div><span style="width:49%;">Data utworzenia:</span>	<span style="width:49%;text-align: right;">{$registry.created_at}</span></div> 
+                 <div><span style="width:49%;">Data aktualizacji:</span>	<span style="width:49%;text-align: right;">{$registry.updated_at}</span></div>
+                 <!-- <div><span style="width:49%;">Wersja dokumentu: </span>	<span style="width:49%;text-align: right;">11</span></div> -->
+              </td> 
+            </tr>   
+          </table>
+    </htmlpagefooter>
+
+    <sethtmlpageheader name="MyHeader_[i]" value="on" show-this-page="1"/>
+    <sethtmlpagefooter name="MyFooter_[i]" value="on" />
+    <table style="width: 100%;margin-left: 10%;margin-right: 10%;margin-top: 20px;padding: 10px;" cellpadding="0" cellspacing="0" >
+            <thead>
+                <tr>
+                    <th  style="width: 30%; border-right: 1px solid #000;">DOTYCZY:</th>
+                    {foreach $registry.entities as $entity}
+                        {if $i == 1}   
+                            <th> 
+                                {if $d->entityToString($entity.id) != ''}
+                                    {$d->entityToString($entity.id)} 
+                                {/if}
+                            </th>
+                        {/if}
+                        {assign var="i" value=$i+1}    
+                    {/foreach}
+                </tr>
+                <tr>
+                    <th  style="width: 30%; border-right: 1px solid #000;">ZRODLO:</th>
+                    <th>{$title}</th>
+                </tr>
+                <tr>
+                    <th  style="width: 30%; border-right: 1px solid #000;">METADANE:</th>
+                    <th> Admin utworzył dokument {$date} </th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $registry.entities as $entity}
+                        <tr style="padding: 10px;"> 
+                            <td colspan="2" style="border: none;"><strong>{$sr_no++}.</strong><span style="color: #4472C4;">{$entity.title}</span> 
+                                <span style="color:#F00;">
+                                    {if $d->entityToString($entity.id) != ''}
+                                        {$d->entityToString($entity.id)} <br>
+                                    {else}
+                                    - <br>
+                                    {/if}
+                                </span>
+                            </td>
+                        </tr>
+                {/foreach}      
+            </tbody>
+        </table>
+    {/foreach}
+    <style>
+        table{
+            border: 1px solid #000;
+            border-collapse: collapse;
+        }
+        table th,
+        table td{
+            text-align: left;
+            padding: 5px 10px;
+        } 
+        table th{
+            border-bottom: 1px solid #000; 
+        }
+        @media print{
+            @page  { 
+                size: auto;   /* auto is the initial value */  
+                margin:40px 20px 100px 20px;  
+            } 
+        }
+    </style>

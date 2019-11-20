@@ -1,0 +1,109 @@
+td[class].opensans {font-family: 'Open Sans', Arial, sans-serif !important}
+td[class].raleway {font-family: 'Raleway', Arial, sans-serif !important}
+td[class].lato {font-family: 'Lato', Arial, sans-serif !important}
+td[class].nunito {font-family: 'Nunito', Arial, sans-serif !important}
+td[class].questrial {font-family: 'Questrial', Arial, sans-serif !important}
+
+div, p, a, li, td { -webkit-text-size-adjust:none; }
+*{-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+td{word-break: break-word;}
+a{word-break: break-word; text-decoration: none; color: inherit;}
+
+body .ReadMsgBody
+{width: 100%; background-color: #ffffff;}
+body .ExternalClass
+{width: 100%; background-color: #ffffff;}
+body{width: 100%; height: 100%; background-color: #ffffff; margin:0; padding:0; -webkit-font-smoothing: antialiased;}
+html{ background-color:#ffffff; width: 100%;}
+
+body p {padding: 0!important; margin-top: 0!important; margin-right: 0!important; margin-bottom: 0!important; margin-left: 0!important; }
+body img {user-drag: none; -moz-user-select: none; -webkit-user-drag: none;}
+body a.rotator img {-webkit-transition: all 1s ease-in-out;-moz-transition: all 1s ease-in-out; -o-transition: all 1s ease-in-out; -ms-transition: all 1s ease-in-out; }
+body a.rotator img:hover {-webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -o-transform: rotate(360deg);-ms-transform: rotate(360deg); }
+body .hover:hover {opacity:0.85;filter:alpha(opacity=85);}
+body .jump:hover {opacity:0.75; filter:alpha(opacity=75); padding-top: 10px!important;}
+
+#opacity {filter: alpha(opacity=20); opacity: 0.20;}
+#opacity2 {opacity: 0.90;}
+#opacity3 {opacity: 0.70;}
+
+body .img20 img {width: 20px; height: auto;}
+body .img12 img {width: 12px; height: auto;}
+body .img106 img {width: 106px; height: auto;}
+body .img150 img {width: 150px; height: auto;}
+body .img600 img {width: 600px; height: auto;}
+body .img275 img {width: 275px; height: auto;}
+body .img24 img {width: 24px; height: auto;}
+body .img110 img {width: 110px; height: auto;}
+body .img127 img {width: 127px; height: auto;}
+body .img33 img {width: 33px; height: auto;}
+body .img190 img {width: 190px; height: auto;}
+body .img175 img {width: 175px; height: auto;}
+body .img170 img {width: 170px; height: auto;}
+body .img32 img {width: 32px; height: auto;}
+body .img283 img {width: 282px; height: auto;}
+body .img290 img {width: 290px; height: auto;}
+body .img71 img {width: 71px; height: auto;}
+body .img92 img {width: 92px; height: auto;}
+body .img277 img {width: 277px; height: auto;}
+body .img17 img {width: 17px; height: auto;}
+body .img290 img {width: 290px; height: auto;}
+body .img405 img {width: 100%; height: auto;}
+body .img252 img {width: 252px; height: auto;}
+body .img289 img {width: 289px; height: auto;}
+body .img19 img {width: 19px; height: auto;}
+body .img75 img {width: 75px; height: auto;}
+body .img16 img {width: 16px; height: auto;}
+
+.login-widget .login input, .login-widget .password input {
+    
+     border: 1px solid  !important; 
+}
+@media only screen and (max-width: 640px){
+		body body{width:auto!important;}
+		body table[class=full] {width: 100%!important; clear: both; }
+		body table[class=mobile] {width: 100%!important; padding-left: 30px; padding-right: 30px; clear: both; }
+		body table[class=fullCenter] {width: 100%!important; text-align: center!important; clear: both; }
+		body td[class].fullCenter {width: 100%!important; text-align: center!important; clear: both; }
+		body *[class=erase] {display: none;}
+		body *[class=buttonScale] {float: none!important; text-align: center!important; display: inline-block!important; clear: both;}
+		body .buttonScale2 {float: none!important; text-align: center!important; display: inline-block!important; clear: both;}
+		body *[class=h10] {width: 100%!important; height: 10px!important;}
+		body *[class=h20] {width: 100%!important; height: 20px!important;}
+		body *[class=h30] {width: 100%!important; height: 30px!important;}
+		body *[class=h40] {width: 100%!important; height: 40px!important;}
+		body td[class].h50 {width: 100%!important; height: 50px!important;}
+		body td[class].pad20 {padding-left: 20px!important; padding-right: 20px!important; text-align: center!important; clear: both;}
+		body .img600 img {width: 100%!important;}
+		body .img190 img {width: 100%!important;}
+		body .img252 img {width: 100%!important;}	
+		body table[class=full2] {width: 100%!important; clear: both;}
+		body td[class].fullCenterMob {width: 100%!important; text-align: center!important; clear: both; }
+		body .image405 img {width: 90%!important;}		
+
+@media only screen and (max-width: 479px){ 
+		body body{width:auto!important;}
+		body table[class=full] {width: 100%!important; clear: both; }
+		body table[class=mobile] {width: 100%!important; padding-left: 20px; padding-right: 20px; clear: both; }
+		body table[class=fullCenter] {width: 100%!important; text-align: center!important; clear: both; }
+		body td[class].fullCenter {width: 100%!important; text-align: center!important; clear: both; }
+		body *[class=erase] {display: none;}
+		body *[class=buttonScale] {float: none!important; text-align: center!important; display: inline-block!important; clear: both;}	
+		body .buttonScale2 {width: 100%!important; text-align: center!important; clear: both;}
+		body *[class=h10] {width: 100%!important; height: 10px!important;}
+		body *[class=h20] {width: 100%!important; height: 20px!important;}
+		body *[class=h30] {width: 100%!important; height: 30px!important;}
+		body *[class=h40] {width: 100%!important; height: 40px!important;}
+		body td[class].h50 {width: 100%!important; height: 50px!important;}
+		body td[class].pad20 {padding-left: 20px!important; padding-right: 20px!important; text-align: center!important; clear: both; }
+		body .img600 img {width: 100%!important;}
+		body .img290 img {width: 100%!important;}
+		body .img190 img {width: 100%!important;}
+		body .img175 img {width: 100%!important;}
+		body .img290 img {width: 100%!important;}
+		body .img252 img {width: 100%!important;}
+		body table[class=full2] {width: 100%!important; clear: both; }
+		body td[class].fullCenterMob {width: 100%!important; text-align: center!important; clear: both; }
+		body .img405 img {width: 90%!important;}
+		
+}

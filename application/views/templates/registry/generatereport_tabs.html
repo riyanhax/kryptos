@@ -1,0 +1,156 @@
+
+   
+<body style="box-sizing: border-box;">    
+    {assign var="first_record" value=0}
+    {foreach $paginator as $d} 
+    {if ($first_record)}
+        <pagebreak />  
+    {else}
+        {assign var="first_record" value=1}
+    {/if}
+    {assign var="sr_no" value=1}
+    {assign var="i" value=1}
+    {assign var="j" value=1}
+    {assign var="selId" value=$registry.id|cat:'-'|cat:$d.id|cat:'-'|cat:$j}
+    {$idArr = ['0' => {$selId}]}    
+        <div style="margin: 5% 5% 0 5%; clear: both;">                                    
+            <div style="font-size:18px; text-align: left; clear:both;">
+                <div style="float:left; width: 20%;">
+                    <img src="/assets/images/logoKrypto.png" style="width: 100px; height: 100px;" alt="ABI">
+                </div>
+                <div id="qrcode" style="text-align:right; width: 80%; float: right;"><img src="/assets/images/qrcode.png" style="width: 100px; height: 100px;" alt="www.kryptos.com"></div>
+                <h3 style="width: 100%; font-weight: lighter; margin-top: 40px;"><strong>Raport </strong>{$title} - 
+                    {foreach $registry.entities as $entity}
+                        {if $i == 1}
+                            {if $d->entityToString($entity.id) != ''}
+                                {$d->entityToString($entity.id)} 
+                            {/if}
+                        {/if}
+                        {assign var="i" value=$i+1}    
+                    {/foreach}
+                </h3>
+            </div>
+        </div>
+            <div>                    
+                {for $x=0 to $maxstep}                    
+                    {assign var=curr_tab value=''}
+                    {assign var=tab_no value=1}
+                    <p style="width: 100%;margin-left: 5%;margin-right: 5%;margin-top: 40px; font-size: 11px;">Tabela {$x+1}.</p>
+                    <table style="width: 100%;margin-left: 5%;margin-right: 5%;margin-top: 10px;padding: 10px; font-size: 14px;" cellpadding="0" cellspacing="0" >
+                    <tbody>
+                    {assign var=index value=0}
+                    {foreach $registry.entities as $entity}
+                    {assign var="selectedId" value=$registry.id|cat:'-'|cat:$d.id|cat:'-'|cat:$entity.id}
+                    {assign var="tab_id" value=$registry.id|cat:'-'|cat:$d.id}
+                    {if $entity->config[7]==$x}
+                        {if $entity.config && $tab_id|array_key_exists:$tab_count && $tab_count.$tab_id > 0}
+                            {assign var=tab_data value=$entity->config|json_decode:1}
+                            {if $tab_data.tab_name && $tab_data.tab_name != $curr_tab}
+                                {assign var=curr_tab value=$tab_data.tab_name}
+                                    <tr style="padding: 10px;">
+                                        <td colspan="2" style="padding: 10px; font-size: 16px; background-color: #ccc">
+                                            {if $registry.steps_mode==Application_Model_Registry::STEPS_MODE_TABS}
+                                            <strong> <span>                                                
+                                            {if !empty($tab_data.tab_name)}{$tab_data.tab_name}{else}Step {$x+1}{/if}
+                                            </span></strong>
+                                            {else}
+                                            <strong> <span>Step. {$x+1}</span></strong>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                    {assign var="tab_no" value=$tab_no+1}
+                                {/if}
+                            {/if}
+                            {if ($index%2 == 0)}
+                                <tr style="padding: 10px; background-color: #fff"> 
+                            {else}
+                                <tr style="padding: 10px; background-color: rgb(240,240,240)"> 
+                            {/if}
+                            {assign var="index" value=$index+1}
+                            <td colspan="1" style="width: 30%; border: 1px solid #000;">
+                                <strong>{$sr_no++}. </strong><span>{$entity.title}</span> 
+                            </td>
+                            <td colspan="1" style="width: 70%; border: 1px solid #000;">
+                                <span style="color: #000;">
+                                    <!-- if current entity value is not empty -->
+                                    {if $d->entityToString($entity.id) != ''}  
+                                        {if $selectedId|array_key_exists:$selectedAttrName}
+                                            {if $selectedAttrName.$selectedId != ''}
+                                            <!-- {', '|implode:$selectedAttrName.$selectedId} -->
+                                            {$selectedAttrName.$selectedId}
+                                                {else}
+                                                -<br/> 
+                                            {/if} 
+                                        {else}
+                                            {if $d->entityToString($entity.id)|strpos:"base64"}
+                                                    <img src="{$d->entityToString($entity.id)}" />
+                                                {else}
+                                                    {$d->entityToString($entity.id)}
+                                            {/if}
+                                            <br>
+                                        {/if}                            
+                                    {else} <!-- if current entity value is empty then check this entity exist in selected attribute array -->
+                                        {if $selectedId|array_key_exists:$selectedAttrName}
+                                            {if $selectedAttrName.$selectedId != ''}
+                                                {$selectedAttrName.$selectedId}
+                                            {else}
+                                                -<br/> 
+                                            {/if} 
+                                        {else}
+                                        - <br>
+                                        {/if} 
+                                    {/if}
+                                </span>
+                            </td>
+                            
+                            </tr>
+                        {/if}
+                        {/foreach}   
+                    </tbody>
+                </table>
+                    {/for}   
+            </div>            
+            <table style="font-size: 12px;width:100%;border:0;text-align: left;border-collapse: collapse;margin-left: 5%;margin-right: 5%;margin-top: 50px;">
+                <tr>
+                    <td colspan="4" style="border-bottom:1px solid #333;">Raport został wygenerowany z aplikacji Kryptos72. Więcej informacji dostępnych u administratora systemu.</td>
+                </tr>
+                <tr>
+                    <td colspan="1">
+                        <div>{$config.0.value}</div> 
+                        <div>{$config.2.value} {$config.4.value}</div>
+                        <div>{$config.3.value} {$config.1.value}</div>
+                    </td>
+                    <td colspan="2">
+                        <div>Autor dokumentu: {$d.author.display_name}</div> 
+                        <div>Źródło: Rejestr {$title}</div>                      
+                    </td>
+                    <td colspan="1">
+                        <div><span style="width:49%;">Data utworzenia: </span>	<span style="width:49%;text-align: right;">{$registry.created_at}</span></div>                             
+                        <!-- <div><span style="width:49%;">Wersja dokumentu: </span>	<span style="width:49%;text-align: right;">11</span></div> -->
+                    </td> 
+                </tr>   
+            </table>
+        {assign var="j" value=$j+1}   
+        {/foreach}        
+    </body>
+        <style>
+            table{
+                border: 1px solid #000;
+                border-collapse: collapse;
+            }
+            table th,
+            table td{
+                text-align: left;
+                padding: 5px 10px;
+            } 
+            table th{
+                border-bottom: 1px solid #000; 
+            }
+            @media print{
+                @page  { 
+                    size: auto;   /* auto is the initial value */  
+                    margin:40px 20px 100px 20px;  
+                } 
+            }
+        </style>
+        

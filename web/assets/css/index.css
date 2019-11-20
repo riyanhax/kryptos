@@ -1,0 +1,188 @@
+header,
+section:not(.step) {
+  display: block;
+  color: #fff;
+}
+/* comagom code start 2019.4.3 */
+/* body {
+  background-image: url("../images/task_list_images/blurred_background.jpg");
+} */
+/* comagom code end 2019.4.3 */
+h1,
+h2 {
+  text-align: center;
+  font-weight: normal;
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
+  font-weight: normal;
+}
+ul.todo_list {
+  width: 400px !important;
+  z-index: 10 !important;
+}
+.improvement-list {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+.sortable {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 10px 0px;
+  max-height: 200px;
+  overflow-y: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.sortable.grid {
+  overflow: hidden;
+}
+.sortable li {
+  list-style: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f6f6f6;
+  font-family: "Tahoma";
+  color: #585872;
+  margin: 5px;
+  padding: 5px;
+  cursor: default;
+}
+
+li.sortable-placeholder {
+  border: 1px dashed #ccc;
+  background: none;
+}
+
+#saveMethodButtonBar {
+  padding: 5px;
+  text-align: right;
+}
+
+#addTask {
+  padding: 0 10px;
+}
+
+#addTaskTextField {
+  width: 200px !important;
+}
+#addTaskButton {
+  float: right;
+}
+#cancelTaskButton {
+  float: right;
+}
+.btn_cancel_hide {
+  display: none !important;
+}
+.btn_cancel_show {
+  display: block !important;
+}
+#completedTasksHeader {
+  display: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  background: white;
+}
+
+#taskLabel {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+#taskButtonBar {
+  float: right;
+}
+
+#dateLabel {
+  float: right;
+  margin-right: 30px;
+}
+
+#lastDateLabel {
+  float: right;
+  margin-right: 55px;
+}
+
+#complete-button,
+#start-button,
+#stop-button,
+#remove-button {
+  background-repeat: no-repeat;
+  padding: 0px 4px;
+  width: 20px;
+  height: 20px;
+  float: right;
+  margin-right: 10px;
+  cursor: pointer;
+  background-size: 100% 100%;
+}
+
+#complete-button {
+  background-image: url("../images/task_list_images/complete_icon.png");
+}
+
+#start-button {
+  background-image: url("../images/task_list_images/save-btn.png");
+}
+
+#stop-button {
+  background-image: url("../images/task_list_images/stop_icon.png");
+}
+
+#remove-button {
+  background-image: url("../images/task_list_images/delete_icon.png");
+}
+
+#creation-date,
+#start-date,
+#completion-date {
+  padding: 1px 4px;
+  background: #f6f6f6;
+  border: 1px solid;
+  border-radius: 4px;
+  display: block;
+  float: right;
+  margin-right: 15px;
+  font-size: 0.8em;
+}
+
+#creation-date {
+  margin-left: 5px;
+}
+
+#small-task,
+#medium-task,
+#large-task {
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: block;
+  float: left;
+  margin-right: 10px;
+}
+
+#small-task {
+  background-image: url("../images/task_list_images/smalltask.png");
+}
+
+#medium-task {
+  background-image: url("../images/task_list_images/mediumtask.png");
+}
+
+#large-task {
+  background-image: url("../images/task_list_images/largetask.png");
+}

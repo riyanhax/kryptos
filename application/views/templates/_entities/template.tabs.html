@@ -1,0 +1,179 @@
+<div class="col-md-12 portlets">
+  {*<!-- Your awesome content goes here -->*}
+  <div class="widget animated fadeInDown">
+    <form
+      id="myWizard"
+      name="f_data"
+      method="POST"
+      action="/registry-entries/{if $taskMode}save-from-task{else}save{/if}"
+      enctype="multipart/form-data"
+      autocomplete="off"
+    >
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs js-step-tabs" role="tablist">
+        {for $x=0 to $maxstep}
+        <li role="presentation">
+          <a
+            href="#step{$x+1}"
+            aria-controls="step{$x+1}"
+            role="tab"
+            data-toggle="tab"
+          >
+            {if !empty($tab_names[$x])}{$tab_names[$x]}{else}Step {$x+1}{/if}
+          </a>
+        </li>
+        {/for}
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        {for $x=0 to $maxstep}
+        <div role="tabpanel" class="tab-pane" id="step{$x+1}">
+          <div class="row">
+            <div class="col-sm-12">
+              {if $data.id}
+              <input type="hidden" name="id" value="{$data.id}" />
+              {/if} {if $documentTemplateId}<input
+                type="hidden"
+                name="document_template_id"
+                value="{$documentTemplateId}"
+              />{/if}
+              <input
+                type="hidden"
+                name="registry_id"
+                value="{$data.registry.id}"
+              />
+              {if $whichWindow == 'updateWindow'}
+              <input
+                type="hidden"
+                name="status"
+                value="{$selectedStatusInfo['status']}"
+              />
+              {/if} {if $x == 0} {if $registryId == "175"}{if $selectedWorkers}
+              <fieldset>
+                <div style="">
+                  <div class="form-group col-md-12">
+                    <label for="" class="col-sm-4">Wybierz osobę:</label>
+                    <div class="col-sm-8 get_required_status">
+                      <input
+                        type="hidden"
+                        name="worker_id"
+                        id="workers_id"
+                        {if $workerSelectDisabled}
+                        value="{$selectedWorkers[0].id}"
+                        {else}
+                        value="{$data.worker_id}"
+                        {/if}
+                      />
+                      <input
+                        type="text"
+                        onblur="updatesName()"
+                        id="workers_name"
+                        class="form-control typeaheadElement validate[required]"
+                        data-source-variable="storageUsers"
+                        data-target-element="#workers_id"
+                        {if $workerSelectDisabled}
+                        disabled
+                        value="{$selectedWorkers[0].name}"
+                        placeholder="{$selectedWorkers[0].name}"
+                        {else}
+                        placeholder="Wyszukaj pracownika..."
+                        {/if}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/if} {/if} {/if}{foreach $data.registry.entities as
+                $registryEntity} {if $registryEntity->config[7]==$x &&
+                $registryEntity->entity->system_name != 'moreInfo'}
+                <div
+                  class="form-group col-md-12"
+                  style="{if $todisable && in_array($registryEntity.entity_id, $todisable)} pointer-events: none; {/if}"
+                >
+                  {Application_Service_Entities::render($registryEntity, $data)
+                  nofilter}
+                </div>
+                {/if} {/foreach}
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        {/for}
+      </div>
+      <div style="clear: both;" class="js-actions">
+        {if $taskMode}
+        <input type="hidden" name="task" value="{$storageTask.id}" />
+        {/if}
+        <button class="btn btn-default js-prev" style="display: none;">
+          &lt; Powrót
+        </button>
+        <button
+          type="button"
+          data-whichform="registryFormSubmit"
+          class="btn btn-primary js-submit btn_reg_save"
+        >
+          <i class="fas fa-check"></i> Zatwierdź
+        </button>
+        <button class="btn btn-info js-next">Następny &gt;</button>
+        <input
+          type="button"
+          data-whichform="registryFormSubmit"
+          value="Zapisz i dodaj następny"
+          class="btn btn-info registry-add-another btn_reg_save_another"
+        />
+      </div>
+      <div style="display:none;">
+        <input
+          type="hidden"
+          id="registryaddAnother"
+          name="addAnother"
+          value="0"
+        />
+        <input type="submit" name="" id="registryFormSubmit" value="0" />
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  (function() {
+    let buttonsContainer = $(".js-actions");
+    let prevButton = buttonsContainer.find(".js-prev");
+    let nextButton = buttonsContainer.find(".js-next");
+    let tabsContainer = $(".js-step-tabs");
+    let tabs = tabsContainer.find('a[data-toggle="tab"]');
+    let addanotherButton = buttonsContainer.find(".registry-add-another");
+    tabs.on("shown.bs.tab", function(e) {
+      let tabId = $(e.target).attr("aria-controls");
+      let isFirst = tabs.filter(":first").attr("aria-controls") === tabId;
+      let isLast = tabs.filter(":last").attr("aria-controls") === tabId;
+      isFirst ? prevButton.hide() : prevButton.show();
+      isLast ? nextButton.hide() : nextButton.show();
+      //isLast ? addanotherButton.show() : addanotherButton.hide();
+    });
+    prevButton.click(function() {
+      tabsContainer
+        .find(".active")
+        .prev()
+        .find("a")
+        .tab("show");
+      return false;
+    });
+    nextButton.click(function() {
+      tabsContainer
+        .find(".active")
+        .next()
+        .find("a")
+        .tab("show");
+      return false;
+    });
+  })();
+  function updatesName() {
+    var name = $("#workers_name").val();
+    $("form#myWizard input[type=text]").each(function() {
+      var input = $(this);
+      var input_name = new RegExp("element_");
+      if (input_name.test(input.attr("name"))) {
+        $('input[name="' + input.attr("name") + '"]').val(name);
+      }
+    });
+  }
+</script>

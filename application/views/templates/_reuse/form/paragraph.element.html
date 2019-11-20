@@ -1,0 +1,12 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter}  data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4"></label>
+    <div class="col-sm-8">
+        <p class="row-value {$attributes.class}">{$params.attributes.label}</p>
+    </div>
+</div>

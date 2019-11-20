@@ -1,0 +1,47 @@
+<div class="panel panel-warning">
+    <div class="panel-heading">{'POŚWIADCZENIE PODPISU ELEKTRONICZNEGO KRYPTOS'|translate}</div>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-small">
+            <tr><td>{'ID Użytkownika'|translate}: </td><td> {$signature.user_id}</td></tr>
+            <tr><td>{'Autor'|translate}: </td><td> {$signature.imie} {$signature.nazwisko}</td></tr>
+            {if $signature.document.email}
+            <tr><td>{'E-mail'|translate}: </td><td> {$signature.document.email}</td><tr>
+            {/if}
+            {assign var=location value=$signature.ip_location|json_decode:1}
+            <tr><td>{'Ades IP'|translate}: </td><td> {$location.city} {$location.region} {$location.country} </td></tr>
+            <tr><td>{'Urządzenie'|translate}: </td><td> {$signature.user_agent} </td></tr>
+
+            <tr><td>Adres IP: </td><td> {$signature.ip}</td></tr>
+            <tr><td>Unikalny identyfikator podpisu: </td><td> {$signature.unique_id}</td></tr>
+
+            <tr><td>{'Unikalny identfikator podpisu'|translate}: </td><td>{$signature.document.numbertxt}</td></tr>
+            <tr><td>{'Unikalny numer podpisu'|translate}: </td><td>{$signature.document.id}</td></tr>
+            {if $signature.document.name}
+            <tr><td>{'Nazwa dokumentu'|translate}: </td><td>{$signature.document.name}</td></tr>
+            {else}
+            {assign var=docname value=Application_Service_Documents::getInstance()->getTemplateName($signature.document.id)}
+            <tr><td>{'Identyfikator dokumentu'|translate}: </td><td>{$docname} {$signature.document.numbertxt}</td></tr>
+
+             {/if}
+
+            <tr><td>{'Nazwa zadania'|translate}: </td><td> {$signature.task_title}</td></tr>
+
+            <tr><td>{'Data złożenia podpisu'|translate}: </td><td> {$signature.sign_date}</td></tr>
+
+        </table>
+    </div>
+</div>
+
+<div class="text-center">
+    <a class="btn btn-danger" href="/signatures/print-signature/id/{$signature.id}" target="_blank">{'WYDRUKUJ POTWIERDZENIE'|translate}</a>
+</div>
+<style type="text/css">
+button.close
+{
+    position: absolute;
+    top: -20px;
+    right: -16px;
+    color: #FFF !important;
+    opacity: unset;
+}
+</style>

@@ -1,0 +1,85 @@
+{assign var="defaultImage" value='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAEYklEQVR4Xu3UAQkAAAwCwdm/9HI83BLIOdw5AgQIRAQWySkmAQIEzmB5AgIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlACBB1YxAJfjJb2jAAAAAElFTkSuQmCC'}
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<script src="/_gfx/libs/signature-pad/signature_pad.min.js"></script>
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter} data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <input type="hidden" name="{$attributes.name}" value="{$attributes.value}"/>
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        <div class="preview-mode">
+            <div class="pull-left">
+                <img class="form-control" src="{$attributes.value|default:$defaultImage}" alt="preview"style="width:300px; height:150px;"/>
+            </div>
+            <div class="container pull-left">
+                <button type="button" class="btn-default btn update-button">
+                    <i class="fa fa-pencil"></i>
+                </button>
+            </div>
+        </div>
+        <div class="edit-mode" style="display: none;">
+            <div class="pull-left">
+                <canvas id="{$id}" class="form-control" style="width:300px; height:150px; border-color: #65BBD6;"></canvas>
+            </div>
+            <div class="container pull-left">
+                <div>
+                    <button type="button" class="btn-aprove btn apply-button">
+                        <i class="fa fa-check"></i> Save
+                    </button>
+                </div>
+                <div>
+                    <br/>
+                    <button type="button" class="btn-default btn clear-button">
+                        <i class="fa fa-eraser"></i> Clear
+                    </button>
+                </div>
+                <div>
+                    <br/>
+                    <button type="button" class="btn-default btn cancel-button">
+                        <i class="fa fa-remove"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    (function(){
+        let signatureNode = $('#{$id}');
+        let fieldContainer = signatureNode.parents('.form-group:first');
+        let previewContainer = fieldContainer.find('.preview-mode:first');
+        let editContainer = signatureNode.parents('.edit-mode:first');
+        let signaturePad = new SignaturePad(signatureNode.get(0), {
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+        fieldContainer.on('click', '.update-button', function () {
+            signaturePad.clear();
+            previewContainer.hide();
+            editContainer.show();
+            return false;
+        });
+        fieldContainer.on('click', '.apply-button', function () {
+            let data = signaturePad.toDataURL('image/png');
+            let hiddenInput = fieldContainer.find(':input[type=hidden]:first');
+            let previewImage = fieldContainer.find('.preview-mode img:first');
+            hiddenInput.val(data);
+            previewImage.attr('src', data);
+            editContainer.hide();
+            previewContainer.show();
+            return false;
+        });
+        fieldContainer.on('click', '.clear-button', function () {
+            signaturePad.clear();
+            return false;
+        });
+        fieldContainer.on('click', '.cancel-button', function () {
+            editContainer.hide();
+            previewContainer.show();
+            return false;
+        });
+    })();
+</script>

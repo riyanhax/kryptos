@@ -1,0 +1,13 @@
+{assign var="headerTag" value=$attributes.subtype|default:'h1'}
+{assign var="positionClasses" value=[
+    'left' => 'text-left',
+    'right' => 'text-right',
+    'hidden' => 'hide'
+]}
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter} data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <!--<label for="{$id}" class="col-sm-4"></label>-->
+    <div class="col-sm-8">
+        <{$headerTag} class="row-value {$attributes.class} {$positionClasses[$attributes.position]|default:''}">{$params.attributes.label}</{$headerTag}>
+    </div>
+</div>
+<div class="clear"></div>

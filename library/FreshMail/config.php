@@ -1,0 +1,3 @@
+<?php
+define ( 'FM_API_KEY', '3b572927e5b273b4065ba69874d9c74b' );
+define ( 'FM_API_SECRET', '409be62965863ca979500f4f04131e994be1da7e' );

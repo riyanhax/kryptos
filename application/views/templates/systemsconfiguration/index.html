@@ -1,0 +1,1045 @@
+<style type="text/css">
+    .tabs-left, .tabs-right {
+        border-bottom: none;
+        padding-top: 2px;
+    }
+    .tabs-left {
+        border-right: 1px solid #ddd;
+    }
+    .tabs-left>li, .tabs-right>li {
+        float: none;
+        margin-bottom: 2px;
+    }
+    .tabs-left>li {
+        margin-right: -1px;
+    }
+    .tabs-left>li.active>a, .tabs-left>li.active>a:hover, .tabs-left>li.active>a:focus {
+        border-bottom-color: #ddd;
+        border-right-color: transparent;
+    }
+    .tabs-left>li>a {
+        border-radius: 4px 0 0 4px;
+        margin-right: 0;
+        display: block;
+    }
+    .vertical-text.tabs-left>li {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+    .col-xs-3 {
+        width: 50%!important;
+    }
+    .glyphicon {
+        margin-right: 10px;
+    }
+    .panel-body {
+        padding: 0px;
+    }
+    .panel-body table tr td {
+        padding-left: 15px
+    }
+    .panel-body .table {
+        margin-bottom: 0px;
+    }
+    /*test*/
+    .col-sm-3.col-md-3 {
+        width: 75%;
+        margin-top: 12px!important;
+    }
+    .col-xs-6 {
+        position: absolute;
+        left: 300px;
+        top: 5px;
+    }
+    .col-sm-9 {
+        background: white;
+    }
+    /*.tab-pane{
+        background-color: white;
+        width:100%;
+        height:500px;"
+    }*/
+    .google-accounts {
+        width: 100%;
+        height: 400px;
+    }
+    /*
+    .form-group label{
+        width: 40%!important;
+    }
+    */
+    .dragable-content{
+        border: 2px dotted #777;
+        height: 100px;
+    }
+
+
+    .tab-content {
+        margin-top: 0px !important;
+    }
+    .widget{
+        background: #f3f3f3 !important;
+    }
+    .bold{
+        font-weight: bold;
+    }
+    .centered-div{
+        float: none !important;
+        margin: 0px auto !important;
+    }
+    .tenpxright{
+        padding-right: 10px;
+    }
+    .icheckbox_square-aero {
+        margin-right: 5px !important;
+    }
+
+    .center{
+        text-align: center;
+    }
+
+    /*tab 4 css*/
+    .checkout-list label.col-sm-12 {
+        padding: 0px;
+    }
+    .checkout-list input {
+        min-width: 85%;
+    }
+    .checkout-list label {
+        display: inline-block;
+        /*width: 15%;*/
+        padding: 0px;
+    }
+    .col-md-8.checkout-list {
+        margin: 10px 0px 5px;
+    }
+    /*end tab 4 css*/
+
+</style>
+
+<!-- Right Sidebar End -->
+<!-- Start right content -->
+
+<!-- ============================================================== -->
+<!-- Start Content here -->
+<!-- ============================================================== -->
+<div class="content">
+<!-- by arvind singh-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--start small side-menu-->
+            <div class="col-sm-3">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-user"> </span>{'Konto'|translate}<i class="fa fa-angle-down pull-right"></i></a> </h4>
+                        </div>
+
+
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <table class="table">
+                                    <tr>
+                                        <td><ul class="nav nav-tabs tabs-left">
+                                            <li><a href="#profile" data-toggle="tab">{'Dane organizacji'|translate}</a></li>
+                                            <li><a href="#company-information-1" data-toggle="tab">{'Informacje o firmie'|translate}</a></li>
+                                            
+                                            <li><a href="#configuring-notifications" data-toggle="tab">{'Konfigurowanie powiadomień'|translate}</a></li>
+                                            <li><a href="#change-password" data-toggle="tab">{'Dane organizacji'|translate}</a></li>
+                                            <li><a href="#api-manage" data-toggle="tab">{'Konfiguracja interfejsu API'|translate}</a></li>
+                                        </ul></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--End small side-menu-->
+            <div class="col-sm-9" >
+                <!-- Tab panes -->
+                <div class="tab-content" >
+                    <div class="tab-pane" id="profile">
+                        <div class="row">
+                            <div class="col-lg-12">
+                            {$message}
+                            {include file='modals/modal.tpl' title='Podstawowe Informacje - co to jest?' content='W zakładce Podstawowe Informacje zawarte są dane o jednostce, które są np. wykorzystywane później w szablonach dokumentów.'}
+                            {*<div class="row">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a class="btn btn-default" href="/admin/loghistory">Historia logowań</a></li>
+                                <li><a class="btn btn-default" href="/admin/zastepstwa">Zastępstwa</a></li>
+                                <li><a class="btn btn-default" href="/komunikat">Komunikaty</a></li>
+                            </ul>
+                        </div>*}
+                                <form class="" role="form" action="{$baseUrl}/company-information" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="companyinformation" value="information">
+                                {foreach $fieldsets as $fieldsetName => $settings}
+                                <fieldset>
+                                	<!-- Yug code starts -->
+                                    {if $fieldsetName != 'Informacje o firmie'}
+                                    <!-- Yug code end -->
+                                    <h5 style="text-align: center;font-size: 20px;"><b>{$fieldsetName}</b></h5>
+                                    <hr>
+                                    <!-- Yug code starts -->
+                                    {/if}
+                                    <!-- Yug code end -->
+                                    {foreach $settings as $setting}
+                                    <!-- Yug code starts -->
+                                    {if $setting.fieldset != 'Informacje o firmie'}
+                                    <!-- Yug code end -->
+                                        {if $setting.class == 'checkbox'}
+                                        <div class="form-group row">
+                                            <div class="col-lg-6 bold">
+                                                <label for="setting-{$setting.id}">
+                                                    {if $setting.description}
+                                                    {$setting.description}
+                                                    {else}
+                                                    {$setting.variable}
+                                                    {/if}
+                                                </label>
+                                            </div>
+                                            <div class="col-lg-4 centered-div">
+                                                <input type="checkbox" name="setting[{$setting.id}]" value="1" class="ios-switch ios-switch-success ios-switch-sm" {if $setting.value}checked{/if} />
+                                            </div>
+                                        </div>
+                                        {else}
+                                        <div class="form-group row">
+                                            <!--<div class="col-lg-2"></div>-->
+                                            <div class="col-lg-6 centered-div">
+                                                <label class="bold" for="setting-{$setting.id}">{$setting.variable}</label>
+                                                <input type="text" value="{$setting.value}" name="setting[{$setting.id}]" id="setting-{$setting.id}" class="form-control"/>
+                                            </div>
+                                        </div>
+                                        {/if}
+                                    <!-- Yug code starts -->
+                                    {/if}
+                                    <!-- Yug code end -->
+                                    {/foreach}
+                                </fieldset>
+                                {/foreach}
+                                <div style="width: 100%;margin: 5px 0;">
+                                    <input type="submit" value={'Zapisz'|translate} class="btn btn-info">
+                                </div>
+                            </form>
+                        </div><div class="col-sm-3 xs-hidden"></div></div>
+                    </div>
+                    <div class="tab-pane" id="company-information-1" style="padding:15px 5px">
+                    <div class="row">
+                        <div class="col-lg-12">
+                        	<!-- Yug code starts -->
+                            <form class="" role="form" action="{$baseUrl}/company-information-new" enctype="multipart/form-data" method="post" id="company_form" name="company_form">
+                            <!-- Yug code end -->
+                                {foreach $fieldsets as $fieldsetName => $settings}
+                                <fieldset>
+                                	<!-- Yug code starts -->
+                                    {if $fieldsetName == 'Informacje o firmie'}
+                                    <!-- Yug code end -->
+                                    <h5 style="text-align: center;font-size: 20px;"><b>{$fieldsetName}</b></h5>
+                                    <hr>
+                                    <!-- Yug code starts -->
+                                    {/if}
+                                    <!-- Yug code end -->
+                                    {foreach $settings as $setting}
+                                    <!-- Yug code starts -->
+                                    {if $setting.fieldset == 'Informacje o firmie'}
+                                    <!-- Yug code end -->
+                                        {if $setting.class == 'checkbox'}
+                                        <div class="form-group row">
+                                            <div class="col-lg-6 bold">
+                                                <label for="setting-{$setting.id}">
+                                                    {if $setting.description}
+                                                    {$setting.description}
+                                                    {else}
+                                                    {$setting.variable}
+                                                    {/if}
+                                                </label>
+                                            </div>
+                                            <div class="col-lg-4 centered-div">
+                                                <input type="checkbox" name="setting[{$setting.id}]" value="1" class="form-control validate[required]" {if $setting.value}checked{/if} />
+                                            </div>
+                                        </div>
+                                        <!-- Vipin code start -->
+                                        {elseif $setting.class == 'selectbox'}
+                                        <div class="form-group row">
+                                            <div class="col-lg-6 centered-div">
+                                                <label class="bold" for="setting-{$setting.id}">{$setting.variable}</label>
+                                                <select name="setting[{$setting.id}]" id="setting-{$setting.id}" class="form-control validate[required]" {if $company_confirmation == 1 }disabled{/if}>
+                                                    <option value="">-Wybierz kraj-</option>
+                                                    {foreach $countries as $country}
+                                                        <option value="{$country.country_code}" {if $setting.value == $country.country_code}selected{/if}>{$country.country_name}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {elseif $setting.class == 'file'}
+                                        <div class="form-group row">
+                                            <div class="col-lg-6 centered-div">
+                                                <label class="bold" for="setting-{$setting.id}">{$setting.variable}</label>
+                                                <input type="file" value="{$setting.value}" name="logoimage[]" id="setting-{$setting.id}" class="form-control" {if $company_confirmation == 1 }disabled{/if}/>
+                                                <img src="{$setting.value}" style="width: 60px; height: 60px;" alt="ABI">
+                                            </div>
+                                        </div>
+                                        <!-- Vipin code end -->
+                                        {else}
+                                        <div class="form-group row">
+                                            <!--<div class="col-lg-2"></div>-->
+                                            <div class="col-lg-6 centered-div">
+                                                <label class="bold" for="setting-{$setting.id}">{$setting.variable}</label>
+                                                <!-- Yug code starts -->
+                                                <input type="text" value="{$setting.value}" name="setting[{$setting.id}]" id="setting-{$setting.id}" class="form-control validate[required]" {if $company_confirmation == 1 }disabled{/if}/>
+                                                <!-- Yug code end -->
+                                            </div>
+                                        </div>
+                                        {/if}
+                                    <!-- Yug code starts -->
+                                    {/if}
+                                    <!-- Yug code end -->
+                                    {/foreach}
+                                </fieldset>
+                                {/foreach}
+                                <div style="width: 100%;margin: 5px 0;">
+                                    <input type="submit" value={'Zapisz'|translate} class="btn btn-info submit_confirmation">
+                                </div>
+                            </form>
+                            <script>
+                              $(document).ready(function() {
+                                $("div.iswitch.ios-switch-success.ios-switch-sm").click(function() {
+                                  // console.log($(this).hasClass("on"));
+                                  var childs = $(this).parent().children();
+                                  if($(this).hasClass("on")) {
+                                    if($(childs[0]).hasClass("formError")) {
+
+                                    }
+                                  }
+                                  console.log();
+                                });
+                              });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                    <!--start tab 2-->
+                    <div class="tab-pane" id="configuring-notifications" style="padding:15px 5px">
+                        <h5 style="text-align: center;font-size: 20px;"><b>{'Konfigurowanie powiadomień'|translate}</b></h5>
+                        <hr>
+                        <!--Notification configuration-->
+                        <form role="form" action="{$baseUrl}/configuring-notifications" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="confignotifications" value="notifications">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="col-sm-2 bold" style="width: 100%;"><i class="fa fa-tasks tenpxright"></i>{'Zadanie'|translate}</label>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="task_email" {if ($conf.task_email)}checked{/if}>E-mail
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="task_sms"  {if ($conf.task_sms)}checked{/if}>SMS
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 bold" style="width: 100%;"><i class="fa fa-history tenpxright"></i>{'Czynność'|translate}</label>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="activity_email"  {if ($conf.activity_email)}checked{/if}>E-mail
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="activity_sms"  {if ($conf.activity_sms)}checked{/if}>SMS
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 bold" style="width: 100%;"><i class="fa fa-ticket tenpxright"></i>{'Bilet'|translate}</label>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="tickets_email"  {if ($conf.tickets_email)}checked{/if}>E-mail
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 checkout-list">
+                                        <label class="col-sm-12">
+                                            <input type="checkbox" name="tickets_sms"  {if ($conf.tickets_sms)}checked{/if}>SMS
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-2 " style="width: 100%; margin: 5px 0;" >
+                                        <input type="submit" value={'Zapisz'|translate} class="btn btn-info">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!--end Notification configuration-->
+                    </div>
+                    <!--end tab 2-->
+                    <!--start tab 3 -->
+                    <div class="tab-pane" id="change-password" style="padding:15px 5px">
+                        <!--Change password-->
+                        <h5 style="text-align: center;font-size: 20px;"><b>{'Zmień hasło'|translate}</b></h5>
+                        <hr>
+                            <div class="form-group row">
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <div class="notes">
+                                            {'Zalecamy stosowanie silnych haseł zgodnie z wielokrotnymi zaleceniami Najwyższej Izby Kontroli. Hasło winno się składać z minimum 10 znaków (w tym co najmniej jedna duża litera, jedna mała, cyfra lub znak specjalny). Pamiętaj, że epodpis wewnętrzny Kryptos stanowi oświadczenie woli w rozumieniu Kodeksu Cywilnego, więc zadbaj o bezpieczeństwo swojego identyfikatora i hasła.'|translate}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row"><div class="col-sm-3 xs-hidden">
+
+                                </div>
+                                    <div class="col-sm-6">
+                                    <form name="f_profile" id="f_profile" role="form" action="{$baseUrl}/change-password" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="passwordchanges" value="password">
+                                        <div class="form-group">
+                                            <label for="old_pass" class="control-label bold">{'Stare hasło'|translate}</label>
+                                            <div class="">
+                                                <input type="password" id="old_pass" name="old_pass" class="form-control validate[required]">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new_pass1" class="control-label bold">{'Nowe hasło'|translate}</label>
+                                            <div class="">
+                                                <input type="password" id="new_pass1" name="new_pass1" class="form-control validate[required,  minSize[10], maxSize[15]]">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new_pass2" class="control-label bold">{'Powtórz nowe hasło'|translate}</label>
+                                            <div class="">
+                                                <input type="password" id="new_pass2" name="new_pass2" class="form-control validate[required,  minSize[10], maxSize[15]]">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value={'Zapisz'|translate} class="btn btn-info">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        <!--end Change password-->
+                    </div>
+                    </div>
+                    <!--end tab 3 -->
+                        <!--tab 4 Konfiguracja interfejsu API-->
+                    <div class="tab-pane" id="api-manage" style="padding:15px 5px">
+                        <!--Change password-->
+                        <h5 style="text-align: center;font-size: 20px;"><b>{'Konfiguracja interfejsu API'|translate}</b></h5>
+                        <hr>
+                        <form role="form" action="{$baseUrl}/api-configuration" method="post" enctype="multipart/form-data">
+                           <!--  {foreach $api as $a}
+                                <label class="col-sm-2 bold" style="width: 100%;"><i class="glyphicon glyphicon-list-alt tenpxright"></i>{$a.name}</label>
+                                <div class="form-group col-md-8 checkout-list centered-div">
+                                    <label class="control-label bold">{'Klucz API'|translate}</label>
+                                    <div class="">
+                                        <input type="text" name="{$a.name}_value" value="{$a.Value}" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-8 checkout-list centered-div">
+                                    <label class="control-label bold">{if ($a.name == smsapi)}From{else if ($a.name == email)}From e-mail{/if}</label>
+                                    <div class="">
+                                        <input type="text" name="{$a.name}_additional" value="{$a.additional}" class="form-control">
+                                    </div>
+                                </div>
+                            {/foreach} -->
+
+
+
+
+
+                        <!-- <div class="form-group col-md-8 checkout-list centered-div">
+                                <label class="control-label bold">Email Configgggg</label>
+                                <div class="">
+                                    <input type="text" name="" value="" class="form-control">
+                                </div>
+                        </div> -->
+ 
+         
+         
+                                  
+
+                              <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab1"  onclick="setToOne()">Email</a></li>
+                                <li><a data-toggle="tab" href="#tab2"  onclick="setToTwo()">SMS</a></li>
+                              </ul>
+                                
+                              <div class="tab-content">
+                                <div id="tab1" class="tab-pane fade in active">
+                                  <div class="form-group col-md-12 checkout-list centered-div">
+                                        <label class="control-label bold">SMTP Server</label>
+                                        <div class="">
+                                            <input type="text" name="emailapiurl" value="{$apidataobj.apiurl}" class="form-control">
+                                        </div>
+                                        <label class="control-label bold">Name </label>
+                                        <div class="">
+                                            <input type="text" name="emailapi" value="{$apidataobj.accesskey}" class="form-control">
+                                        </div>
+                                        
+                                        <label class="control-label bold">Username</label>
+                                        <div class="">
+                                            <input type="text" name="emailusername" value="{$apidataobj.username}" class="form-control">
+                                        </div>
+                                        
+                                         <label class="control-label bold">Password</label>
+                                        <div class="">
+                                            <input type="password" name="emailpassword" value="{$apidataobj.password}" class="form-control">
+                                        </div>
+
+                                </div>
+                                </div>
+                                <div id="tab2" class="tab-pane fade">
+                                  <div class="form-group col-md-12 checkout-list centered-div">
+                                        <label class="control-label bold">API Url </label>
+                                        <div class="">
+                                            <input type="text" name="smsapiurl" value="{$apidataobj1.apiurl}" class="form-control">
+                                        </div>
+                                        <label class="control-label bold">API Key </label>
+                                        <div class="">
+                                            <input type="text" name="smsapi" value="{$apidataobj1.accesskey}" class="form-control">
+                                        </div>
+                                        <label class="control-label bold">Secret Key</label>
+                                        <div class="">
+                                            <input type="text" name="smsusername" value="{$apidataobj1.username}" class="form-control">
+                                        </div>
+                                        <label class="control-label bold">UseType (Stage or Prod)</label>
+                                        <div class="">
+                                            <input type="text" name="smspassword" value="{$apidataobj1.password}" class="form-control">
+                                        </div>
+
+                                       
+                                </div>
+                                </div>
+                              </div>
+
+                             
+
+                                 <div class="form-group col-md-8 centered-div">
+                                <div style="width: 100%; margin: 5px 0;" >
+                                    <input type="hidden" name="hiddenval" id="hiddenval" value="1">
+                                    <input type="submit" value={'Zapisz'|translate} class="btn btn-info">
+                                </div>
+                            </div>
+
+
+
+
+                            
+                        </form>
+                    </div>
+                        <!-- end Konfiguracja interfejsu API - tab 4-->
+                    <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+{if $companyConfirmed == 1}
+<script>
+
+
+$(document).ready(function () {
+$('#md-3d-flip-vertical').addClass("md-show");
+    $('.md-3d-flip-vertical-close').click(function(){
+        $('#md-3d-flip-vertical').removeClass("md-show");
+    });
+});
+
+</script>
+{/if}
+<div class="md-modal-welcome md-3d-flip-vertical" id="md-3d-flip-vertical">
+        <div class="md-content">
+                                <table
+                                width="100%"
+                                border="0"
+                                cellpadding="0"
+                                cellspacing="0"
+                                align="center"
+                                class="full"
+                                bgcolor="#262827"
+                                style="background-color: #262827;"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td align="center" valign="top">
+                                      <table
+                                        class="full"
+                                        align="center"
+                                        border="0"
+                                        width="100%"
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                      >
+                                        <tbody>
+                                          <tr>
+                                            <!-- <td
+                                              width="100%"
+                                              height="15"
+                                              style="font-size: 1px; line-height: 1px;"
+                                            >
+                                              &nbsp;
+                                            </td> -->
+                                          </tr>
+                                          <tr>
+                                            <td align="center" class="pad20">
+                                              <!-- Start Nav -->
+                                              <table
+                                                width="100%"
+                                                border="0"
+                                                cellpadding="0"
+                                                cellspacing="0"
+                                                align="center"
+                                                class="full"
+                                              >
+                                                <tbody>
+                                                  <tr>
+                                                    <td
+                                                      width="100%"
+                                                      valign="middle"
+                                                      align="center"
+                                                      class="img150"
+                                                    >
+                                                      <table
+                                                        width="100%"
+                                                        border="0"
+                                                        cellpadding="0"
+                                                        cellspacing="0"
+                                                        align="left"
+                                                        style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"
+                                                        class="fullCenter"
+                                                      >
+                                                        <tbody>
+                                                          <tr>
+                                                            <td
+                                                              height="40"
+                                                              valign="middle"
+                                                              align="center"
+                                                              width="100%"
+                                                              class="fullCenter"
+                                                              style="line-height: 1px;"
+                                                            >
+                                                              <a href="#" style="text-decoration: none;">
+                                                                <img
+                                                                  src="/assets/welcomemodal/5c5aabf1798d6kryptos-logo.png"
+                                                                  width="150"
+                                                                  alt=""
+                                                                  border="0"
+                                                                  class="hover"
+                                                                />
+                                                              </a>
+                                                              
+                                                            </td>
+                                                          </tr>
+                                                          <!-- <p> -->
+                                                                <button class="glyphicon glyphicon-remove md-close md-3d-flip-vertical-close" style="float:right;font-size: 22px;background-color: transparent; border:none;margin-top:2px;margin-right:2px;left: 50px;"></button>
+                                                                <!-- <button class="btn btn-danger md-close md-3d-flip-vertical-close">Close</button>
+                                                                </p> -->
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td
+                                              width="100%"
+                                              height="15"
+                                              style="font-size: 1px; line-height: 1px;"
+                                            >
+                                              &nbsp;
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                          
+                              <table
+      width="100%"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      align="center"
+      class="full"
+      bgcolor="#ffffff"
+      style="background-color: #ffffff;"
+    >
+      <tbody>
+        <tr>
+          <td
+            align="center"
+            valign="top"
+            style="background-image: url('images/header_bg2.jpg'); -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-position: center bottom; background-repeat: no-repeat;"
+            background="images/header_bg2.jpg"
+          >
+            <table
+              class="mobile"
+              align="center"
+              border="0"
+              width="100%"
+              cellpadding="0"
+              cellspacing="0"
+            >
+              <tbody>
+                <tr>
+                  <td align="center">
+                    <table
+                      width="600"
+                      border="0"
+                      cellpadding="0"
+                      cellspacing="0"
+                      align="center"
+                      class="fullCenter"
+                    >
+                      <tbody>
+                        <tr>
+                          <td width="100%">
+                            <table
+                              width="550"
+                              border="0"
+                              cellpadding="0"
+                              cellspacing="0"
+                              align="center"
+                              class="fullCenter"
+                            >
+                              <tbody>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    height="110"
+                                    style="font-size: 1px; line-height: 1px;"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    style="color: #3d3d3d; font-family: Helvetica, Arial, sans-serif, 'Questrial'; font-weight: 300; vertical-align: top; font-size: 34px; text-align: left; line-height: 38px;"
+                                    class="fullCenter questrial"
+                                  >
+                                    Witaj w systemie Kryptos72!
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    height="12"
+                                    style="font-size: 1px; line-height: 1px;"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    style="color: #3d3d3d; font-family: Helvetica, Arial, sans-serif, 'Raleway'; font-weight: 300; vertical-align: top; font-size: 18px; text-align: left; line-height: 24px; text-transform: uppercase;"
+                                    class="fullCenter raleway"
+                                  >
+                                    PROVE IT!
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    height="2"
+                                    align="left"
+                                    class="buttonScale"
+                                  >
+                                    <span class="featuredHolder"
+                                      ><span class="featuredHolder"
+                                        ><span class="featuredHolder"
+                                          ><table
+                                            width="80"
+                                            align="left"
+                                            border="0"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            class="buttonScale"
+                                          >
+                                            <tbody>
+                                              <tr>
+                                                <td
+                                                  width="80"
+                                                  height="15"
+                                                  style="font-size: 1px; line-height: 1px;"
+                                                >
+                                                  &nbsp;
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td
+                                                  height="2"
+                                                  width="80"
+                                                  bgcolor="#e9108c"
+                                                  style="font-size: 1px; line-height: 1px; background-color: #e9108c;"
+                                                >
+                                                  &nbsp;
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table></span
+                                        ></span
+                                      ></span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    height="30"
+                                    style="font-size: 1px; line-height: 1px;"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    style="color: #747474; font-family: Helvetica, Arial, sans-serif, 'Open Sans'; font-weight: 300; vertical-align: top; font-size: 14px; text-align: left; line-height: 24px;"
+                                    class="fullCenter raleway"
+                                  >
+                                    Nie wiem czy wiesz, ale właśnie dołączyłeś
+                                    do grona obywateli świata, którym zależy na
+                                    bezpieczeństwie informacji, ponoć zwą nas
+                                    "Kryptosjanie".
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    width="100%"
+                                    height="40"
+                                    style="font-size: 1px; line-height: 1px;"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td valign="middle" align="left">
+                                    <span class="featuredHolder"
+                                      ><span class="featuredHolder"
+                                        ><span class="featuredHolder"
+                                          ><table
+                                            border="0"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            align="left"
+                                            class="fullCenter"
+                                          >
+                                            <tbody>
+                                              <tr>
+                                                <td>
+                                                  <table
+                                                    border="0"
+                                                    cellpadding="0"
+                                                    cellspacing="0"
+                                                    align="left"
+                                                    class="buttonScale"
+                                                  >
+                                                    <tbody>
+                                                      <tr>
+                                                        <td
+                                                          align="center"
+                                                          height="42"
+                                                          bgcolor="#e9108c"
+                                                          style="border-radius: 4px; padding-left: 35px; padding-right: 35px; padding-bottom: 1px; font-weight: 600; font-family: Helvetica, Arial, sans-serif, 'Open Sans'; color: #ffffff; font-size: 14px; text-transform: uppercase; line-height: 20px; background-color: #e9108c;"
+                                                          class="opensans"
+                                                        >
+                                                          <a
+                                                            href="kryptos72.com/korzysci-dla-pracownika"
+                                                            style="color: #ffffff; text-decoration: none;"
+                                                            >POZNAJ
+                                                            FILOZOFIĘ"KRYPTOS"</a
+                                                          >
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table></span
+                                        ></span
+                                      ></span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td
+                                    height="110"
+                                    width="100%"
+                                    style="font-size: 1px; line-height: 1px;"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+        </div><!-- End div .md-content -->
+    </div>
+<!-- End right content -->
+<script type="text/javascript">
+// Yug code starts 
+backendUtilities.addVatidationEngine("company_form");
+// Yug code end 
+    $(document).ready(function(){
+        $( '.panel-group .nav li a:eq(1)'  ).trigger( 'click' );
+
+        $( '.panel-group .nav a' ).on( 'click', function () {
+            $( '.panel-group .nav' ).find( 'li.active' ).removeClass( 'active' );
+            $( this ).children( 'li' ).addClass( 'active' );
+        });
+    });
+
+
+         backendUtilities.addVatidationEngine("f_profile");
+         backendUtilities.addVatidationEngine("f_profile2");
+    /*$("#setting-11").change(function () {
+        alert('Uwaga, po zapisaniu nowej daty oświadczeń/upoważnień zostanie przeładowana dokumentacja.');
+    });*/
+
+
+    function czy_jest_znak(haslo, male_litery) {
+        var jest_mala_litera = false;
+        for (var i = 0; i < haslo.length; i++) {
+            //var litera_hasla=haslo.substring(i, 1);
+            litera_hasla = haslo.charAt(i);
+            if (male_litery.indexOf(litera_hasla) != -1) {
+                var jest_mala_litera = true;
+                break;
+            }
+        }
+        if (jest_mala_litera == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $('#f_profile').submit(function () {
+
+        if($('#old_pass').val() && $('#new_pass1').val() && $('#new_pass2').val()){
+
+            if ($('#new_pass1').val() != $('#new_pass2').val()) {
+                alert('{'Wprowadzone nowe hasła różnią się.'|translate}');
+                return false;
+            }
+
+            var haslo = $('#new_pass1').val();
+            var male_litery = "qwertyuiopasdfghjklzxcvbnmęóąśłżźćń";
+
+            if (czy_jest_znak(haslo, male_litery)) {
+
+            } else {
+                alert('{'Wymagana jest co najmniej jedna mała litera'|translate}');
+                return false;
+            }
+
+            var wielkie_litery = male_litery.toUpperCase()
+
+
+            if (czy_jest_znak(haslo, wielkie_litery)) {
+            } else {
+                alert('{'Wymagana jest co najmniej jedna wielka litera'|translate}');
+                return false;
+            }
+
+
+            if (czy_jest_znak(haslo, '1234567890')) {
+            } else {
+                alert('{'Wymagana jest co najmniej cyfra'|translate}');
+                return false;
+            }
+
+            if (czy_jest_znak(haslo, {literal}'`~!@#$%^&*()_+|[];\',./{}:">?_-=\\"'{/literal})) {
+            } else {
+                alert('{'Wymagany jest co najmniej jeden znak specjalny'|translate}');
+                return false;
+            }
+        }
+
+
+    })
+
+
+
+    /*$('#f_profile').submit(function () {
+
+
+        if ($('#new_pass1').val() != $('#new_pass2').val()) {
+            alert('{'Wprowadzone nowe hasła różnią się.'|translate}');
+            return false;
+        }
+
+        var haslo = $('#new_pass1').val();
+        var male_litery = "qwertyuiopasdfghjklzxcvbnmęóąśłżźćń";
+
+        if (czy_jest_znak(haslo, male_litery)) {
+
+        } else {
+            alert('{'Wymagana jest co najmniej jedna mała litera'|translate}');
+            return false;
+        }
+
+        var wielkie_litery = male_litery.toUpperCase()
+
+
+        if (czy_jest_znak(haslo, wielkie_litery)) {
+        } else {
+            alert('{'Wymagana jest co najmniej jedna wielka litera'|translate}');
+            return false;
+        }
+
+
+        if (czy_jest_znak(haslo, '1234567890')) {
+        } else {
+            alert('{'Wymagana jest co najmniej cyfra'|translate}');
+            return false;
+        }
+
+        if (czy_jest_znak(haslo, {literal}'`~!@#$%^&*()_+|[];\',./{}:">?_-=\\"'{/literal})) {
+        } else {
+            alert('{'Wymagany jest co najmniej jeden znak specjalny'|translate}');
+            return false;
+        }
+
+
+
+    });*/
+</script>
+<script type="text/javascript">
+    function setToOne(){
+
+  document.getElementById('hiddenval').value='1';
+   
+}
+
+function setToTwo(){
+  document.getElementById('hiddenval').value='2';
+}
+</script>

@@ -1,0 +1,46 @@
+<table
+  cellpadding="0"
+  cellspacing="0"
+  border="1"
+  class="table table-striped table-bordered example"
+>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th colspan="3" style="text-align: center;">{'Dodatkowe konta'|translate}</th>{'Imię'|translate}
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th data-filter-type="string">{'Nazwa licencji'|translate}</th>
+      <th data-filter-type="select">{'Cena'|translate}</th>
+      <th data-filter-type="string">{'Okres płatności (co miesiąc -> co miesiąc)'|translate}</th>
+      <th data-filter-type="string">Pro</th>
+      <th data-filter-type="string">Mini</th>
+      <th data-filter-type="string">Expert</th>
+      <th data-filter-type="string">{'Aktywna od:'|translate}</th>
+      <th data-filter-type="string">{'Wygasa:'|translate}</th>
+    </tr>
+  </thead>
+  <tbody class="js-checkbox-container">
+    {foreach $paginator as $d} {if $d.period_unit == 2} {$price = $d.price}
+    {else} {$price = $d.price * 12} {/if}
+    <tr>
+      <td>{$d.name}</td>
+      <td>{$d.subscription_price} {$d.currency|ucfirst}</td>
+      {if $d.period_unit == 2}
+      <td>{$d.period} month</td>
+      {else}
+      <td>{$d.period} year</td>
+      {/if}
+      <td>{$d.pro_count - $d.license_pro_count}</td>
+      <td>{$d.mini_count - $d.license_mini_count}</td>
+      <td>{$d.expert_count - $d.license_expert_count}</td>
+      <td>{smart_date value=$d.created_at}</td>
+      <td>{smart_date value=$d.end_date}</td>
+    </tr>
+    {/foreach}
+  </tbody>
+</table>

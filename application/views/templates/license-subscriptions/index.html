@@ -1,0 +1,46 @@
+<table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example js-licences-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th data-filter-type="select">Licencja</th>
+        <th data-filter-type="string">Email</th>
+        <th data-filter-type="string">Login</th>
+        <th data-filter-type="select-items">Status</th>
+        <th data-filter-type="date-range">Data utworzenia</th>
+        <th data-filter-type="date-range">Wygasa</th>
+        <th>opcje</th>
+    </tr>
+    </thead>
+    <tbody class="ui-widget-content">
+    {foreach $paginator as $d}
+    <tr>
+        <td class="text-right">{$d@iteration}</td>
+        <td class="text-left">{$d.license.name}</td>
+        <td class="text-left">{$d.osoba.email}</td>
+        <td class="text-left">{$d.osoba.login_do_systemu}</td>
+        <td class="text-center">
+            {if $d.status == Application_Model_LicenseSubscription::STATUS_ACTIVATED}
+                <i class="fa fa-circle" style="color:#00cc00;" title="active"><span class="select-item hiddenElement">Active</span></i>
+            {else}
+                <i class="fa fa-circle" style="color:#cc0000;" title="inactive"><span class="select-item hiddenElement">Inactive</span></i>
+            {/if}
+        </td>
+        <td class="text-center">{smart_date value=$d.created_at}</td>
+        <td class="text-center">{smart_date value=$d.end_date}</td>
+        <td class="operations">
+            <a class="fa fa-info-circle" href="/license-subscriptions/view/id/{$d.id}" data-toggle="tooltip" title="Details"></a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+<br />
+<script>
+    (function () {
+        var table = $('.js-licences-table');
+        table.on('click', '.js-license-delete', function () {
+            return window.confirm('Delete license?');
+        });
+    })();
+</script>

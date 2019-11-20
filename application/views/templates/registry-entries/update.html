@@ -1,0 +1,354 @@
+{include file='modals/multiform_modal.tpl'}
+
+<div class="row" id="SingleForm" style="display: none;">
+  <div class="col-lg-12 vimal">
+    <form
+      name="f_data"
+      id="f_data"
+      method="POST"
+      action="/registry-entries/{if $taskMode}save-from-task{else}save{/if}"
+      enctype="multipart/form-data"
+    >
+      <fieldset>
+        <input type="hidden" name="addAnother" id="addAnother" value="0" />
+        {if $data.id}<input type="hidden" name="id" value="{$data.id}" />{/if}
+        {if $documentTemplateId}<input
+          type="hidden"
+          name="document_template_id"
+          value="{$documentTemplateId}"
+        />{/if}
+        <input type="hidden" name="registry_id" value="{$data.registry.id}" />
+        {if $whichWindow == 'updateWindow'}
+        <input
+          type="hidden"
+          name="status"
+          value="{$selectedStatusInfo['status']}"
+        />
+        {/if} 
+        
+        {if $selectedWorkers}
+        <div style="">
+          <div class="form-group row">
+            <label for="" class="col-sm-4">Wybierz osobę:</label>
+            <div class="col-sm-8">
+              <input
+                type="hidden"
+                name="worker_id"
+                id="worker_id"
+                value="{$data.worker_id}"
+              />
+              <input
+                type="text"
+                onblur="updateName()"
+                id="worker_name"
+                class="form-control typeaheadElement"
+                data-source-variable="storageUsers"
+                data-target-element="#worker_id"
+              />
+            </div>
+          </div>
+          <!--<div class="form-group row ">
+                        <label for="" class="col-sm-4">Select worker</label>
+                        <div class="col-sm-8">
+                            <select id="worker_id" name="worker_id" class="form-control ">
+                                <option value="" selected="selected">Select...</option>
+                                {foreach $workers as $k => $worker}
+                                    <option value="{$k}" >{$worker.imie} {$worker.nazwisko}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>-->
+        </div>
+        {/if} {foreach $data.registry.entities as $registryEntity}
+        <div
+          style="{if $todisable && in_array($registryEntity.entity_id, $todisable)} pointer-events: none; {/if}"
+        >
+          {Application_Service_Entities::render($registryEntity, $data)
+          nofilter}
+        </div>
+
+        {/foreach} {if $data.id && !empty($data.registry.documents_templates)}
+        {element tag="bs.checkbox-line" attributes=[ 'type' => 'checkbox',
+        'labelClass' => 'col-sm-8 col-sm-offset-4', 'name' =>
+        'update_documents', 'label' => 'Zaktualizuj dokumenty' ]} {/if}
+
+        <div>
+          {if $taskMode}
+          <a
+            href="/tasks-my/details/id/{$storageTask.id}"
+            class="btn btn-default"
+            >Powrót</a
+          >
+          <input type="hidden" name="task" value="{$storageTask.id}" />
+          <input
+            type="button"
+            value="Zapisz"
+            data-whichform="formSubmit"
+            class="btn btn-info btn_reg_save"
+            onclick="$('#formSubmit').click();"
+          />
+          {else}
+          <a
+            href="/registry-entries/index/registry_id/{$data.registry_id}"
+            class="btn btn-default"
+            >Powrót</a
+          >
+          <input
+            type="button"
+            value="Zapisz"
+            data-whichform="formSubmit"
+            class="btn btn-info btn_reg_save"
+          />
+          <input
+            type="button"
+            data-whichform="formSubmit"
+            value="Zapisz i dodaj następny "
+            class="btn btn-info btn_reg_save_another"
+          />
+          {/if}
+        </div>
+      </fieldset>
+      <div class="hiddenElement">
+        <input
+          type="submit"
+          id="formSubmit"
+          value="Zapisz"
+          class="btn btn-info"
+        />
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--  Multistep form div -->
+<div class="row" id="MultiForm" style="display: none;">
+  {if $data.registry.steps_mode==Application_Model_Registry::STEPS_MODE_TABS}
+  {include file='_entities/template.tabs.html'
+  selectedWorkers=(array)$selectedWorkers 
+  data=$data 
+  whichWindow = $whichWindow
+  selectedStatusInfo = $selectedStatusInfo 
+  totalItems = $totalItems 
+  limit = $limit
+  workerSelectDisabled = $workerSelectDisabled} 
+  {else} {include file='_entities/template.wizard.html'} {/if}
+</div>
+<!-- End : Multistep form div -->
+
+<script src="/assets/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+  backendUtilities.addVatidationEngine("f_data");
+  // backendUtilities.addVatidationEngine("myWizard");
+</script>
+
+<script>
+  var highest = {$maxstep};
+  if(highest==0){
+      $("#SingleForm").css('display','block');
+  }else{
+      $("#MultiForm").css('display','block');
+      $("#MultiForm").attr("stepnum",highest);
+  }
+  $( document ).ready(function(){
+      $('.easyWizardSteps li:last-child').remove();
+      $(".easyWizardWrapper section:last-child").remove();
+      var totalItems = Number('{$totalItems}');
+      var recordLimit = Number('{$recordLimit}');
+      var limit = Number('{$limit}');
+      var isEdit = '{$isEdit}';
+      
+      $('.btn_reg_save').on('click', function (e) {
+          var whichform = $(this).data("whichform");
+          console.log(totalItems);
+          console.log(whichform);
+          console.log(recordLimit);
+          if(limit != -1) {
+            //if this user is not superadmin
+              if (totalItems >= recordLimit && isEdit !== '1') {
+                  bootbox.alert("<h3>Ostrzeżenie</h3><div>Nie możesz dodać więcej niż "+ recordLimit +" rekordy</div>", function(result) {
+                      if(result){
+                          e.currentTarget.submit();
+                      }
+                  });
+                  e.preventDefault();
+              } else {
+                if(whichform == "formSubmit") {
+                  $('#formSubmit').click();
+                } else {
+                  if($("#workers_name").val() == "") {
+                    $("#workers_name").focus();
+                  } else {
+                    $('#registryFormSubmit').click();
+                  }
+
+                }
+              }
+          } else {
+            //if this user is superadmin
+            if(whichform == "formSubmit") {
+              $('#formSubmit').click();
+            } else {
+              if($("#workers_name").val() == "") {
+                $("#workers_name").focus();
+              } else {
+                $('#registryFormSubmit').click();
+              }
+            }
+
+          }
+      });
+
+      $('.btn_reg_save_another').on('click', function (e) {
+        var whichform = $(this).data("whichform");
+          if(limit != -1) {
+              if (totalItems >= recordLimit) {
+                  bootbox.alert("<h3>Ostrzeżenie</h3><div>Nie możesz dodać więcej niż "+ recordLimit +" rekordy</div>", function(result) {
+                      if(result){
+                          e.currentTarget.submit();
+                      }
+                  });
+                  e.preventDefault();
+              } else {
+                if(whichform == "formSubmit") {
+                  $('#addAnother').val('1');
+                  $('#formSubmit').click()
+                } else {
+                  if($("#workers_name").val() == "") {
+                    $("#workers_name").focus();
+                  } else {
+                    $('#registryaddAnother').val('1');
+                    $('#registryFormSubmit').click();
+                  }
+
+                }
+              }
+          } else {
+            if(whichform == "formSubmit") {
+              $('#addAnother').val('1');
+              $('#formSubmit').click()
+            } else {
+
+              if($("#workers_name").val() == "") {
+                $("#workers_name").focus();
+              } else {
+                $('#registryaddAnother').val('1');
+                $('#registryFormSubmit').click();
+              }
+            }
+
+          }
+      });
+  });
+
+
+    $("body").on("click", ".next", function() {
+
+        if($(".easyWizardSteps li:nth-last-child(1)").hasClass("current")){
+         $(".next").css("display","none");
+         $(".submit").css("display","block");
+
+        }
+
+      });
+      $("form").submit(function(e){
+          e.preventDefault();
+
+          var values = $(this).serializeArray();
+          var datas = {};
+
+          values.forEach(element => {
+              datas[element['name']] = element['value'];
+          });
+          $.each(CKEDITOR.instances, function (index) {
+              if($.inArray(index, datas)) {
+                  datas[index] = CKEDITOR.instances[index].getData();
+              }
+          });
+          datas = JSON.stringify(datas);
+          $.ajax({
+              url: "/registry-entries/checkduplicatedentry",
+              type: "POST",
+              data: { data: datas },
+          }).done(function(data){
+              if($.trim(data.status)=='1')
+              {
+                  bootbox.confirm("<h3>Potwierdź operację</h3><div>Taki element już istnieje, jeśli go dodać będą dwa identyczne elementy w rejestrze. Czy chcesz go mimo to?</div>", function(result) {
+                      if(result){
+                          e.currentTarget.submit();
+                      }
+                  });
+              }else if ($.trim(data.status)=='0'){
+                  e.currentTarget.submit();
+              }
+          });
+      });
+
+  function showMore(divId){
+      //alert(divId);
+      let containerTable = jQuery('#'+divId);
+      var text = containerTable.find('.js-registry-selected-values-container tfoot tr td b').text();
+      if(text == "Show more"){
+
+          containerTable.find('.js-registry-selected-values-container tbody .table_rows_hide').show();
+          containerTable.find('.js-registry-selected-values-container tfoot tr td b').text("Show less");
+          return false ;
+
+      }else{
+
+          containerTable.find('.js-registry-selected-values-container tbody .table_rows_hide').hide();
+          containerTable.find('.js-registry-selected-values-container tfoot tr td b').text("Show more");
+          return false ;
+
+      }
+  }
+
+  function runregistrySel() {
+          var fields = [];
+              $('.fields').each(function() {
+              fields.push($(this).text());
+              });
+          $('.check-all-regitry').on('click', function (e) {
+              $('.registryCheckbox').each(function () {
+                  if(!$(this).hasClass('checked')){
+                  $(this).addClass('checked');
+                  dial.lastDialProcessFn(this.id.replace('id', ''), {
+                                  id: this.id.replace('id', ''),
+                              registry_id: $('#zbiory_registry').val(),
+                              registry_title: $("#zbiory_registry option:selected").text(),
+                              registry_fields: fields
+                                  //displayName: this.getAttribute('data-display-name')
+                              }, $(this).hasClass('checked'));
+                  }
+
+              });
+
+          });
+          $('.uncheck-all-regitry').on('click', function (e) {
+              $('.registryCheckbox').each(function () {
+                  $(this).removeClass('checked');
+                  dial.lastDialProcessFn(this.id.replace('id', ''), {
+                                  id: this.id.replace('id', ''),
+                              registry_id: $('#zbiory_registry').val(),
+                              registry_title: $("#zbiory_registry option:selected").text(),
+                              registry_fields: fields
+                                  //displayName: this.getAttribute('data-display-name')
+                              }, $(this).hasClass('checked'));
+
+              });
+          });
+
+          }
+
+      function updateName() {
+          var name = $("#worker_name").val();
+          $("form#f_data input[type=text]").each(function(){
+              var input = $(this);
+              var input_name = new RegExp('element_');
+              if (input_name.test(input.attr('name'))) {
+                  $('input[name="'+input.attr("name")+'"]').val(name);
+              }
+          });
+      }
+
+      var storageUsers = objectsStorage.init({$selectedWorkers|json_encode nofilter});
+</script>

@@ -1,0 +1,557 @@
+<style>
+#auditTable {
+  display: block;
+}
+#logTable {
+  display: none;
+}
+.logBtn {
+   position: absolute;
+    right: 50%;
+    margin-top:2px;
+    z-index:1;
+}
+.logBtn button {
+    padding:8px;
+}
+</style>
+<script>
+  $(document).ready(function(){
+   
+    $(".logBtn").click(function(){
+      if( $("#logTable").css('display') == 'none') {
+
+        $('#logTable').css('display', 'block');
+        $('#auditTable').css('display', 'none');
+        $(".logBtn button").attr('data-original-title', 'wyświetl dziennik');
+        return;
+      }
+      if( $("#auditTable").css('display') == 'none') {
+        $('#auditTable').css('display', 'block');
+        $('#logTable').css('display', 'none');
+       $(".logBtn button").attr('data-original-title', 'Zobacz audyt');
+      }
+    })
+  })
+</script>
+   
+ <div class="logBtn">
+
+    <button data-toggle="tooltip" title="See the audit" class="fa fa-history btn btn-default" data-original-title="Zobacz audyt"></button>
+</div>
+      
+<div id="logTable">
+
+ <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered example" id="">
+    <thead>
+     <th>Informacje dotyczące rejestru</th>  
+    
+    </thead>
+  <tbody class="ui-widget-content js-checkbox-container">
+
+{foreach $logAction as $entity}
+           
+            
+            <tr>
+                <td>
+                    
+                     {if $entity.action == 'update value'}
+                         {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                       zmienił wartość {$entity.action_on} 
+                       <b>{$entity.action_name}</b> 
+                       {if $entity.previous_value != ""}
+                       stara wartość
+                       <b>{$entity.previous_value}</b>
+                       {/if}
+                       {if $entity.previous_value != ""}
+                       do nowej wartości
+                       <b>{$entity.new_value}</b>
+                       {/if}
+                    
+                    {elseif $entity.action == 'wstaw wiersz'}
+                     {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                       wstawione wartości w rzędzie 
+                       <b> {$entity.action_name} </b>
+                       
+                    
+                    {elseif $entity.action == 'usuń wiersz'}
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                      edytować identyfikator wiersza 
+                       <b>{$entity.action_name}</b>
+                       
+
+                    {elseif $entity.action == 'delete'}
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                      usuń identyfikator wiersza
+                       <b>{$entity.action_name}</b>
+                        
+                    
+                    {elseif $entity.action == 'Utwórz pole'}
+                     {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                     Dodaj pole
+                       <b>{$entity.action_name}</b>
+                        in form 
+                     
+                    {elseif $entity.action == 'usuń pole'}
+
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                      usuń pole
+                       <b>{$entity.action_name}</b>
+                        z formularza 
+                    {elseif $entity.action == 'field update'}
+
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name} in registry <a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a>
+                      pole aktualizacji
+                       <b>{$entity.action_name}</b>
+                        in form  
+                       
+                    {/if} 
+                </td>
+               
+            </tr>
+                   
+            {/foreach}
+    </tbody>
+</table>
+</div>
+<div id="auditTable">
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered example" id="register_dataTable">
+      
+        <thead>
+        
+        <tr>
+            <th data-filter-type="string">ID</th>
+            <th data-filter-type="string">Nazwa Użytkownika</th>
+         
+            <th data-filter-type="string">polecenie listu</th>
+         
+            <th>Wiersz / pole</th>
+            
+            <th>Czas</th>
+        </tr>
+        </thead>
+
+        <tbody class="ui-widget-content js-checkbox-container">
+            {foreach $registryAction as $entity}
+                <tr>
+                    <td>{$entity.id}</td>
+                    <td>{$entity.f_name} &nbsp; {$entity.l_name}</td>
+                  
+                    <td><a href="{$entity.link}" style="color:#7CFC00">{$entity.registry_title}</a></td>
+                  
+                    {if is_numeric($entity.action_name) == true}
+                    <td>Deleted registery record id #{$entity.action_name}</td>
+                    {else}
+                        {if $entity.action == 'wstaw wiersz'}
+                             <td>Inserted registry record : <br>"{$entity.action_name}"</td>
+                        {elseif $entity.action == 'field update'}
+                            <td>Updated field label from the form: <br>"{$entity.action_name}"</td>
+                        {elseif $entity.action == 'usuń pole'}
+                            <td>deleted field from the from : <br>"{$entity.action_name}"</td>
+                        {elseif $entity.action == 'Utwórz pole'}
+                            <td>Created field from the form : <br>"{$entity.action_name}"</td>
+                        {else}
+                            <td>Updated registry record : <br>"{$entity.action_name}" from "{$entity.previous_value}" aby "{$entity.new_value}"</td>
+                        
+                        {/if}
+                    {/if}
+                   
+                    <td>{$entity.insert_date}</td>
+                   
+                </tr>
+            {/foreach}
+            
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal start for filter -->
+<div class="modal fade bs-example-modal-lg" id="filterDialog" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="form_tickets_ajax_create" id="form_tickets_ajax_create" action="/registry/ajax-save-filter" method="post" class="form-horizontal ajax-form" role="form" data-process-fn="formProcessDialModal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    
+                    <h4 class="modal-title">Utwórz nowy filtr</h4>
+                    
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                
+                    <div class="col-sm-12" style="margin-bottom:20px;">pokaż rejestr spełniający poniższe warunki :</div>
+                    
+                                <br />
+                            </div>
+                            <div class="row">
+                                <table class=" table order-list">
+                                    <thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-sm-4">
+                                            
+                                            <select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,0);" onclick="return fetchCriteria(this.value,0);" >
+                                                <option value="-1">-- wybierać --</option>
+                                                 {foreach $column_name as $column_key => $column_value}
+                                                <option value="{$column_key}">{$column_value}</option>
+                                                {/foreach}
+
+                                            </select>
+                                        </td>
+                                        <td class="col-sm-4" id="condBox_0"></td>
+                                        <td class="col-sm-3" id="keywordBox_0"></td>
+                                        <td class="col-sm-2"><a class="deleteRow"></a>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="5" style="text-align: left;">
+                                            <input type="button" class="btn btn-lg btn-block " id="addCondition" value="dodaj warunek" />
+                                        </td>
+                                    </tr>
+                                    <tr></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="filter_name">Nazwa filtru :</label><br />
+                                    <input type="text" class="form-control" name="filter_name" id="filter_name" placeholder="Nazwa filtru">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 pull-right">
+                                <div class="form-group">
+                                    <label for="filter_scope">Widok:</label><br />
+                                    <select name="filter_scope" id="filter_scope" class="form-control">
+                                        <option value="private">Prywatny</option>
+                                        <option value="shared">Udostępniony</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12"><div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="filter_save">
+                                    <input type="checkbox" name="savefilter" id="savefilter" />&nbsp;&nbsp;Zapisz wybrane warunki z filtrem</label><br />
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="footer-actions">
+                        <button type="button" onclick="return saveFilter();" class="btn btn-success dialog-form-submit">zapisz</button>
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">zamknij</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+  {assign "cnt" 0}
+{foreach $filters as $filter} 
+<div class="modal fade bs-example-modal-lg" id="filterDialog_{$filter.id}" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!--  Modal content-->
+        <div class="modal-content">
+            <form name="form_tickets_ajax_create" id="form_tickets_ajax_create" action="/registry/ajax-save-filter" method="post" class="form-horizontal ajax-form" role="form" data-process-fn="formProcessDialModal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update filter {$filter.filter_name}</h4>
+                    <input type="hidden" name="hidFilterId" id="hidFilterId" value="{$filter.id}"/>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12" style="margin-bottom:20px;">Show registry that match ALL of these conditions:</div><br />
+                            </div>
+                            <div class="row">
+                                <table class=" table order-list update-order-list">
+                                    <thead>
+                                    <tbody>
+                                    {assign "checkdelet" 0}
+                                    {foreach $filter.conditions as $condition_val}
+                                    <tr>
+                                        <td class="col-sm-4">
+
+                                            <select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,{$cnt});">
+                                                {foreach $column_name as $column_key => $column_value}
+                                                    {if {$column_key} eq {$condition_val.parameter_id} }
+                                                        <option value="{$column_key}" selected="selected">{$column_value}</option>
+                                                    {else}
+                                                        <option value="{$column_key}">{$column_value}</option>
+                                                    {/if}
+
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    
+                                        {if isset($condition_val.keyword.from) || isset($condition_val.keyword.to)}
+                                            <td class="col-sm-4" id="condBox_{$cnt}"></td>
+                                            <td class="col-sm-3" id="keywordBox_{$cnt}">
+                                                    From: <input type='text' class='row-value form-control datepicker-input' name='from[]' id='from_{$cnt}' value="{$condition_val.keyword.from}"/>
+                                                    To : <input type='text' class='row-value form-control datepicker-input' name='to[]' id='to_{$cnt}' value="{$condition_val.keyword.to}"/>
+                                            </td>
+                                        {else}
+                                            <td class="col-sm-4" id="condBox_{$cnt}">
+                                                <select name="condition_for[]" class="form-control">
+                                                    <option value="equal" {if $condition_val.condition == 'equal'} selected="selected" {/if} >takie jak/równe</option>
+                                                    <option value="not-equal" {if $condition_val.condition == 'not-equal'} selected="selected" {/if} >nierówne/nie takie jak</option>
+                                                    <option value="empty" {if $condition_val.condition == 'empty'} selected="selected" {/if} >puste</option>
+                                                    <option value="like" {if $condition_val.condition == 'like'} selected="selected" {/if} >takie</option>
+                                                    <option value="not-like" {if $condition_val.condition == 'not-like'} selected="selected" {/if} >nie takie</option>
+                                                    <option value="start_with" {if $condition_val.condition == 'start_with'} selected="selected" {/if} >zaczynające się od</option>
+                                                    <option value="not_start_with" {if $condition_val.condition == 'not_start_with'} selected="selected" {/if} >nie zaczynające sie od</option>
+                                                    <option value="end_with" {if $condition_val.condition == 'end_with'} selected="selected" {/if} >konczące sie na</option>
+                                                    <option value="not_end_with" {if $condition_val.condition == 'not_end_with'} selected="selected" {/if} >nie konczące się na</option>
+                                                </select>
+                                               
+                                            </td>
+
+                                            <td class="col-sm-3" id="keywordBox_{$cnt}">
+                                                {if $condition_val.parameter_id == 5}
+                                                    <select name="keyword[]" class="form-control">
+                                                    {if $condition_val.keyword == 'pole' }
+                                                        <option value="pole" selected="selected">pole</option>
+                                                        <option value="awantura">awantura</option>
+                                                    {else}
+                                                        <option value="pole">pole</option>
+                                                        <option value="awantura" selected="selected">awantura</option>
+                                                    {/if}
+                                                    </select>
+
+                                                {elseif $condition_val.parameter_id == 4}
+                                                    <select name='keyword[]' class='form-control'> 
+                                                        <option value='wstaw wiersz' {if $condition_val.keyword == 'wstaw wiersz'} selected="selected" {/if}>wstaw wiersz</option>
+                                                        <option value='update value' {if $condition_val.keyword == 'update value'} selected="selected" {/if} >update value</option>
+                                                        <option value='Utwórz pole' {if $condition_val.keyword == 'Utwórz pole'} selected="selected" {/if} >Utwórz pole</option>
+                                                        <option value='field update' {if $condition_val.keyword == 'field update'} selected="selected" {/if} >field update</option>
+                                                        <option value='delete' {if $condition_val.keyword == 'delete'} selected="selected" {/if} >delete</option>
+                                                        <option value='usuń pole' {if $condition_val.keyword == 'usuń pole'} selected="selected" {/if} >usuń pole</option></select>
+                                                {else}
+                                                    <input type="text"  name="keyword[]"class="form-control" value="{$condition_val.keyword}" />
+                                                {/if}
+                                            </td>
+                                        {/if}
+
+                                        {if $checkdelet eq 0}
+                                            <td class="col-sm-2"></td>
+                                        {else}
+                                            <td class="col-sm-2"><input type="button" class="ibtnDel btn btn-md btn-danger" value="Delete"></td>
+                                        {/if}
+
+                                        {$checkdelet = $checkdelet + 1}
+                                        {$cnt = $cnt + 1}
+                                    </tr>
+                                    {/foreach}
+                                    </tbody>
+                                     <tfoot>
+                                    <tr>
+                                        <td colspan="4" style="text-align: left;">
+                                            <input type="button" class="btn btn-lg btn-block updateAddNewCondition" id="updateAddNewCondition" value="Add Condition" />
+                                        </td>
+                                    </tr>
+                                    <tr></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="filter_name">Filter name:</label><br />
+                                    <input type="text" class="form-control" name="filter_name" disabled="disabled" value="{$filter.filter_name}" id="filter_name" placeholder="Filter title">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 pull-right">
+                                <div class="form-group">
+                                    <label for="filter_scope">Visibility:</label><br />
+                                    <select name="filter_scope" id="filter_scope" class="form-control" disabled="disabled">
+                                        {if $filter.filter_scope == 'private' }
+                                        <option value="private" selected="selected">Private</option>
+                                        <option value="shared">Shared</option>
+                                        {else}
+                                        <option value="private">Private</option>
+                                        <option value="shared" selected="selected">Shared</option>
+                                        {/if}
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="footer-actions">
+                        
+                        <button type="button" onclick="return saveFilter({$filter.id});" class="btn btn-success dialog-form-submit">Show Filter Result</button>
+                        
+                        <button type="button" onclick="return deleteFilter({$filter.id});" class="btn btn-danger dialog-form-submit">Delete</button>
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/foreach} 
+ 
+ <script>
+
+   
+    $(document).ready(function () {
+
+      
+        var counter = 1;
+        $("#addCondition").on("click", function () {
+            var newRow = $("<tr>");
+            var cols = "";
+            cols += '<td><select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,'+counter+');" onclick="return fetchCriteria(this.value,'+counter+');">'+$("#regtype").html()+'</select></td>';
+            cols += '<td id="condBox_'+counter+'"></td>';
+            cols += '<td id="keywordBox_'+counter+'"></td>';
+            cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger" value="Delete"></td>';
+            newRow.append(cols);
+            $("table.order-list").append(newRow);
+            counter++;
+        });
+
+        var cnt = $('table.order-list tbody tr').length;
+        //console.log(cnt);
+        $(".update-order-list #updateAddNewCondition").on("click", function () {
+            console.log(cnt);
+            var newRow = $("<tr>");
+            var cols = "";
+            cols += '<td><select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,'+cnt+');" onclick="return fetchCriteria(this.value,'+cnt+');">'+$("#regtype").html()+'</select></td>';
+            cols += '<td id="condBox_'+cnt+'"></td>';
+            cols += '<td id="keywordBox_'+cnt+'"></td>';
+            cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger" value="Delete"></td>';
+            newRow.append(cols);
+            $("table.order-list").append(newRow);
+            cnt++;
+        });
+
+        $("table.order-list").on("click", ".ibtnDel", function (event) {
+            $(this).closest("tr").remove();
+            counter -= 1
+        });
+        $(".datepicker-input").on("click",function(){
+            $(this).datepicker();
+        });
+
+       
+
+    });
+
+    function createConditionBox()
+    {
+
+        var conditions_data = {
+            "equal" : 'takie jak/równe',
+            "not-equal" : 'nierówne/nie takie jak',
+            "empty" : 'puste',
+            "like" :'takie',
+            "not-like" : 'nie takie',
+            "start_with" : 'zaczynające się od',
+            "not_start_with" : 'nie zaczynające sie od',
+            "end_with" :'konczące sie na',
+            "not_end_with" :'nie konczące się na',
+        };
+
+
+        
+        var select = "<select name='condition_for[]' class='form-control' >";
+        $.each(conditions_data,function(key, value){
+            select+="<option value='"+key+"'>"+value+"</option>";
+        });
+        select+="</select>";
+        return select;
+    }
+
+     function fetchCriteria(parameterId, count)
+    {   
+        
+        if(parameterId != 9) {
+            if(parameterId == 5){
+                trRow = "<select name='keyword[]' class='form-control'> <option value='pole'>pole</option><option value='awantura'>awantura</option></select>";
+                $(".order-list #condBox_"+count).html(createConditionBox());
+                $(".order-list #keywordBox_"+count).html(trRow);
+            }else if(parameterId == 4){
+                trRow = "<select name='keyword[]' class='form-control'> <option value='wstaw wiersz'>wstaw wiersz</option><option value='update value'>update value</option><option value='Utwórz pole'>Utwórz pole</option><option value='field update'>field update</option><option value='delete'>delete</option><option value='usuń pole'>usuń pole</option></select>";
+                $(".order-list #condBox_"+count).html(createConditionBox());
+                $(".order-list #keywordBox_"+count).html(trRow);
+            }else {
+                trRow = "<input type='text' class='form-control' name='keyword[]' id='keyword_'+counter+ /></td>";
+                $(".order-list #condBox_"+count).html(createConditionBox());
+                $(".order-list #keywordBox_"+count).html(trRow);
+            }  
+           
+        } else {
+            
+            trRow = "From: <input type='text' class='row-value form-control datepicker-input' name='from[]' id='from_"+count+"'/> To : <input type='text' class='row-value form-control datepicker-input' name='to[]' id='to_"+count+"'/></td>";
+            $(".order-list #condBox_"+count).html("");
+            $(".order-list #keywordBox_"+count).html(trRow);
+            
+        }
+        
+    }
+
+    function deleteFilter(filterId)
+    {
+       
+        if(confirm('do you really wants to remove this filter ?'))
+        {
+            $.ajax({
+                url: "/registry/ajax-delete-filter",
+                type:'POST',
+                data: "filter_id="+filterId,
+                success: function(result){
+                    location.href = '/registry/audit/registry_id/{$registryId}'
+                }
+            });
+        }
+    }
+    function saveFilter(filterId="")
+    { 
+        $.ajax({
+            url: "/registry/ajax-save-filter",
+            type:'POST',
+            data:$(this).serialize(),
+            success:function(result){
+                if(filterId!=="")
+                    location.href = '/registry/audit/registry_id/{$registryId}/filter_id/'+filterId;
+                else
+                    location.href = '/registry/audit/registry_id/{$registryId}';
+            }
+        });
+    }
+
+
+   
+</script> 
+<!-- Modal end for filter -->

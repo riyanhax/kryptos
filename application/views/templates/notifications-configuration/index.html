@@ -1,0 +1,76 @@
+<form id="f_profile" name="f_profile" action="/notificationsConfiguration/save" method="POST" class="form-horizontal" role="form">
+	<div class="tab-pane" id="rola" style="padding:15px 5px">
+            <div class="form-group row">
+                <label for="data" class="col-sm-2" style="width: 100%;">Notification Configuration</label>
+<div class="form-group row">
+<label class="col-sm-2 glyphicon glyphicon-list-alt" style="width: 100%;">Task</label>
+                <div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="task_email" {if ($conf.task_email)}checked{/if}>E-mail
+                        </label>
+                </div>
+		<div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="task_sms"  {if ($conf.task_sms)}checked{/if}>SMS
+                        </label>
+                </div>
+</div>
+<div class="form-group row">
+<label class="col-sm-2 glyphicon glyphicon-paperclip" style="width: 100%;">Activity</label>
+		<div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="activity_email"  {if ($conf.activity_email)}checked{/if}>E-mail
+                        </label>
+                </div>
+		<div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="activity_sms"  {if ($conf.activity_sms)}checked{/if}>SMS
+                        </label>
+                </div>
+</div>
+<div class="form-group row">
+<label class="col-sm-2 glyphicon glyphicon-tags" style="width: 100%;">Ticket</label>
+		<div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="tickets_email"  {if ($conf.tickets_email)}checked{/if}>E-mail
+                        </label>
+                </div>
+		<div class="col-md-4 checkout-list">
+                        <label class="col-sm-12">
+                            <input type="checkbox" name="tickets_sms"  {if ($conf.tickets_sms)}checked{/if}>SMS
+                        </label>
+                </div>
+</div>
+            </div>
+	    <div class="form-group row">
+	    	<input type="submit" value="Zapisz"  class="btn btn-info">
+	    </div>
+        </div>
+</form>
+
+<style>
+
+.tab-pane {
+    border: 1px solid #efefef;
+}
+.form-group.row {
+    margin: 0px;
+    border-bottom: 1px solid #efefef;
+}
+label.col-sm-2 {
+    font-weight: bold;
+}
+.checkout-list label.col-sm-12 {
+    padding: 0px;
+}
+.icheckbox_square-aero {
+    margin-right: 5px !important;
+}
+input.btn.btn-info {
+    margin: 10px !important;
+}
+label.col-sm-2::before {
+    padding-right: 11px;
+}
+</style>
+

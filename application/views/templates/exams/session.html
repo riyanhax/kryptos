@@ -1,0 +1,81 @@
+<div class="row page-medium">
+    <div style="width: 100%; padding: 10px 45px 10px 45px; text-align: center;">
+        <p>Pozostały czas: <span id="timer"></span></p>
+    </div>
+    <div class="col-sm-12">
+        <div class="widget animated fadeInDown">
+            <form name="f_data" id="f_data" method="POST" action="{$baseUrl}/session-complete" class="wizardContainer form-horizontal">
+                <input type="hidden" name="id" value="{$session.id}"/>
+                <div class="examElement" data-navigation="false">
+                    {foreach $session.exam.questions as $question}
+                        <section class="step">
+                            <h4>
+                                {$question.question}
+                            </h4>
+                            <hr>
+                            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-widget answers">
+                                {foreach $question.answers as $answer}
+                                    <tr>
+                                        <td class="min-width"><input type="checkbox" name="answers[{$question.id}][{$answer.id}]" id="answer_{$question.id}_{$answer.id}" value="1"></td>
+                                        <td><label for="answer_{$question.id}_{$answer.id}">{$answer.answer}</label></td>
+                                    </tr>
+                                {/foreach}
+                            </table>
+                            <hr>
+                        </section>
+                    {/foreach}
+                    <section class="step" data-pagination="false">
+                        <h3>OSTATNIA SZANSA</h3>
+                        <div class="well">To już wszystkie pytania egzaminacyjne. Masz jeszcze możliwość powrotu do danego pytania i zmiany udzielonej odpowiedzi na inną lub zakończ test.</div>
+
+                        <p>Czy chcesz zakończyć test i poznać wyniki?</p>
+
+                        <button type="button" class="btn btn-default wizard-back-button">JESZCZE NIE</button>
+                        <button type="submit" class="btn btn-info">TAK, CHCĘ ZAKOŃCZYĆ</button>
+                    </section>
+                </div>
+            </form>
+
+            <div class="progress progress-sm">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <span id="test_id">1</span>/{count($session.exam.questions)}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var tim;
+    var min = 00;
+    var sec = 60;    
+    var timeOverFlag = false;
+    $("body").attr('oncontextmenu', "return false");
+    $("body").addClass("preventcopy");
+    function f1() {
+        if (parseInt(sec) > 0) {
+            sec = parseInt(sec) - 1;
+            document.getElementById("timer").innerHTML = min+" minut " + sec+" sekund";
+            tim = setTimeout("f1()", 1000);
+        }
+        else {
+            if (parseInt(sec) == 0) {
+                min = parseInt(min) - 1;
+                if (parseInt(min) == 0) {
+                    sec = 60;
+                    f1();
+                } else if(parseInt(min) < 0) {
+                    clearTimeout(tim);
+                    timeOverFlag = true;
+                    $('.next').click();
+                }
+                else {
+                    sec = 60;
+                    document.getElementById("timer").innerHTML = min + " minut " + sec + " sekund";  
+                    tim = setTimeout("f1()", 1000);                  
+                }
+            }
+        }
+    }
+    f1();
+</script>

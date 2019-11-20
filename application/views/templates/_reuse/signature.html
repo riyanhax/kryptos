@@ -1,0 +1,7 @@
+{if $value}
+<a class="btn btn-default" data-html="true" data-toggle="tooltip" data-placement="top"
+   title="<img src='{$value}' style='background-color: white;'/>" id="{$uniqueId}">...</a>
+<script>
+    $("#{$uniqueId}").popover();
+</script>
+{/if}

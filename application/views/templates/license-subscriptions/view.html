@@ -1,0 +1,55 @@
+<fieldset>
+    <div class="form-group row">
+        <label class="col-sm-2">License:</label>
+        <div class="col-sm-4">
+            <div>
+                <b>{$data.license.name}</b>
+                {if $auth->isGranted('node/licenses/update', ['id' => $data.license.id])}
+                    <a class="glyphicon glyphicon-pencil" href="/osoby/update/id/{$data.license.id}" data-toggle="tooltip" title="Edytuj"></a>
+                {/if}
+            </div>
+            <div><small>{$data.license.description}</small></div>
+            <div>Price: {($data.license.price/100)|string_format:"%.2f"} ({$data.license.currency})</div>
+            <div>Period: {$data.license.period} ({$trialPeriodUnits[$data.license.period_unit]})</div>
+            <div>Trial period: {$data.license.period} ({$trialPeriodUnits[$data.license.trial_period_unit]})</div>
+            <div>User type: {$userTypes[$data.license.user_type]}</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2">Customer</label>
+        <div class="col-sm-4">
+            <div>
+                <b>#{$data.osoba.id}</b>
+                {if $auth->isGranted('node/osoby/update', ['id' => $data.osoba.id])}
+                    <a class="glyphicon glyphicon-pencil" href="/osoby/update/id/{$data.osoba.id}" data-toggle="tooltip" title="Edytuj"></a>
+                {/if}
+            </div>
+            <div>First name: {$data.osoba.imie|default:'-'}</div>
+            <div>Last name: {$data.osoba.nazwisko|default:'-'}</div>
+            <div>Email: <a>{$data.osoba.email}</a></div>
+            <div>Phone: {$data.osoba.telefon_stacjonarny|default:'-'}</div>
+            <div>Mobile phone: {$data.osoba.telefon_komorkowy|default:'-'}</div>
+            <div>Login: {$data.osoba.login_do_systemu} ({$userTypes[$data.osoba.type_of_user]})</div>
+            <div>Created at: {$data.osoba.created_at}</div>
+        </div>
+    </div>
+</fieldset>
+
+<table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example js-licences-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th data-filter-type="select">Activity type</th>
+        <th data-filter-type="date-range">Activity time</th>
+    </tr>
+    </thead>
+    <tbody class="ui-widget-content">
+    {foreach $activityLog as $activity}
+    <tr>
+        <td class="text-right">{$activity@iteration}</td>
+        <td class="text-left">{$activityTypes[$activity.event_type]|default:'-'}</td>
+        <td class="text-left">{smart_date value=$activity.event_time}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>

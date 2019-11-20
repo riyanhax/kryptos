@@ -1,0 +1,360 @@
+{$message} {include file='modals/modal.tpl' title='Podstawowe Informacje - co to
+jest?' content='W zakładce Podstawowe Informacje zawarte są dane o jednostce,
+które są np. wykorzystywane później w szablonach dokumentów.'} {*
+<div class="row">
+  <ul class="nav navbar-nav navbar-right">
+    <li>
+      <a class="btn btn-default" href="/admin/loghistory">Historia logowań</a>
+    </li>
+    <li><a class="btn btn-default" href="/admin/zastepstwa">Zastępstwa</a></li>
+    <li><a class="btn btn-default" href="/komunikat">Komunikaty</a></li>
+  </ul>
+</div>
+*}
+<style>
+  .tab-pane {
+    border: 1px solid #efefef;
+  }
+  .form-group.row {
+    margin: 0px;
+    border-bottom: 1px solid #efefef;
+  }
+  label.col-sm-2 {
+    font-weight: bold;
+  }
+  .checkout-list label.col-sm-12 {
+    padding: 0px;
+  }
+  .icheckbox_square-aero {
+    margin-right: 5px !important;
+  }
+  input.btn.btn-info {
+    margin: 10px !important;
+  }
+  label.col-sm-2::before {
+    padding-right: 11px;
+  }
+  .right {
+    text-align: right;
+  }
+  .center {
+    text-align: center;
+  }
+  .tenpxright {
+    padding-right: 10px;
+  }
+</style>
+<form
+  id="f_profile"
+  name="f_profile"
+  method="post"
+  action="/Systemsconfiguration/save"
+  class="form-horizontal"
+>
+  {foreach $fieldsets as $fieldsetName => $settings}
+  <fieldset>
+    <legend>{$fieldsetName}</legend>
+    {foreach $settings as $setting} {if $setting.class == 'checkbox'}
+    <div class="form-group">
+      <div class="col-lg-4 right">
+        <label for="setting-{$setting.id}">
+          {if $setting.description} {$setting.description} {else}
+          {$setting.variable} {/if}
+        </label>
+      </div>
+      <div class="col-lg-6">
+        <input type="checkbox" name="setting[{$setting.id}]" value="1"
+        class="ios-switch ios-switch-success ios-switch-sm" {if
+        $setting.value}checked{/if} />
+      </div>
+    </div>
+    {else}
+    <div class="form-group">
+      <div class="col-lg-4 right">
+        <label for="setting-{$setting.id}">{$setting.variable}</label>
+      </div>
+      <div class="col-lg-6">
+        <input
+          type="text"
+          value="{$setting.value}"
+          name="setting[{$setting.id}]"
+          id="setting-{$setting.id}"
+          class="form-control"
+        />
+      </div>
+    </div>
+    {/if} {/foreach}
+  </fieldset>
+  {/foreach}
+
+  <!--Notification configuration-->
+  <fieldset>
+    <legend>Konfiguracja powiadomień</legend>
+    <div class="tab-pane" id="rola" style="padding:15px 50px">
+      <div class="form-group">
+        <!--<label for="data" class="col-sm-2" style="width: 100%;">Notification Configuration</label>-->
+        <div class="form-group">
+          <label class="col-sm-2" style="width: 100%;"
+            ><i class="fa fa-tasks tenpxright"></i>Task</label
+          >
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="task_email" {if
+              ($conf.task_email)}checked{/if}>E-mail
+            </label>
+          </div>
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="task_sms" {if
+              ($conf.task_sms)}checked{/if}>SMS
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2" style="width: 100%;"
+            ><i class="fa fa-history tenpxright"></i>Activity</label
+          >
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="activity_email" {if
+              ($conf.activity_email)}checked{/if}>E-mail
+            </label>
+          </div>
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="activity_sms" {if
+              ($conf.activity_sms)}checked{/if}>SMS
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2" style="width: 100%;"
+            ><i class="fa fa-ticket tenpxright"></i>Ticket</label
+          >
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="tickets_email" {if
+              ($conf.tickets_email)}checked{/if}>E-mail
+            </label>
+          </div>
+          <div class="col-md-4 checkout-list">
+            <label class="col-sm-12">
+              <input type="checkbox" name="tickets_sms" {if
+              ($conf.tickets_sms)}checked{/if}>SMS
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <!--end Notification configuration-->
+
+  <!--Change password-->
+  <fieldset>
+    <legend>Zmień hasło</legend>
+    <div class="tab-pane" id="rola" style="padding:15px 50px">
+      <div class="form-group">
+        <!--<label for="data" class="col-sm-2" style="width: 100%;">Zmień hasło</label>-->
+        <div class="form-group">
+          <div class="col-lg-12">
+            <div class="notes">
+              {'Zalecamy stosowanie silnych haseł zgodnie z wielokrotnymi
+              zaleceniami Najwyższej Izby Kontroli. Hasło winno się składać z
+              minimum 10 znaków (w tym co najmniej jedna duża litera, jedna
+              mała, cyfra lub znak specjalny). Pamiętaj, że epodpis wewnętrzny
+              Kryptos stanowi oświadczenie woli w rozumieniu Kodeksu Cywilnego,
+              więc zadbaj o bezpieczeństwo swojego identyfikatora i
+              hasła.'|translate}
+            </div>
+          </div>
+        </div>
+        <div class="form-group right">
+          <label class="col-lg-4 col-sm-4">{'Stare hasło'|translate}:</label>
+          <div class="col-lg-6 col-sm-8">
+            <input
+              type="password"
+              id="old_pass"
+              name="old_pass"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="form-group right">
+          <label class="col-lg-4 col-sm-4">{'Nowe hasło'|translate}:</label>
+          <div class="col-lg-6 col-sm-8">
+            <input
+              type="password"
+              id="new_pass1"
+              name="new_pass1"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="form-group right">
+          <label class="col-lg-4 col-sm-4"
+            >{'Powtórz nowe hasło'|translate}:</label
+          >
+          <div class="col-lg-6 col-sm-8">
+            <input
+              type="password"
+              id="new_pass2"
+              name="new_pass2"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <!--end Change password-->
+
+  <div class="form-group center">
+    <input type="submit" value="Zapisz" class="btn btn-info" />
+  </div>
+</form>
+
+<script type="text/javascript">
+  backendUtilities.addVatidationEngine("f_profile");
+  /*$("#setting-11").change(function () {
+      alert('Uwaga, po zapisaniu nowej daty oświadczeń/upoważnień zostanie przeładowana dokumentacja.');
+  });*/
+
+
+  function czy_jest_znak(haslo, male_litery) {
+      var jest_mala_litera = false;
+      for (var i = 0; i < haslo.length; i++) {
+          //var litera_hasla=haslo.substring(i, 1);
+          litera_hasla = haslo.charAt(i);
+          if (male_litery.indexOf(litera_hasla) != -1) {
+              var jest_mala_litera = true;
+              break;
+          }
+      }
+      if (jest_mala_litera == true) {
+          return true;
+      } else {
+          return false;
+      }
+  }
+
+  $('#old_pass').on('input', function() {
+      if($('#old_pass').val()){
+          $("#new_pass1").addClass("validate[required,minSize[10], maxSize[15]]");
+          $("#new_pass2").addClass("validate[required,minSize[10], maxSize[15]]");
+      }else{
+          $("#new_pass1").removeClass("validate[required,minSize[10], maxSize[15]]");
+          $("#new_pass2").addClass("validate[required,minSize[10], maxSize[15]]");
+      }
+  });
+
+  $('#new_pass1').on('input', function() {
+      if($('#new_pass1').val()){
+          $("#old_pass").addClass("validate[required]");
+          $("#new_pass2").addClass("validate[required,minSize[10], maxSize[15]]");
+      }else{
+          $("#old_pass").removeClass("validate[required]");
+          $("#new_pass2").addClass("validate[required,minSize[10], maxSize[15]]");
+      }
+  });
+
+  $('#new_pass2').on('input', function() {
+      if($('#new_pass2').val()){
+          $("#old_pass").addClass("validate[required]");
+          $("#new_pass1").addClass("validate[required,minSize[10], maxSize[15]]");
+      }else{
+          $("#old_pass").removeClass("validate[required]");
+          $("#new_pass1").addClass("validate[required,minSize[10], maxSize[15]]");
+      }
+  });
+
+  $('#f_profile').submit(function () {
+
+      if($('#old_pass').val() && $('#new_pass1').val() && $('#new_pass2').val()){
+
+      if ($('#new_pass1').val() != $('#new_pass2').val()) {
+          alert('{'Wprowadzone nowe hasła różnią się.'|translate}');
+          return false;
+      }
+
+      var haslo = $('#new_pass1').val();
+      var male_litery = "qwertyuiopasdfghjklzxcvbnmęóąśłżźćń";
+
+      if (czy_jest_znak(haslo, male_litery)) {
+
+      } else {
+          alert('{'Wymagana jest co najmniej jedna mała litera'|translate}');
+          return false;
+      }
+
+      var wielkie_litery = male_litery.toUpperCase()
+
+
+      if (czy_jest_znak(haslo, wielkie_litery)) {
+      } else {
+          alert('{'Wymagana jest co najmniej jedna wielka litera'|translate}');
+          return false;
+      }
+
+
+      if (czy_jest_znak(haslo, '1234567890')) {
+      } else {
+          alert('{'Wymagana jest co najmniej cyfra'|translate}');
+          return false;
+      }
+
+      if (czy_jest_znak(haslo, {literal}'`~!@#$%^&*()_+|[];\',./{}:">?_-=\\"'{/literal})) {
+      } else {
+          alert('{'Wymagany jest co najmniej jeden znak specjalny'|translate}');
+          return false;
+      }
+      }
+
+
+  })
+
+
+  /*$('#f_profile').submit(function () {
+
+
+      if ($('#new_pass1').val() != $('#new_pass2').val()) {
+          alert('{'Wprowadzone nowe hasła różnią się.'|translate}');
+          return false;
+      }
+
+      var haslo = $('#new_pass1').val();
+      var male_litery = "qwertyuiopasdfghjklzxcvbnmęóąśłżźćń";
+
+      if (czy_jest_znak(haslo, male_litery)) {
+
+      } else {
+          alert('{'Wymagana jest co najmniej jedna mała litera'|translate}');
+          return false;
+      }
+
+      var wielkie_litery = male_litery.toUpperCase()
+
+
+      if (czy_jest_znak(haslo, wielkie_litery)) {
+      } else {
+          alert('{'Wymagana jest co najmniej jedna wielka litera'|translate}');
+          return false;
+      }
+
+
+      if (czy_jest_znak(haslo, '1234567890')) {
+      } else {
+          alert('{'Wymagana jest co najmniej cyfra'|translate}');
+          return false;
+      }
+
+      if (czy_jest_znak(haslo, {literal}'`~!@#$%^&*()_+|[];\',./{}:">?_-=\\"'{/literal})) {
+      } else {
+          alert('{'Wymagany jest co najmniej jeden znak specjalny'|translate}');
+          return false;
+      }
+
+
+
+  });*/
+</script>

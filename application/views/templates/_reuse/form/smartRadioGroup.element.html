@@ -1,0 +1,524 @@
+{if empty($attributes.id)} {assign var="id" value=$attributes.name|set_id}
+{else} {assign var="id" value=$attributes.id} {/if} {assign var="registries"
+value=$params.attributes.all_options} {assign var="fieldValues"
+value=array_values($params.attributes.value)}
+
+<div
+  class="form-group row {$wrapper.class nofilter}"
+  {$wrapper.attributes_string
+  nofilter}
+  data-enable-if="{$params.attributes.widget.enableIf}"
+  data-visible-if="{$params.attributes.widget.visibleIf}"
+>
+  <input type="hidden" name="{$attributes.name}" value="{$attributes.value}" />
+  <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+  <div class="col-sm-8">
+    <div id="{$id}">
+      <div>
+        <table
+          style="width: auto;"
+          class="js-registry-selected-values-container"
+        >
+          <tbody>
+            <tr>
+              <td>&nbsp;</td>
+              <td>
+                <button class="btn btn-default js-add-radio-button">
+                  <i class="fa fa-plus-circle"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+      </div>
+      <!-- Modal -->
+      <div
+        class="modal fade js-relation-modal"
+        id="myModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+      >
+        <div class="modal-dialog main-modal" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel">
+                {$params.attributes.label}
+              </h4>
+            </div>
+            <div align="right">
+              <button 
+                type="button"
+                class="btn btn-primary js-add-submit-button"
+                style="margin: 3%"
+              >
+                {'ZATWIERDŹ'|translate}
+              </button>
+            </div>
+            <div>
+                <div style="padding-left: 21px;" class="col-md-6" >
+                  <input type="text" id="searcher" onkeyup="filterThis(this)" placeholder="{'Wyszukaj'|translate}">
+                </div>
+                <div  class="col-md-6" >
+                  <p style="float: right;">
+                    Kliknij na ikonę plusa, by dodać rekordy
+                  </p>
+                </div>
+            </div>
+            <br><br>
+            <div class="modal-body form-inline">
+              <div class="form-group">
+                <select
+                  class="form-control js-registry-select"
+                  style="width: auto;"
+                >
+                  {foreach from=$registries key=registryId item=registry}
+                  <option value="{$registryId}">{$registry.title}</option>
+                  {/foreach}
+                </select>
+              </div>
+              <div class="form-group pull-right">
+                <a class="btn btn-default" id="addRegisterBtn"
+                  ><i class="fa fa-plus"></i
+                ></a>
+                <br />
+              </div>
+
+              {foreach from=$registries key=registryId item=registry}
+              <div
+                class="registry-table js-registry-table js-registry-table-{$registryId}"
+                data-registry-id="{$registryId}"
+                style="display: none; overflow: auto;"
+              >
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  id="smartRadioGroupTable_{$registryId}"
+                  class="table table-bordered smartRadioGroupTable{$registryId}"
+                >
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      {foreach $registry.fields as $field}
+                      <th class="sortableLists list-group">
+                        {$field}
+                        <i
+                          class="fa fa-fw fa-sort"
+                          style="display: inline-block;"
+                        ></i>
+                      </th>
+                      {/foreach}
+                    </tr>
+                  </thead>
+                  <tbody id="tete">
+                    {foreach from=$registry.values key=valueId item=values}
+                    <tr
+                      class="js-registry-value-row replicate-{$registryId} js-registry-value-row-{$valueId}"
+                      data-title="{join(' ', $values)}"
+                    >
+                      <td id="{$valueId}-pre-td">
+                        <input
+                          type="checkbox"
+                          checked
+                          value="{$valueId}"
+                          id="{$valueId}-pre-selector"
+                          name="registry_value[{$registryId}]"
+                          class="js-radio-registry-value js-registry-value-{$registryId}"
+                        />
+                      </td>
+                      {foreach from=$registry.fields key=fieldId item=field}
+                      <td class="col1">{$values[$fieldId]}</td>
+                      {/foreach}
+                    </tr>
+                    {/foreach}
+                  </tbody>
+                </table>
+              </div>
+              {/foreach}
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary js-add-submit-button"
+                style="margin: 3%"
+              >
+                {'ZATWIERDŹ'|translate}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Modal -->
+      <div
+        class="modal fade js-relation-modal"
+        id="addModal_{$id}"
+        style="z-index: 9999"
+        id=""
+        tabindex="1"
+        role="dialog"
+        aria-labelledby="addModalLabel"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h2
+                class="modal-title"
+                id="addModalLabel"
+                style="font-size: 18px;"
+              ></h2>
+            </div>
+            <div class="modal-body form-inline">
+              <div
+                class="form-group row"
+                style="display: block;"
+                id="form_{$id}"
+              >
+                {foreach from=$registry.fields key=fieldId item=field}
+                <div style="clear:both;">
+                  <label class="col-sm-4" id="element_{$fieldId}_title"
+                    >{$field|translate}</label
+                  >
+                  <div class="col-sm-8" style="margin-top: 6px;">
+                    <input
+                      type="text"
+                      id="record_name"
+                      data-id="element_{$fieldId}"
+                      class="row-value form-control "
+                      style="width: 100%;"
+                      value=""
+                    />
+                  </div>
+                </div>
+                {/foreach}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="submit"
+                class="btn btn-primary js-add-submit-button"
+                style="margin: 3%"
+              >
+                {'Dodaj'|translate}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (function(){
+    // $('#smartRadioGroupTable_{$registryId}_filter label').text("Szukaj");
+    // $('#smartRadioGroupTable_{$registryId}').DataTable( {
+    //     "dom": '<"toolbar">frtip'
+    // } );
+      let container = jQuery('#{$id}');
+      let modal = container.find('#myModal').insertAfter('.content:first').modal({
+          show: false
+      });
+      let addRegisterModal = container.find('#addModal_{$id}').insertAfter('.content:first').modal({
+          show: false
+      });
+      let registryValues = modal.find('.js-radio-registry-value');
+      let registrySelect = modal.find('.js-registry-select');
+      let registryId = registrySelect.val();
+      let registryTable = modal.find('.js-registry-table');
+      let valuesContainer = container.find('.js-registry-selected-values-container tbody');
+
+      function addRadioSelectedValue(valueId){
+          let existingValues = valuesContainer.find('.js-registry-selected-value');
+          let valueRow = modal.find('.js-registry-value-row-'+valueId);
+
+          let registryId = valueRow.parents('.js-registry-table:first').data('registry-id');
+          let registryTitle = registrySelect.find('option[value='+registryId+']').html();
+          let valueTitle = valueRow.data('title') ;
+          if (!valueTitle ) {
+            return false;
+          }
+          let html = '<tr class="js-registry-selected-value js-registry-'+registryId+'-selected-value added'+valueId+' radio-'+registryId+'-selected">' +
+              '<td><b>' + registryTitle + '</b>: ' + valueTitle + '</td>' +
+              '<td>' +
+              '<input type="hidden" name="{$attributes.name}[]" value="'+valueId+'">' +
+              '<button class="btn btn-default js-del-button"><i class="fa fa-minus-circle"></i></button>' +
+              '</td>' +
+              '</tr>';
+          if (!existingValues.length) {
+              valuesContainer.prepend(html);
+              return true;
+          } else {
+            valuesContainer.prepend(html);
+          }
+          /**
+           let valueToReplace = existingValues.filter('.js-registry-'+registryId+'-selected-value');
+           if (valueToReplace.length) {
+              valueToReplace.replaceWith(html);
+              return true;
+          }
+           **/
+          //existingValues.filter(':last').after(html);
+      }
+
+      $('#addRegisterBtn').on("click", function () {
+          registryTitle = registrySelect.find('option[value='+registryId+']').html();
+          $('h2').html(registryTitle+": dodaj wpis");
+          addRegisterModal.modal('show');
+          jQuery(this).blur();
+          return false;
+      });
+      
+
+      addRegisterModal.find('.close').click(function(){
+          addRegisterModal.modal('hide');
+      });
+
+      modal.find('.close').click(function(){
+          modal.modal('hide');
+      });
+
+      addRegisterModal.find('.js-add-submit-button').click(function(){
+          var is_valid = true;
+          var formdata = new FormData();
+          formdata.append("registry_id", registryId);
+          formdata.append("controller", "registry-entries");
+          formdata.append("action", "save");
+          formdata.append("module", "default");
+
+          var data_values = "";
+          $("#form_{$id}").find("input").each(function(){
+            
+              if($(this).val() != "") {
+                  data_values += "" + $(this).val();
+              }
+              formdata.append($(this).attr('data-id'), $(this).val());
+              formdata.append($(this).attr('data-id')+"_title", $("#"+$(this).attr('data-id')+"_title").text());
+              var checker = $(this).val().toLowerCase();
+              $('.replicate-'+registryId).each(function() {
+                  if (checker == $(this).data('title').toLowerCase()) {
+                    alert('Element o ten nazwie, znajduje się już na liście.');
+                    is_valid = false;
+                    return false;
+                  }
+                });
+          });
+          if (is_valid) {
+            $.ajax({
+              url: '/registry-entries/addnewrecord/registry-id/'+registryId,
+              type: 'POST',
+              data: formdata,
+              dataType: 'json',
+              processData: false,  // tell jQuery not to process the data
+              contentType: false,   // tell jQuery not to set contentType
+              success: function(data, textStatus, jqXHR)
+              {
+                  if(typeof data.error === 'undefined')
+                  {
+                      // Success so call function to process the form
+                      alert("Successfully added");
+                      var addstring = "<tr class='js-registry-value-row replicate-"+registryId+" js-registry-value-row-"+ data['result'] +"' data-title='"+ data_values +"'><td><input type='checkbox' value='"+ data['result'] +"' name='registry_value["+registryId+"]' class='js-radio-registry-value js-registry-value-"+registryId+" radiobtn-"+ data['result'] +"' style='position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;'/></td>";
+                      $("#form_{$id}").find("input").each(function(){
+                          addstring += "<td>"+ $(this).val() +"</td>";
+                      });
+
+                      $('.smartRadioGroupTable'+registryId+' > tbody').prepend(addstring);
+                      $('.radiobtn-' + data['result']).each(function(){
+                          $(this).iCheck({
+                              checkboxClass: 'icheckbox_square-aero',
+                              radioClass: 'iradio_square-aero',
+                              increaseArea: '20%'
+                          });
+                      });
+                  }
+                  else
+                  {
+                      // Handle errors here
+                      //alert('ERRORS: ' + data.error);
+                  }
+              },
+              error: function(jqXHR, textStatus, errorThrown)
+              {
+                  // Handle errors here
+                  //alert('ERRORS: ' + textStatus);
+                  // STOP LOADING SPINNER
+              }
+            });
+            addRegisterModal.modal('hide');
+          }
+          
+      });
+
+      $(".js-radio-registry-value").on('ifChecked', function(e) {
+          var Id = $(this).val()
+          //alert(Id)
+          //addRadioRemoveValues(Id);
+          //addRadioSelectedValue(Id);
+          
+      });
+      // iCheck unchecked event
+      $(".js-radio-registry-value").on('ifUnchecked', function(e) {
+          var Id = $(this).val()
+          //alert('nahi hai checked')
+          $('table.js-registry-selected-values-container tr.added'+Id).remove();
+          //addRadioRemoveValues(Id);
+          //addRadioSelectedValue(Id);
+      });
+      // $(document).on('ifUnchecked','.js-radio-registry-value',function(e) {
+      //   //alert('hehehe')
+      //   var Id = $(this).val()
+      //   addRadioRemoveValues(Id);
+      // });
+      // $(document).on('ifChecked','.js-radio-registry-value',function(e) {
+      //   //alert('hha')
+      //   var Id = $(this).val()
+      //   addRadioRemoveValues(Id);
+      // });
+      // this function picks the value from oTable which rows are checked.
+      function addRadioRemoveValues(Id){
+          let registryId = registrySelect.val();
+          setTimeout(function(){
+
+              var selectedValues = [];
+              $('.smartRadioGroupTable'+registryId).find('input').each(function(){
+                  var tuisre = $(this).is(":checked");
+                  if (tuisre) {
+                      selectedValues.push($(this).val());
+                  }
+              });
+              addRadioSelectedValue(Id);
+              let existingValues = valuesContainer.find('.js-registry-selected-value');
+              existingValues.map(function(){
+                  if(!selectedValues.includes($(this).find(':input:first').val())){
+                      $(this).remove();
+                  }
+              });
+
+
+          },500) ;
+      }
+
+
+      registrySelect.change(function(){
+          let registryId = $(this).val();
+          registryValues.removeAttr('checked').iCheck('update');
+          $( ".js-registry-value-row" ).removeClass( "green_row" );
+          registryTable.hide()
+              .filter('.js-registry-table-'+registryId).show();
+      }).change();
+      container.find('.js-add-radio-button').click(function () {
+          let registryId = registrySelect.val();
+          registryValues.removeAttr('checked').iCheck('update');
+          $( ".js-registry-value-row" ).removeClass( "green_row" );
+          let existingRadioValues = valuesContainer.find('.radio-'+registryId+'-selected');
+          var existingRadioValuesIdArray = [];
+          existingRadioValues.map(function(){
+              let existingRadioValueId = $(this).find(':input:first').val();
+                existingRadioValuesIdArray.push(existingRadioValueId);
+                $('.js-registry-value-row-'+existingRadioValueId).iCheck('check');
+                $( '.js-registry-value-row-'+existingRadioValueId).removeClass( "green_row" );
+              //jQuery('.js-registry-value-row-'+existingValueId).find(':input:first').iCheck('check');
+          });
+          
+          //var checkVal = $('#'+existingRadioValuesIdArray[0]+'-pre-selector').val();
+                  //$('.js-registry-value-row-'+checkVal).iCheck('check');
+                  //$( '.js-registry-value-row-'+checkVal).removeClass( "green_row" );
+          $('#smartRadioGroupTable_'+registryId).find('input').each(function(){
+              if(jQuery.inArray($(this).val(),existingRadioValuesIdArray) !== -1  ){
+                
+                  //jQuery(this).iCheck('check');
+              }
+          });
+
+          modal.modal('show');
+          jQuery(this).blur();
+          return false;
+      });
+      modal.find('.js-add-submit-button').click(function(){
+          let registryId = registrySelect.val();
+          $('#{$id} tbody').find('.js-registry-'+registryId+'-selected-value').each(function(){
+                      $(this).remove();                 
+                  });
+          let selectedValueId = modal.find('.js-registry-table-'+registryId+' :input:checked').val();
+          if (!selectedValueId) {
+              alert('Please select value');
+              return false;
+          }
+          var duplicates = [];
+          $('.smartRadioGroupTable'+registryId).find('input').each(function(){
+                  var tuisre = $(this).is(":checked");
+                  if (tuisre && jQuery.inArray($(this).val(),duplicates) == -1) {
+                    //alert($(this).val())
+                    duplicates.push($(this).val());
+                    addRadioSelectedValue($(this).val());
+                  }
+              });
+          
+          modal.modal('hide');
+      });
+      modal.on('click', '.js-registry-table .js-registry-value-row', function () {
+          jQuery(this).find(':input:first').iCheck('toggle');
+          $( ".js-registry-value-row" ).removeClass( "green_row" );
+      });
+      modal.on('click', '.js-registry-value-row .iCheck-helper', function () {
+          //$( ".js-registry-value-row" ).removeClass( "green_row" );
+      });
+      valuesContainer.on('click', '.js-del-button', function () {
+          /*if (confirm('Are you sure want to delete value?')) {
+              jQuery(this).parents('.js-registry-selected-value:first').remove();
+          }*/
+          var button = this ;
+          bootbox.confirm("<h3>Potwierdź operację</h3><div>Czy na pewno chcesz usunąć wybrany element?</div>", function(result) {
+              if(result){
+                  jQuery(button).parents('.js-registry-selected-value:first').remove();
+              }
+          });
+          jQuery(this).blur();
+          return false;
+      });
+      {if $fieldValues|count}
+      {foreach $fieldValues as $valueId}
+      addRadioSelectedValue('{$valueId}');
+      {/foreach}
+          {/if}
+          })();
+
+  $(function() {
+      // initial sort set using sortList option
+      $(".table").tablesorter({
+          // sort on the first column and second column in ascending order
+          sortList: [[1,0]]
+      });
+      
+  });
+
+  function filterThis (obj) {       
+        var value = $(obj).val().toLowerCase();
+        $(".table-bordered tbody tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    }
+</script>
+<style>
+  .iradio_square-aero.hover,
+  .iradio_square-aero {
+    display: inline-block !important;
+  }
+</style>

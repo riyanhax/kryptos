@@ -1,0 +1,126 @@
+<div id="logging">
+    <div class="login-widget">
+        <div class="logo">
+            <img src="/assets/images/kryptos.png">
+        </div>
+        <div class="infoText">
+            <h1>REJESTRACJA</h1>
+        </div>
+        <div class="section">
+            {if $message}
+            <div>
+                <span>{$message}</span>
+            </div>
+            {/if} {if $registered}
+            <div style="color:white">
+                <p>Konto zostało utworzone</p>
+                <p>Login: {$login} </p>
+                <p>Hasło: {$password} </p>
+                <p><b>Proszę zapisać powyższe dane zanim przejdziesz dalej</b></p>
+            </div>
+            <div class="submit">
+                <a href="/" class="btn btn-back">Anuluj</a>
+                <a href="/" class="btn btn-submit">ZALOGUJ</a>
+            </div>
+            {else}
+            <div class="loginBox">
+                <form method="post" action="/index/register" id="registrationForm">
+		    <input type="hidden" name="email" value="{$email}">
+                    <p style="color:white">Nazwa organizacji:</p>
+                    <div class="form-group login">
+                        <i class="fa fa-user overlay"></i>
+                        <input type="text" name="organisation" value="{$organisation}">
+                    </div>
+                      <p style="color:white; padding-top:10px;">NIP:</p>
+                    <div class="form-group login">
+                        <i class="fa fa-user overlay"></i>
+                        <input type="text" name="nip" value="{$nip}">
+                    </div>
+                    <p style="color:white; padding-top:10px;">Imię:</p>
+                    <div class="form-group login">
+                        <i class="fa fa-user overlay"></i>
+                        <input type="text" name="firstname" value="{$firstname}">
+                    </div>
+
+                    <p style="color:white; padding-top:10px;">Nazwisko:</p>
+                    <div class="form-group login">
+                        <i class="fa fa-user overlay"></i>
+                        <input type="text" name="surname" value="{$surname}">
+                    </div>
+
+		    <p style="color:white; padding-top:10px;">dzień narodzin:</p>
+		    <div class="form-group login">
+                        <select id="birthday" name="birthday" class="form-control validate[required]">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                    </div>
+
+
+		    <p style="color:white; padding-top:10px;">miesiąc urodzenia:</p>
+		    <div class="form-group login">
+                        <select id="birthmonth" name="birthmonth" class="form-control validate[required]">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group submit">
+                        <a href="/" class="btn btn-back">Anuluj</a>
+                        <input type="submit" name="submit" class="btn btn-submit" value="Zarejestruj">
+                    </div>
+
+                    <input type="hidden" name="login" id="login" value="{$login}" />
+                </form>
+            </div>
+            <p style="color:white"><a href="/index/login">Jeżeli posiadasz konto przejdź do logowania</a></p>
+            <div class="errorMessage warning">
+                <p>Dane kontaktowe:</p>
+                <p> tel. 18 447 22 77</p>
+                <p>bok@kryptos.co</p>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+{include file="index/_login-script.html"}

@@ -1,0 +1,826 @@
+{assign var="ignoredCollumns" value=['datagrid', 'button', 'hyperlink', 'header']}
+<form method="post" action="/registry-entries/bulk-actions/registry_id/{$registry.id}">
+    <div class="table-operations-header">
+        {assign var="id" value=$registry.id}
+        {if $auth->isGranted("perm/$id/write.all", ['author' => $registry.author_id])}
+            {element tag='a' route='registry-entries/update' routeParams=['registry_id' => $registry.id] attributes=[
+                'class' => 'btn btn-success addRecord',
+                'icon' => 'plus',
+                'tooltip' => 'Dodaj wpis'|translate,
+                'innerHtml' => 'Dodaj'|translate
+            ]}
+        {/if}
+        {if $auth->isGranted("perm/$id/write.all", ['author' => $registry.author_id])}
+        <a class="btn btn-success bulk-edit" data-title="Bulk Edit" data-toggle="tooltip"><i class="fa icon-edit"></i> &nbsp;Edycja zbiorowa</a>
+        {/if}
+         {element tag='a' route='registry/audit' routeParams=['registry_id' => $registry.id] attributes=[
+            'class' => 'btn btn-success',
+            'icon' => 'view',
+            'tooltip' => 'wyświetl dziennik',
+            'innerHtml' => 'Log'|translate
+        ]}
+    </div>
+
+    <table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example">
+        <thead>
+        <tr>
+            <th style="width:9%;text-align:center;">Nr.</th>
+            <th class="min-width"></th>
+            {foreach $registry.entities as $entity}
+                {if !in_array($entity.entity.system_name, $ignoredCollumns)}
+                <th data-entry-tab="12" data-filter-type="string"{if $entity@iteration > 3} data-visible="false"{/if}>{$entity.title}</th>
+                    <!-- <th data-filter-type="string">{$entity.title}</th> -->
+                {/if}
+            {/foreach}
+            <th>{'Operacje'|translate}</th>
+        </tr>
+        </thead>
+        <tbody class="ui-widget-content js-checkbox-container">
+            <tr class="bulk" style="display: none !important;">
+                <td></td>
+                <td></td>
+                {foreach $registry.entities as $entity}
+                    {if !in_array($entity.entity.system_name, $ignoredCollumns)}
+                    <td>
+                        <input {if $entity.entity_id == 6} type = "button" {else} type = "text" {/if} id = "{$entity.id}" {if $entity.entity_id == 4} class="form-control bulk-edit datepicker-input" {elseif $entity.entity_id == 6} class="form-control bulk-edit choose-from-dial typeaheadElement" data-dial-url="/osoby/addmini/addmini/?useProcess=true" style="width: 80%;" {else} class="form-control bulk-edit" {/if} placeholder="--Brak Zmian--" entityid = "{$entity.entity_id}">
+                    </td>
+                    {/if}
+                {/foreach}
+                <td>
+				  <button type="button" class="btn btn-info btn-update">{'Zaktualizuj'|translate}</button>
+				  <button type="button" class="btn btn-info btn-cancel">{'Anuluj'|translate}</button>
+                    <!--input type="button" value="Update" class="btn btn-info btn-update">
+                    <input type="button" value="Cancel" class="btn btn-info btn-cancel"-->
+                </td>
+            </tr>
+            {if $currentPage == 1}
+                {assign "cnt" 1}
+            {elseif $currentPage > 1}
+                <!-- {assign "cnt" 1} -->
+                {assign var = "cnt" value = $shownIndex}
+            {/if}
+            {foreach $paginator as $d}
+            <tr>
+                <td style="text-align: center;">{$cnt}</td>
+                <td>
+                    <div class="icheckbox_square-aero js-checkbox-from-container entry_id" data-target-id="entry_id[{$d.id}]" name="{$d.id}">
+                        <ins class="iCheck-helper"></ins>
+                        <span class="hidden text-indicator"></span>
+                    </div>
+                </td>
+                <!--<td>{$d.author.display_name}</td>-->
+                {foreach $registry.entities as $entity}
+                    {if !in_array($entity.entity.system_name, $ignoredCollumns)}
+                        <td>
+                            {if $entity.title == 'Czynności przetwarzania'}
+                                {include
+                                    file="_reuse/relationship-matrix.html"
+                                    config=(array)$entity.config_data
+                                    values=$d->entityToString($entity.id)
+                                    multiformData=$entity.multiform_data
+                                    excludes=[$d.id]
+                                }
+                            {elseif $entity.title == 'Obszary'}
+                                {include
+                                    file="_reuse/relationship-matrixsecond.html"
+                                    config=(array)$entity.config_data
+                                    values=$d->entityToString($entity.id)
+                                    multiformData=$entity.multiform_data
+                                    excludes=[$d.id]
+                                }
+                            {elseif in_array($entity.entity.system_name, ['select', 'smartRadioGroup'])}
+                                {include
+                                    file="_reuse/relationships.html"
+                                    config=(array)$entity.config_data
+                                    values=$d->entityToString($entity.id)
+                                    multiformData=$entity.multiform_data
+                                }
+                            {elseif $entity.entity.system_name == 'signature'}
+                                {include
+                                    file="_reuse/signature.html"
+                                    config=(array)$entity.config_data
+                                    value=$d->entityToString($entity.id)
+                                    uniqueId=$d.id|cat:'-'|cat:$entity.id|cat:'-signature'
+                                }
+                            {elseif $entity.entity.system_name == 'moreInfo'}
+                                {include
+                                    file="_reuse/permission_status.html"
+                                    statusValue=$permissionStatus[$d->id].status
+                                }
+                            {elseif $entity.entity.system_name != 'datagrid'}
+                                {if $d->registry_id == 175 || $d->registry_id == 221 }
+                                    <!-- {if !empty($workers[$d->worker_id])} -->
+                                        <span class="recordInfo">{$workers[$d->worker_id]['imie']} - {$workers[$d->worker_id]['nazwisko']}</span>
+                                    <!-- {else}
+                                        <span class="recordInfo">{$deletedAllWorkersInfo[$d->worker_id]['worker_name']} - {$deletedAllWorkersInfo[$d->worker_id]['worker_surname']}</span>
+                                    {/if} -->
+                                {else}
+                                    <span class="recordInfo">{$d->entityToString($entity.id)}</span>
+                                {/if}
+                            {/if}
+                        </td>
+                    {/if}
+                {/foreach}
+                <td class="">
+                <span class="glyphicon glyphicon-cd"></span>
+                {if $auth->isGranted("perm/$id/read.my", ['author' => $d.author_id])}
+                    {if $d.registry_id != "175"}
+                    {element tag='a' route='registry-entries/ajax-pop-up-window' routeParams=['id' => $d.id, 'registry_id' => $d.registry_id] attributes=[
+
+                    'dialog' => [
+                    'process' => 'refreshSection',
+                    'new-dialog' => true
+                    ],
+                    'data' => [
+                    'refresh-element' => '.section-documents'
+                    ],
+
+                    'class' => 'choose-from-dial',
+                    'tooltip' => 'Podgląd',
+                    'innerHtml' => '<i class="fa fa-eye"></i>',
+                    'data-toggle' => 'tooltip',
+                    'title' => 'Podgląd'
+                    ]}
+                    {/if}
+                {/if}
+                {if $auth->isGranted("perm/$id/write.my", ['author' => $d.author_id])}
+                    {if $d.worker_id != 0}
+                        {element tag='a' attributes=[
+                            'icon' => 'edit',
+                            'tooltip' => 'Edytuj'|translate,
+                            'class' => 'btn_edit_permission',
+                            'data-workerstatus' => $allOfWorkers[$d.worker_id].status_of_worker,
+                            'data-id' => $d.id,
+                            'data-registryid' => $d.registry_id
+                        ]}
+                    {else}
+                        {element tag='a' route='registry-entries/update' routeParams=['id' => $d.id, 'registry_id' => $d.registry_id] attributes=[
+                            'icon' => 'edit',
+                            'tooltip' => 'Edytuj'|translate
+                        ]}
+                    {/if}
+                    {element tag='a' route='registry-entries/update' routeParams=['clone' => $d.id, 'registry_id' => $d.registry_id] attributes=[
+                    'icon' => 'star',
+                    'tooltip' => 'Duplikuj'|translate
+                    ]}
+                    <!-- TODO: Removed add a document and documents icons -->
+                    
+                    {element tag='a' route='registry-entries/remove' routeParams=['id' => $d.id, 'registry_id' => $d.registry_id] attributes=[
+                        'icon' => 'delete',
+                        'delete' => 'singleDelete',
+                        'tooltip' => 'Usuń'|translate
+                    ]}
+                {/if}
+                {if $permissionStatus[$d.id].status == 1 }
+                    {element tag='a' route='registry-entries/ajax-pop-up-withdrawal' routeParams=['id' => $d.id, 'registry_id' => $d.registry_id] attributes=[
+
+                        'dialog' => [
+                        'process' => 'refreshSection',
+                        'new-dialog' => true
+                        ],
+                        'class' => '',
+                        'tooltip' => 'Wycofaj',
+                        'innerHtml' => '<img src="/assets/img/withdrawal.png" style="margin-top: 1px; width: 18px;height: 18px;">',
+                        'data-toggle' => 'tooltip',
+                        'title' => 'Wycofaj'
+                    ]}
+                {/if}
+                {if $permissionStatus[$d.id].status == 3 }
+                    {element tag='a' route='registry-entries/ajax-pop-up-withdrawal-information' routeParams=['id' => $d.id, 'registry_id' => $d.registry_id, 'worker_name' => $workers[$d->worker_id]['imie'] , 'worker_surname' => $workers[$d->worker_id]['nazwisko']] attributes=[
+                        'dialog' => [
+                        'process' => 'refreshSection',
+                        'new-dialog' => true
+                        ],
+                        'class' => '',
+                        'tooltip' => 'Więcej informacji',
+                        'innerHtml' => '<p style="display: inline-block;"><span class="fa fa-info" style="font-size: 22px;"></span></p>',
+                        'data-toggle' => 'tooltip',
+                        'title' => 'Więcej informacji'
+                    ]}
+                {/if}
+                </td>
+            </tr>
+            {$cnt = $cnt + 1}
+            {/foreach}
+        </tbody>
+    </table>
+
+    <div class="table-operations-footer">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-danger modal-confirm-delete" data-toggle="tooltip" data-title="{'Usuń zaznaczone'|translate}" data-modal-name="delete_selected" data-modal-class="delete-selected-confirmation"><i class="fa fa-remove"></i></button>
+            <span class="btn btn-default dt-select-all-button" data-toggle="tooltip" data-title="{'Zaznacz / odznacz wszystkie'|translate}"><i class="fa fa-check"></i></span>
+        </div>
+    </div>
+
+    <div class="hiddenElement">
+        <input type="submit" class="modal-confirm-delete_selected-submit" name="rowsAction" value="delete"/>
+        {foreach $paginator as $d}
+        <input type="hidden" name="entry_id[{$d.id}]" class="js-checkbox-target">
+        {/foreach}
+    </div>
+</form>
+<!------------------------------------- COMAGOM CODE START ------------------------------------------>
+
+<!------------------------------------- COMAGOM CODE END ------------------------------------------>
+<!-- Modal start for filter -->
+<div class="modal fade bs-example-modal-lg" id="filterDialog" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="form_tickets_ajax_create" id="form_tickets_ajax_create" action="/registry-entries/ajax-save-filter" method="post" class="form-horizontal ajax-form" role="form" data-process-fn="formProcessDialModal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Utwórz nowy filtr</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12" style="margin-bottom:20px;">pokaż rejestr spełniający poniższe warunki :</div><br />
+                            </div>
+                            <div class="row">
+                                <table class=" table order-list">
+                                    <thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-sm-4">
+                                            <select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,0);" onclick="return fetchCriteria(this.value,0);">
+                                                <option value="-1">-- wybierać --</option>
+                                                {foreach $registry.entities as $d}
+                                                <option value="{$d.id}-{$d.entity_id}">{$d.title}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td class="col-sm-4" id="condBox_0"></td>
+                                        <td class="col-sm-3" id="keywordBox_0"></td>
+                                        <td class="col-sm-2"><a class="deleteRow"></a>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="5" style="text-align: left;">
+                                            <input type="button" class="btn btn-lg btn-block " id="addCondition" value="dodaj warunek" />
+                                        </td>
+                                    </tr>
+                                    <tr></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="filter_name">Nazwa filtru :</label><br />
+                                    <input type="text" class="form-control" name="filter_name" id="filter_name" placeholder="Nazwa filtru">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 pull-right">
+                                <div class="form-group">
+                                    <label for="filter_scope">Widok:</label><br />
+                                    <select name="filter_scope" id="filter_scope" class="form-control">
+                                        <option value="private">Prywatny</option>
+                                        <option value="shared">Udostępniony</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<input type="hidden" name="register_id" value="{$registry.id}">
+                    <div class="row">
+                        <div class="col-sm-12"><div class="col-sm-5">
+                            <div class="form-group">
+                                <label for="filter_save">
+                                    <input type="checkbox" name="savefilter" id="savefilter" />&nbsp;&nbsp;Zapisz wybrane warunki z filtrem</label><br />
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="footer-actions">
+                        <button type="button" onclick="return saveFilter();" class="btn btn-success dialog-form-submit">Zapisać</button>
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Blisko</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{assign "cnt" 0}
+{foreach $filters as $filter}
+<div class="modal fade bs-example-modal-lg" id="filterDialog_{$filter.id}" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="form_tickets_ajax_create" id="form_tickets_ajax_create" action="/registry-entries/ajax-save-filter" method="post" class="form-horizontal ajax-form" role="form" data-process-fn="formProcessDialModal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update filter {$filter.filter_name}</h4>
+					<input type="hidden" name="hidFilterId" id="hidFilterId" value="{$filter.id}"/>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12" style="margin-bottom:20px;">Show registry that match ALL of these conditions:</div><br />
+                            </div>
+                            <div class="row">
+                                <table class=" table order-list update-order-list">
+                                    <thead>
+                                    <tbody>
+									{assign "checkdelet" 0}
+                                    {foreach $filter.conditions as $condition}
+                                    <tr>
+                                        <td class="col-sm-4">
+                                            <select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,{$cnt});">
+                                                {foreach $registry.entities as $d}
+                                                {if {$d.id}-{$d.entity_id} eq {$condition.parameter_id}-{$condition.entity_id} }
+                                                <option value="{$d.id}-{$d.entity_id}" selected="selected">{$d.title}</option>
+												{else}
+                                                <option value="{$d.id}-{$d.entity_id}">{$d.title}</option>
+                                                {/if}
+
+                                                {/foreach}
+                                            </select>
+                                        </td>
+
+										{if $condition.entity_id == 4}
+                                        <td class="col-sm-4" id="condBox_{$cnt}"></td>
+										<td class="col-sm-3" id="keywordBox_{$cnt}">
+												From: <input type='text' class='row-value form-control datepicker-input' name='from[]' id='from_{$cnt}' value="{$condition.keyword.from}"/>
+												To : <input type='text' class='row-value form-control datepicker-input' name='to[]' id='to_{$cnt}' value="{$condition.keyword.to}"/>
+                                        </td>
+										{else}
+											<td class="col-sm-4" id="condBox_{$cnt}">
+												<select name="condition_for[]" class="form-control">
+													<option value="equal" {if $condition.condition == 'equal'} selected="selected" {/if} >takie jak/równe</option>
+													<option value="not-equal" {if $condition.condition == 'not-equal'} selected="selected" {/if} >nierówne/nie takie jak</option>
+													<option value="empty" {if $condition.condition == 'empty'} selected="selected" {/if} >puste</option>
+													<option value="like" {if $condition.condition == 'like'} selected="selected" {/if} >takie</option>
+													<option value="not-like" {if $condition.condition == 'not-like'} selected="selected" {/if} >nie takie</option>
+													<option value="start_with" {if $condition.condition == 'start_with'} selected="selected" {/if} >zaczynające się od</option>
+													<option value="not_start_with" {if $condition.condition == 'not_start_with'} selected="selected" {/if} >nie zaczynające sie od</option>
+													<option value="end_with" {if $condition.condition == 'end_with'} selected="selected" {/if} >konczące sie na</option>
+													<option value="not_end_with" {if $condition.condition == 'not_end_with'} selected="selected" {/if} >nie konczące się na</option>
+												</select>
+												<!--<select name='condition_for[]' class='form-control' >
+													<option value="{$condition.condition}">{$condition.condition}</option>
+												</select>-->
+											</td>
+											<td class="col-sm-3" id="keywordBox_{$cnt}">
+												<input type="text"  name="keyword[]"class="form-control" value="{$condition.keyword}" />
+											</td>
+										{/if}
+
+										{if $checkdelet eq 0}
+											<td class="col-sm-2"></td>
+										{else}
+											<td class="col-sm-2"><input type="button" class="ibtnDel btn btn-md btn-danger" value="Usuń"></td>
+										{/if}
+
+										{$checkdelet = $checkdelet + 1}
+										{$cnt = $cnt + 1}
+                                    </tr>
+                                    {/foreach}
+                                    </tbody>
+									 <tfoot>
+                                    <tr>
+                                        <td colspan="4" style="text-align: left;">
+                                            <input type="button" class="btn btn-lg btn-block updateAddNewCondition" id="updateAddNewCondition" value="Dodaj warunek" />
+                                        </td>
+                                    </tr>
+                                    <tr></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="filter_name">Nazwa filtru:</label><br />
+                                    <input type="text" class="form-control" name="filter_name" disabled="disabled" value="{$filter.filter_name}" id="filter_name" placeholder="Filter title">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 pull-right">
+                                <div class="form-group">
+                                    <label for="filter_scope">Widoczność:</label><br />
+                                    <select name="filter_scope" id="filter_scope" class="form-control" disabled="disabled">
+                                        {if $filter.filter_scope == 'private' }
+                                        <option value="private" selected="selected">Prywatny</option>
+                                        <option value="shared">Publiczny</option>
+                                        {else}
+                                        <option value="private">Prywatny</option>
+                                        <option value="shared" selected="selected">Publiczny</option>
+                                        {/if}
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="footer-actions">
+						<button type="button" onclick="return saveFilter({$filter.id});" class="btn btn-success dialog-form-submit">Wyświetl rezultat</button>
+                        <!--<a href="/registry-entries/index/registry_id/{$registry.id}/filter_id/{$filter.id}" class="btn btn-info" >Show Filter Result</a>-->
+                        <button type="button" onclick="return deleteFilter({$filter.id});" class="btn btn-danger dialog-form-submit">Usuń</button>
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Zamknij</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/foreach}
+<!--Form to generate report-->
+<form id="report_form" method="post" action = "#">
+    <button type="button" data-title="Raport PDF" data-toggle="tooltip" class="btn btn-success dt-report" onclick="downloadReport()"><i class="fa icon-print-2"></i> &nbsp;Raport</button>
+    <span id="report_msg"><b>Please select at least one registry entry to generate report.</b></span>    
+    <input type="hidden" name="selected_entiries" id="selected_entiries" value="">
+</form>
+<style>
+    #report_msg {
+        display: none;
+    }
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        margin: -75px 0 0 -75px;
+        border: 10px solid #ef5a97;
+        border-radius: 50%;
+        border-top: 10px solid #f8f8f8;
+        width: 100px;
+        height: 100px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+</style>
+<!--Form to generate report-->
+<!-- Loader div -->
+<div id="reportLoader" style="display:none" class="reportloader">
+    <div id="loader"></div>
+</div>
+<!-- Loader div -->
+<script>
+
+    function downloadReport() {
+       
+        var entry_ids = [];
+        $(".entry_id").each(function(index, element){
+            var checked = $(element).attr("class");
+            if(checked == "icheckbox_square-aero js-checkbox-from-container entry_id js-checkbox-spoof-element checked"){
+                let entry_id = $(element).attr('name');
+                entry_ids.push(entry_id);
+            }
+        });
+        if (entry_ids.length > 0) {
+            $("#report_msg").hide();
+            $("#selected_entiries").val(entry_ids);
+        
+            var url = "/registry-entries/report/registry_id/{$registry.id}";
+            var formData = $("#report_form").serialize();
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data:formData,
+                beforeSend: function() {
+                    $("#reportLoader").show();
+                },
+                success: function(data, status) {
+                    if (data.indexOf('raport_rejestry_') != -1) {
+                        //create anchor tag element
+                        var link = document.createElement('a');
+                        link.download = data;  //set download attribute
+                        link.href = '/'+data;  //set href
+                        //force download
+                        link.dispatchEvent(new MouseEvent("click", {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        }));
+                        //unlink generated pdf
+                        // $.get("/registry/unlinkpdf?file="+data, function(data, status){
+                        //     console.log("File deleted:" +data);
+                        // });
+                    } else {
+                        alert(data);
+                    }
+                    $("#reportLoader").hide();
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    //alert('Ajax request failed.' + textStatus);
+                }
+            });
+        } else {
+            $("#report_msg").show(); 
+            setTimeout(function() {
+                $("#report_msg").hide();
+            },3000);
+            return false;
+        }
+    }
+    $(document).ready(function () {
+
+        /*        $('#register_dataTable').DataTable( {
+            "paging":   true,
+            "ordering": true,
+            "info":     true
+        } );*/
+        $(".btn_edit_permission").click(function(e) {
+            console.log("came to here");
+            var workerstatus = parseInt($(this).data("workerstatus"));
+            var id = parseInt($(this).data('id'));
+            var registry_id = parseInt($(this).data('registryid'));
+           
+                if(workerstatus == 1) {
+                    bootbox.alert("<h3>Ostrzeżenie</h3><div>Pracownik, który ma to uprawnienie, został usunięty. Nie możesz więc edytować tego uprawnienia.</div>", function(result) {
+                            if(result){
+                            }
+                        });
+                        e.preventDefault(); 
+                } else {
+                    window.location.href = "/registry-entries/update/id/" + id + "/registry_id/" + registry_id;
+                }
+          
+            
+        });
+        $('.addRecord').on('click', function (e) {
+            var totalItems = Number('{$mytotalItems}');
+            var limit = Number('{$recordLimit}');
+            console.log(totalItems,limit);
+            if(limit != -1) {
+                if (totalItems >= limit) {
+                    bootbox.alert("<h3>Ostrzeżenie</h3><div>Nie możesz dodać więcej niż "+ limit +" rekordy</div>", function(result) {
+                        if(result){
+                            e.currentTarget.submit();
+                        }
+                    });
+                    e.preventDefault(); 
+                }
+            }
+        });
+        $('.recordInfo').each(function(){
+            $(this).html($(this).text());
+        })
+        var counter = 1;
+        $("#addCondition").on("click", function () {
+            var newRow = $("<tr>");
+            var cols = "";
+            cols += '<td><select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,'+counter+');" onclick="return fetchCriteria(this.value,'+counter+');">'+$("#regtype").html()+'</select></td>';
+            cols += '<td id="condBox_'+counter+'"></td>';
+            cols += '<td id="keywordBox_'+counter+'"></td>';
+            cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger" value="Usuń"></td>';
+            newRow.append(cols);
+            $("table.order-list").append(newRow);
+            counter++;
+        });
+
+		var cnt = $('table.order-list tbody tr').length;
+        $(".update-order-list #updateAddNewCondition").on("click", function () {
+			var newRow = $("<tr>");
+			var cols = "";
+			cols += '<td><select name="regtype[]" id="regtype" class="form-control" onchange="return fetchCriteria(this.value,'+cnt+');" onclick="return fetchCriteria(this.value,'+cnt+');">'+$("#regtype").html()+'</select></td>';
+			cols += '<td id="condBox_'+cnt+'"></td>';
+			cols += '<td id="keywordBox_'+cnt+'"></td>';
+			cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger" value="Usuń"></td>';
+			newRow.append(cols);
+			$("table.order-list").append(newRow);
+			cnt++;
+        });
+
+        $("table.order-list").on("click", ".ibtnDel", function (event) {
+            $(this).closest("tr").remove();
+            counter -= 1
+        });
+		$(".datepicker-input").on("click",function(){
+			$(this).datepicker();
+		});
+
+        $(".bulk-edit").on("click",function(){
+            $(".bulk").css("display","block");
+        });
+        $(".btn-cancel").on("click",function(){
+            $(".bulk").css("cssText", "display: none !important;");
+        });
+
+         
+
+        $(".btn-update").on("click",function(){                      //bulkupdate
+            var entry_ids = "";
+            $(".entry_id").each(function(index, element){
+                var checked = $(element).attr("class");
+                if(checked == "icheckbox_square-aero js-checkbox-from-container entry_id js-checkbox-spoof-element checked"){
+                    var entry_id = $(element).attr('name');
+                    entry_ids = entry_ids +  entry_id + ",";
+                }
+            });
+
+            if(entry_ids == ""){
+                alert('Please select entries.');
+                return;
+            }
+
+            entry_ids = entry_ids.substr(0, entry_ids.length-1);
+            $(".bulk-edit").each(function(index, element){
+                var data = $(element).val();
+                var entity_id = $(element).attr('entityid');
+
+                if (typeof data == 'undefined' || data == null || data == "") return;
+                 $.ajax({
+                    url: "/registry-entries/bulkedit",
+                    type:'POST',
+                    data: { id : element.id, entry_ids: entry_ids, data:data, entity_id: entity_id},
+
+                    success: function(result){
+                         }
+                });
+            });
+
+            location.reload();
+            alert('BulkUpdate Success.');
+        });
+
+    });
+
+	function createConditionBox()
+	{
+
+        var conditions_data = {
+            "equal" : 'takie jak/równe',
+            "not-equal" : 'nierówne/nie takie jak',
+            "empty" : 'puste',
+            "like" :'takie',
+            "not-like" : 'nie takie',
+            "start_with" : 'zaczynające się od',
+            "not_start_with" : 'nie zaczynające sie od',
+            "end_with" :'konczące sie na',
+            "not_end_with" :'nie konczące się na',
+        };
+
+
+		//var condition = new Array("equal","not-equal","empty","like","not-like","start_with","not_start_with","end_with","not_end_with");
+		var select = "<select name='condition_for[]' class='form-control' >";
+		$.each(conditions_data,function(key, value){
+			select+="<option value='"+key+"'>"+value+"</option>";
+		});
+		select+="</select>";
+		return select;
+	}
+
+    function fetchCriteria(parameterEntityId,count)
+    {
+		var expEnt = parameterEntityId.split("-");
+		var entity_id = parseFloat(expEnt[1]);
+		if(entity_id !== 4 && entity_id !== 5) {
+			$.ajax({
+				url: "/registry-entries/ajax-search-filter",
+				type:'POST',
+				data: "parameter-entity-id="+parameterEntityId+"&count="+count+"&registry_id={$registry.id}",
+				success: function(result){
+					// result += "<div class='col-sm-4'><input type='text' class='form-control' name='keyword_"+count+"'  /></div>";
+					trRow = "<input type='text' class='form-control' name='keyword[]' id='keyword_'+counter+ /></td>";
+					$(".order-list #condBox_"+count).html(result);
+					$(".order-list #condBox_"+count).html(createConditionBox());
+					$(".order-list #keywordBox_"+count).html(trRow);
+				}
+			});
+		} else {
+			trRow = "From: <input type='text' class='row-value form-control datepicker-input' name='from[]' id='from_"+count+"'/> To : <input type='text' class='row-value form-control datepicker-input' name='to[]' id='to_"+count+"'/></td>";
+			$(".order-list #condBox_"+count).html("");
+			$(".order-list #keywordBox_"+count).html(trRow);
+			//$('#from_'+count).datepicker();
+		}
+    }
+
+    function deleteFilter(filterId)
+    {
+        if(confirm('do you really wants to remove this filter ?'))
+        {
+            $.ajax({
+                url: "/registry-entries/ajax-delete-filter",
+                type:'POST',
+                data: "filter_id="+filterId,
+                success: function(result){
+                    location.href = '/registry-entries/index/registry_id/{$registry.id}'
+                }
+            });
+        }
+    }
+    function saveFilter(filterId="")
+    {
+        $.ajax({
+            url: "/registry-entries/ajax-save-filter",
+            type:'POST',
+            data:$(this).serialize(),
+            success:function(result){
+				if(filterId!=="")
+					location.href = '/registry-entries/index/registry_id/{$registry.id}/filter_id/'+filterId;
+				else
+					location.href = '/registry-entries/index/registry_id/{$registry.id}';
+            }
+        });
+    }
+
+
+    jQuery(function(){
+        var totalPages = Number('{$totalPages}');
+        var totalItems = Number('{$totalItems}');
+        var currentPage = Number('{$currentPage}');
+        var pageSize = Number('{$pageSize}');
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+        var iterations = jQuery('.paginate_iterations');
+        iterations.unbind('click');
+        iterations.unbind('change');
+        for (var i = 2;i <= totalPages;i++){
+            selectedPage = '';
+            if (currentPage == i) {
+                selectedPage = 'selected';
+            }
+            iterations.append('<option value="'+i+'" '+selectedPage+'>'+i+'</option>');
+        }
+        function iterChange(event){
+            window.location.href = location.pathname + '?page=' + Number(jQuery(this).val()) + '&page_size=' + pageSize;
+            return false;
+        }
+        iterations.on('change', iterChange);
+
+        jQuery('.paginate_start_text').text( ((currentPage-1) * pageSize) + 1 );
+        if(totalItems > currentPage * pageSize)
+        {
+            jQuery('.paginate_end_text').text( currentPage * pageSize );
+        } else {
+            jQuery('.paginate_end_text').text( totalItems );
+        }
+        
+        jQuery('.paginate_total_text').text( totalItems );
+        
+
+        // pagination form event
+        jQuery('.paginate_button.next').on('click', function(){
+            if (currentPage < totalPages){
+                currentPage++;
+            }
+            window.location.href = location.pathname + '?page=' + currentPage + '&page_size=' + pageSize;
+            return false;
+        });
+
+        jQuery('.paginate_button.previous').on('click', function(){
+            if (currentPage > 1) {
+                currentPage--;
+            }
+            window.location.href = location.pathname + '?page=' + currentPage + '&page_size=' + pageSize;
+            return false;
+        }); 
+
+        jQuery('.paginate_button.first').on('click', function(){
+            currentPage = 1;
+            window.location.href = location.pathname + '?page=' + currentPage + '&page_size=' + pageSize;
+            return false;
+        });
+
+        jQuery('.paginate_button.last').on('click', function(){
+            currentPage = totalPages;
+            window.location.href = location.pathname + '?page=' + currentPage + '&page_size=' + pageSize;
+            return false;
+        });
+
+        jQuery('.dt-change-limit-section select').each(function(){
+            jQuery('option', this).each(function(){
+                if (pageSize+1 == Number(this.value)) {
+                    this.selected = true;
+                }
+            });
+            jQuery(this).on('change', function(){
+                currentPage = 1;
+                window.location.href = location.pathname + '?page=' + currentPage + '&page_size=' + (Number(jQuery(this).val()) - 1);
+            });
+        });
+    });
+</script>
+<!-- Modal end for filter -->

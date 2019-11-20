@@ -1,0 +1,86 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        {assign var="tableId" value=$id|replace:'_':'-'|cat:'-matrix-table'}
+        <table class="table table-striped table-bordered" id="{$tableId}">
+            <tr>
+                <td colspan="4" style="width: 100%;"></td>
+                <td align="center">
+                    <button class="btn btn-default js-add-button">
+                        <i class="fa fa-plus-circle"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<script>
+(function(){
+    function renderFormElement(options, index, suffix, selected) {
+        let r, v;
+        let optionsHTML = '<option></option>';
+        for (r in options) {
+            optionsHTML += '<optgroup label="'+options[r].title+'">';
+            for (v in options[r].values) {
+                optionsHTML += '<option value="'+v+'" '+(v===selected?'selected="selected"':'')+'>' + options[r].values[v] + '</option>';
+            }
+            optionsHTML += '</optgroup>';
+        }
+        return '<select class="matrix-'+suffix+'-'+index+' form-control" name="{$attributes.name}['+index+']['+suffix+']">' + optionsHTML + '</select>';
+    }
+
+    function addRow(button, valuePair){
+        let table = $(button).parents('table:first');
+        let options = table.data('options');
+        let position = table.data('position');
+        let valueFrom, valueTo;
+        if (valuePair) {
+            [valueFrom, valueTo] = valuePair.split('-').filter(function(value){
+                return value != {$data.id|default:'0'};
+            });
+            if (!valueFrom || !valueTo) {
+                return;
+            }
+        }
+        table.data('position', isNaN(position) ? (position = 1) : ++position);
+        $(button).parents('tr:first')
+            .before('<tr>' +
+                '<td>Row #' + position + '</td>' +
+                '<td align="right">' + renderFormElement(options, position, 'from', valueFrom) + '</td>' +
+                '<td>-</td>' +
+                '<td align="left">' + renderFormElement(options, position, 'to', valueTo) + '</td>' +
+                '<td align="center"><button class="btn btn-default js-del-button"><i class="fa fa-minus-circle"></i></button></td>' +
+            '</tr>');
+
+    }
+    let table = $('#{$tableId}');
+    if (table.data('initialized')) {
+        return;
+    }
+    let buttonAdd = table.find('.js-add-button');
+    table
+        .data('initialized', true)
+        .data('options', {$params.attributes.all_options nofilter});
+    buttonAdd.click(function(){
+        addRow(buttonAdd, null, null);
+        return false;
+    });
+    table.on('click', '.js-del-button', function(){
+        $(this).parents('tr:first').remove();
+        return false;
+    });
+    {foreach $attributes.value as $value}
+        addRow(buttonAdd, '{$value}');
+    {foreachelse}
+        addRow(buttonAdd);
+    {/foreach}
+})();
+</script>

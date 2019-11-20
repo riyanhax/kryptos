@@ -1,0 +1,11 @@
+<div id="map" >
+  <div id="mapCanvas"  id="fixed-map" style="height:400px;"></div>
+</div>
+
+<div id = "editor"></div>
+
+<div class="map" id="maps" style="visibility:hidden;">
+   <img src="http://maps.google.com/maps/api/staticmap?size=640x400{foreach $locations as $key => $latlongData}&markers=label:|{$latlongData[0]},{$latlongData[1]}{/foreach}&key=AIzaSyA7FhaI850ZX_wVmyavVc54N0Yuc2TK8EI" style="width: 1039px;height: 400px;" />
+</div>
+
+<div id="show_img" style="position: relative;top: -396px;"></div>

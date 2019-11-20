@@ -1,0 +1,246 @@
+{if $userIsAdmin && !$userIsSuperadmin}
+	{if $hasLicense}
+	<li class="dropdown iconify hide-phone">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		<span class="pull-left">
+		    Licencja: {$userBalance} {constant('Application_Service_Balances::DEFAULT_BALANCE_CURRENCY')}
+		</span>
+		    <i class="fa fa-caret-down"></i>
+		</a>
+		<ul class="dropdown-menu">
+		    <li>
+		        <a href="/payments/history"><i class="fa fa-history"></i> Historia płatności</a>
+		    </li>
+		    <li>
+		        <a href="/licenses/history"><i class="fa fa-history"></i> Historia licencji</a>
+		    </li>
+		</ul>
+	</li>
+		{if $is_trial == 0}
+		<li class="dropdown iconify hide-phone">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			<span class="pull-left">
+				{'Aktywacje'|translate}
+			</span>
+				<i class="fa fa-caret-down"></i>
+			</a>
+			<ul class="dropdown-menu">
+				<li>
+				    {element tag='a' route='payments/increase-users' routeParams=[] attributes=[
+				    'dialog' => true,
+				    'tooltip' => 'Aktywuj więcej dostępów'|translate,
+				    'innerHtml' => '<i class="fa fa-user-plus"></i> Aktywuj więcej dostępów',
+				    'data' => [
+				    'new-dialog' => 0
+				    ]
+				    ]}
+				</li>
+		   		<li>
+			        {element tag='a' route='home/licenses-view' attributes=[
+			        'dialog' => true,
+			        'tooltip' => 'Kup teraz'|translate,
+			        'innerHtml' => '<i class="fa fa-square"></i> Przedłuż dostęp do Kryptos',
+			        'data' => [
+			        'new-dialog' => 0
+			        ]
+			        ]}
+			    </li>
+			</ul>
+		</li>
+		{else}
+		<li class="dropdown iconify hide-phone">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			<span class="pull-left">
+                Trial wygaśnie za: {$diff_days|translate} dni
+			</span>
+				<i class="fa fa-caret-down"></i>
+			</a>
+			<ul class="dropdown-menu">
+		   		<li>
+			        {element tag='a' route='home/licenses-view' attributes=[
+			        'dialog' => true,
+			        'tooltip' => 'Kup teraz'|translate,
+			        'innerHtml' => '<i class="fa fa-square"></i> Przedłuż dostęp do Kryptos',
+			        'data' => [
+			        'new-dialog' => 0
+			        ]
+			        ]}
+			    </li>
+                
+			</ul>
+		</li>
+		{/if}
+	{else}
+	<li class="dropdown iconify hide-phone">
+		{element tag='a' route='payments/buy' routeParams=[] attributes=[
+		'dialog' => true,
+		'tooltip' => 'Buy'|translate,
+		'innerHtml' => 'Buy'|translate,
+		'data' => [
+		'new-dialog' => 0
+		]
+		]}
+	</li>
+	{/if}
+{/if}
+<style>
+	.pd-lr{
+	padding:0 5px !important;
+	}
+	h2.title{
+	font-size: 25px;
+	}
+	.pad-top{
+	padding-top:3rem;
+	}
+	.prize-box{
+	border:1px solid rgba(153,153,153,1);
+	padding:20px 15px;
+	text-align:center;
+	}
+	.prize-box.active{
+	border-color:#4a72e7;
+	}
+	.top-el{
+	position:absolute;
+	content:'';
+	width: calc(100% - 10px);
+	height:20px;
+	background-color:#4a72e7;
+	top:-20px;
+	left:5px;
+	padding:10px;
+	display:none;
+	color:#fff;
+	line-height: 0px;
+	}
+	.corner-wrap {
+	position: absolute;
+	top: 1px;
+	right: 6px;
+	width: 2em;
+	height: 2em;
+	background-color: #fff;
+	display:none;
+	}
+	.corner-triangle {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 2em 2em 0;
+	border-color: transparent #4a72e7 transparent transparent;
+	}
+	.prize-box.active .top-el, .prize-box.active .corner-wrap{
+	display:block;
+	}
+	@media(max-width:767px){
+	.prize-box{
+	margin-bottom:40px;
+	}
+	}
+</style>
+{if $userIsAdmin && !$userIsSuperadmin}
+	{if $end_date < $currentDate}          
+	<div class="modal fade modal-styled in" id="messages-response" tabindex="-1" role="dialog" aria-labelledby="ajaxDialLabel" aria-hidden="false" style="display: block;">
+		<div class="modal-dialog modal-lg ajaxDialSize" role="document">
+			<div class="modal-content onlyconent">
+				<div class="modal-header">
+					<h3>Purchase License</h3>
+				</div>
+				<div class="modal-body">
+					<section>
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="alert alert-danger" style="text-align: center; font-size:20px">License is expired</div>
+							
+		                    		{$i=1}
+		    						{foreach $paginator as $d}
+		        						{$price = $d.price}
+		            					<div class="col-sm-4 pd-lr">
+		                					<form action="/home/licenses-request" method="post" class="test">
+		                    					<div class="prize-box">
+		                        					<div class="corner-wrap">
+			                        					<div class="corner-triangle"></div>
+		                    						</div>
+												    <h2 class="title">{$d.name}</h2>
+												    <h3 id="price_{$i}">$<span>{$d.price}</span></h3>
+												    <p>{$d.description}</p>
+												    <p>Expert Count: {$d.expert_count}</p>
+												    <p>Pro Count: {$d.pro_count}</p>
+												    <p>Mini Count: {$d.mini_count}</p>
+												    <h4>Period
+												    <select name="validity" id="validity_{$i}">
+												        <option data-price="{$d.price}" value="month">Monthly</option>
+												        <option data-price="{$d.price}" value="year">Yearly</option>
+												    </select></h4>
+
+												    <input type="hidden" name="license_name" value="{$d.name}">
+												    <input type="hidden" name="license_description" value="{$d.description}">
+												    <input type="hidden" name="expert_count" value="{$d.expert_count}">
+												    <input type="hidden" name="pro_count" value="{$d.pro_count}">
+												    <input type="hidden" name="mini_count" value="{$d.mini_count}">
+												    <input type="hidden" name="license_price" value="{$d.price}" id="hidden_price_{$i}">
+												    <input type="hidden" name="license_id" value="{$d.id}">
+												    <input type="submit" name="buy_now" class="btn btn-primary" value="Kup teraz">
+		                    					</div>
+		                					</form>
+											<script type="text/javascript">
+												jQuery(document).ready(function($){
+												    $('#validity_{$i}').change(function(){
+												       // alert('test');
+												        var value = $(this).val();
+												        alert(value);
+												        if(value == 'year'){
+												            var new_price = parseInt({$price}*12);
+												            $('#price_{$i} span').html(new_price);
+												            $('#hidden_price_{$i}').val(new_price);
+												        }else{
+												            var new_price = {$price};
+												            $('#price_{$i} span').html(new_price);
+												            $('#hidden_price_{$i}').val(new_price);
+												        }
+												    });
+												})
+											</script>
+											{$i = $i+1}
+		            					</div>
+		    						{/foreach}
+			    				</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			<div class="modal-footer"></div>
+		</div>
+		</div>
+	</div>
+	{/if}
+{/if}
+
+{if !$userIsAdmin && !$userIsSuperadmin}
+	{if $end_date < $currentDate}
+	<li>
+		<div class="modal fade modal-styled in" id="messages-response" tabindex="-1" role="dialog" aria-labelledby="ajaxDialLabel" aria-hidden="false" style="display: block;background-color: rgba(0, 0, 0, 0.7);">
+			<div class="modal-dialog modal-lg ajaxDialSize" role="document">
+				<div class="modal-content onlyconent">
+					<div class="modal-header">
+						<h3>License is expired</h3>
+					</div>
+					<div class="modal-body">
+						<section>
+							<div class="container">
+								<div class="row">
+									<div class="col-sm-12">
+									<div class="alert alert-danger" style="text-align: center; font-size:20px">License is expired. Please contact to your company admin.</div>
+									</div>
+								</div>
+							</div>
+						</section>
+				</div>
+			</div>
+		</div>
+	</li>
+	{/if}
+{/if}

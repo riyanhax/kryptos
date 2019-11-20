@@ -1,0 +1,86 @@
+<form
+  id="f_profile"
+  name="f_profile"
+  action="/rights-permissions/save"
+  method="POST"
+  class="form-horizontal"
+  role="form"
+>
+  <input type="hidden" name="id" id="id" value="{$data.id}" />
+  <input type="hidden" name="page_name" id="page_name" value="{$pageName}" />
+  <input
+    type="hidden"
+    name="proposal_role"
+    id="proposal_role"
+    value="{$proposalRole}"
+  />
+  <input type="hidden" name="task_id" id="task_id" value="{$taskId}" />
+
+  <ul class="nav nav-tabs">
+    <li class="active">
+      <a href="#rights-permissions-expert" data-toggle="tab">Prawa eksperta</a>
+    </li>
+
+    <li>
+      <a href="#rights-permissions-pro" data-toggle="tab">Prawa prokuratora</a>
+    </li>
+
+    <li><a href="#rights-permissions-mini" data-toggle="tab">Prawa mini</a></li>
+  </ul>
+  <div class="tab-content">
+    <div
+      class="tab-pane"
+      id="rights-permissions-expert"
+      style="padding:15px 5px"
+    >
+      <div class="form-group row">
+        <div class="col-md-8" style="margin-bottom: 10px;">
+          <label>Limit rekordów</label>
+        </div>
+        <div class="col-md-8">
+          {include
+          file='rights-permissions/_element-expert-rightspermissions-extended.html'}
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="rights-permissions-pro" style="padding:15px 5px">
+      <div class="form-group row">
+        <div class="col-md-8" style="margin-bottom: 10px;">
+          <label>Limit rekordów</label>
+        </div>
+        <div class="col-md-8">
+          {include
+          file='rights-permissions/_element-pro-rightspermissions-extended.html'}
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="rights-permissions-mini" style="padding:15px 5px">
+      <div class="form-group row">
+        <div class="col-md-8" style="margin-bottom: 10px;">
+          <label>Limit rekordów</label>
+        </div>
+        <div class="col-md-8">
+          {include
+          file='rights-permissions/_element-mini-rightspermissions-extended.html'}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <a href="/osoby" class="btn btn-default">Powrót</a>
+    <input
+      type="submit"
+      name="submit_type"
+      value="Zapisz"
+      class="btn btn-info"
+    />
+  </div>
+</form>
+
+<script type="text/javascript">
+  $(".tab-pane")
+    .eq(0)
+    .addClass("active");
+</script>

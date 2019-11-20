@@ -1,0 +1,73 @@
+<div class="row margin-bottom">
+    <div class="col-sm-12">
+        <button type="button" class="btn" onclick="$('#elements-expert-rightspermissions-extended .icheckbox_square-aero').not('.checked').click()">Zaznacz wszystkie</button>
+        <button type="button" class="btn" onclick="$('#elements-expert-rightspermissions-extended .icheckbox_square-aero').filter('.checked').click()">Odznacz wszystkie</button>
+
+	{element tag='button' route='registry/ajax-edit-role' routeParams=['id' => 0, 'role_id' => 0, 'system_name' => 'default_role_expert'] attributes=[
+            'dialog' => [
+                'process' => 'refreshSection',
+                'new-dialog' => true
+            ],
+            'icon' => 'edit',
+	    'type' => 'button',
+	    'class' => 'btn',
+            'data' => [
+                'refresh-element' => '.section-roles'
+            ],
+            'tooltip' => 'Edytuj rolę'
+        ]}
+    </div>
+</div>
+
+<table cellspacing="0" cellpadding="0" border="0" class="table table-striped table-bordered" id="elements-rightspermissions-extended">
+    <thead>
+    <tr>
+        <th width="30%">Moduł</th>
+        <th>Akcja</th>
+        <th>Dostęp</th>
+        <th>Record limit</th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach from=$rightspermissionsExpertConfigExtended key=moduleName item=moduleConfig}
+        {foreach from=$moduleConfig.permissions item=configItem}
+            <tr
+                {if $configItem.basePermission}
+                class="relative-element"
+                data-relation-base="permission-{$configItem.basePermission|md5}"
+                data-relation-id="1"
+                {/if}
+            >
+                <td>{if $configItem.basePermission} <span class="fa fa-long-arrow-up"></span> {else}{$moduleConfig.label}{/if}</td>
+                <td>{$configItem.label}</td>
+                <td>
+                    <input type="hidden" id="permission-{$configItem.name|md5}" name="rightspermissionsExpert[{$configItem.name}]" class="toggle-relative" value="{if !empty($rightspermissionsExpertExtended[$configItem.name])}1{else}0{/if}">
+                    <div class="icheckbox_square-aero js-checkbox" data-target-id="rightspermissionsExpert[{$configItem.name}]"><ins class="iCheck-helper"></ins></div>
+                </td>
+                <td style="padding-top: 18px;">
+                    {if !$configItem.basePermission}
+                        <input class="limit_each_registry_count" type="Number" min=0 value="{if empty($limitExpertJson)}0{else}{$limitExpertJson[{$configItem.name}]}{/if}" name="limitExpert[{$configItem.name}]">
+                    {/if}
+                </td>
+            </tr>
+        {/foreach}
+    {/foreach}
+    </tbody>
+</table>
+<style>
+#f_profile .form-group.row:nth-child(3), #f_profile .form-group.row:nth-child(4) {
+    display: none;
+}
+
+button.btn.processed-choose-from-dial {
+    margin-top: -2px;
+}
+
+button.btn.processed-choose-from-dial::before {
+    content: "Edytuj rolę";
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    padding: 0 0 1px 0;
+}
+</style>

@@ -1,0 +1,36 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter} data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <input type="hidden" name="{$attributes.name}" value="{$attributes.value}"/>
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        <span>Najniższa ocena</span>
+        <div class="btn-group" role="group" id="{$id}">
+            {for $variant=1 to 5}
+                <button type="button" class="btn btn-default" data-variant="{$variant}">
+                    {$variant}
+                </button>
+            {/for}
+        </div>
+        <span>Najwyższa ocena</span>
+    </div>
+</div>
+<script>
+    (function(){
+        let container = jQuery('#{$id}');
+        let allVariants = container.find('button');
+        let hiddenInput = container.parents('.form-group:first').find(':input[type=hidden]');
+        container.on('click', 'button', function () {
+            allVariants.removeClass('active');
+            let variant = jQuery(this).addClass('active').data('variant');
+            hiddenInput.val(variant).trigger('change');
+        });
+        if (hiddenInput.val()) {
+            allVariants.filter('[data-variant='+hiddenInput.val()+']').click();
+        }
+    })();
+</script>

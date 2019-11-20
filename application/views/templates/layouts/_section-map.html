@@ -1,0 +1,22 @@
+<div style="padding-bottom: 5px;" class="row-fluid">
+    <div class="span12">
+        <h3 class="page-title">
+            <i class="{if $layout->sectionIcon}{$layout->sectionIcon}{else}icon-data-science-inv{/if}"></i>
+            &nbsp;
+            {if $layout->sectionDetailed}
+                {$layout->sectionDetailed|translate}
+            {else}
+                {$layout->section|translate}
+            {/if}
+            &nbsp;
+            <a class="btn btn-top btn-warning" id="top-block-btn-back">
+                <i class="icon-back"></i>
+                {'Powrót'|translate}
+            </a>
+            <a class="btn btn-top btn-warning" id="download-pdf-btn" >
+                <i class="icon-pdf"></i>
+                {'ściągnij PDF'|translate}
+            </a>
+        </h3>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+{assign var="relations" value=Application_Service_Relationships::getInstance()->getItemsList($values,$multiformData, array($registryId))}
+{foreach $relations as $relation}
+    <div>{$relation.title}</div>
+{/foreach}

@@ -1,0 +1,203 @@
+{if $layout->subNavigation}
+    {if $layout->page_title_compare == 'Uprawnienia'}
+        <ul class="sub-navigation nav-pills navbar-right" style="padding-left: 5px !important;">
+            <a class="btn btn-primary" href="/documents/pending" role="button" style="font-size: 18px;padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 4px;" aria-haspopup="true">
+                Dokumenty oczekujące
+            </a>
+            
+        </ul>
+    {/if}
+    <div class="dropdown sub-navigation nav-pills navbar-right">
+        <button class="btn btn-primary dropdown-toggle btn_todo_list" type="button" style="border-radius: 6px !important;font-size: 18px;padding: 10px;margin-left: 5px !important;">Do zrobienia
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu todo_list">
+            <div id="taskListContainer" class="container narrow">
+                <div id="addTask">
+                    <form>
+										<!--input type="hidden" class="fddfd" name="registry_id" value="105" -->
+
+					<input type="hidden" class="fddfd" name="registry_id" value="{$layout->registry_id}" >
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Zadanie:</label>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" id="addTaskTextField" autofocus="autofocus" placeholder="Name...">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Priorytet:</label>
+                            <div class="col-sm-10">
+                                <select id="complexityComboBox" class="form-control">
+                                    <option value="1">Niski</option>
+                                    <option value="2">Normalny</option>
+                                    <option value="3">Wysoki</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input id="addTaskButton" class="btn btn-success" type="submit" value="Dodaj zadanie" />
+                                <input id="cancelTaskButton" class="btn btn-danger btn_cancel_hide" type="submit" value="Anuluj" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <ul id="sortableTodo" class="sortable"></ul>
+                <div id="completedTasksHeader">
+                    <span id="completedLabel">Ukończone</span>
+                    <span id="lastDateLabel">Data wykonania</span>
+                </div>
+                <ul id="sortableCompleted" class="sortable"></ul>
+            </div>
+        </ul>
+    </div>
+    <style>
+        ul.dropdown-menu li:hover ul.dropdown-menu li {
+            border-left: 2px solid greenyellow;
+            
+        }
+
+    </style>
+    <div class="modal fade bs-example-modal-lg" id="todolist" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="form_todo_item" class="form-horizontal ajax-form" role="form" data-process-fn="formProcessDialModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">New Todo Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 form-control-label">Title:</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" id="registry_id" name="registry_id" value="{$layout->registry_id}" >
+                                <input type="hidden" id="registry_title" name="registry_title" value="{$layout->registry_title}" >
+                                <Input type="text" id="todo_task_name" class="form-control" name="todo_task_name"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="footer-actions">
+                            <button class="btn btn-success create_new_todo_item" style="float: right;">zapisać</input>
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Blisko</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+        
+    <!-- <ul class="sub-navigation nav-pills navbar-right" style="    margin-left: -30px !important;">
+        <li role="presentation" class="dropdown">
+            
+            <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="{$subNavigationItem.icon}"></i> &nbsp; CheckList &nbsp; <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" style="overflow-y: scroll;max-height:341px;width:350px !important;">
+                <li style="border:1px solid grey;padding-left:5px;">
+                   <button  class="btn btn-success"  data-toggle="modal" data-target="#todolist"><span class="glyphicon glyphicon-plus"></span> Create New TODO - About {$layout->registry_title}</a>
+                </li>
+                {if $layout->todo_list_infos == []}
+                <li style="border:1px solid grey;padding-left:5px;">
+                    <div class="todo_list_item">
+                        <span>Nie masz zadań</span>
+                    </div>
+                </li>
+                {else}
+                {foreach $layout->todo_list_infos as $item}
+                <li style="border:1px solid grey;padding-left:5px;">
+                    <div class="todo_list_item">
+                        <input class="todo_item_id" type="checkbox" value="{$item['id']}">
+                        <span>{$item['todo_title']}</span>
+                    </div>
+                </li>
+                {/foreach}
+                {/if}
+                <li style="border:1px solid grey;">
+                    <button type="button" class="btn btn-default btn-sm btn-success checked_todo_items" style="float:right;">
+                        <span class="glyphicon glyphicon-ok"></span> Done
+                    </button>
+                </li>
+            </ul>
+            </li>
+    </ul> -->
+    {if $layout->selected_window != "update_window"}
+    <ul class="sub-navigation nav-pills navbar-right">
+	
+        {foreach $layout->subNavigation as $subNavigationItem}
+            {if empty($subNavigationItem.permissions) || $auth->isGranted($subNavigationItem.permissions)}
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="{$subNavigationItem.icon}"></i> &nbsp; {$subNavigationItem.label} &nbsp; <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" style="overflow-y: scroll;max-height:341px;">
+                        {foreach $subNavigationItem.children as $subNavigationItemChild}
+                            {if empty($subNavigationItemChild.permissions) || $auth->isGranted($subNavigationItemChild.permissions)}
+                                <li>
+                                    <a
+                                    {if !$subNavigationItemChild.nohref} href="{$subNavigationItemChild.path}"{/if}
+                                    {if !empty($subNavigationItemChild.onclick)} onclick="{$subNavigationItemChild.onclick}"{/if}
+                                    {if !empty($subNavigationItemChild.isdialog)} data-toggle="modal" data-target="{$subNavigationItemChild.target}" {/if} >
+                                    <i class="{$subNavigationItemChild.icon}"></i> &nbsp;{$subNavigationItemChild.label}</a></li>
+                            {/if}
+                        {/foreach}
+                    </ul>
+                </li>
+            {/if}
+        {/foreach}
+    </ul>
+    {/if}
+{/if}
+<script>
+    var selectedRegistryId = "{$layout->registry_id}";
+    var selectedReigstryName = "{$layout->registry_title}";
+    $(document).ready(function () {
+       
+        $(".create_new_todo_item").click(function () {
+            $.post("/registry-entries/todoitem",
+            {
+                registry_id: $("#registry_id").val(),
+                registry_title: $("#registry_title").val(),
+                todo_task_name: $("#todo_task_name").val()
+            }, function(data,success) {
+                location.href = '/registry-entries/index/registry_id/{$layout->registry_id}';
+            });
+        });
+        var selectedItemsId = [];
+        $(".checked_todo_items").click(function () {
+            $(".todo_item_id").each(function () {
+                var parent = $(this).parent();
+                var classNames = parent[0].getAttribute("class");
+                classNames = classNames.split(" ");
+                for (let index = 0; index < classNames.length; index++) {
+                    if(classNames[index] == 'checked') {
+                        selectedItemsId.push($(this).val());
+                    }
+                }
+            });
+            $.post("/registry-entries/selectedtodoitems",{
+                data: selectedItemsId
+            }, function(data,success) {
+                location.href = '/registry-entries/index/registry_id/{$layout->registry_id}';
+            });
+            console.log(selectedItemsId);
+        });
+        var openFlag = false;
+        $(".btn_todo_list").click(function () {
+            var parent = $(this).parent();
+            if(openFlag == false) {
+                $(parent[0]).addClass("open");
+                openFlag = true;
+            } else {
+                $(parent[0]).removeClass("open");
+                openFlag = false;
+            }
+        });
+    });
+</script>
+<script src="/assets/js/task-list-base.js"></script>

@@ -1,0 +1,36 @@
+<h1>{$dialogTitle}</h1>
+
+<div class="row view-render">
+  <div class="col-sm-12">
+    <fieldset>
+      <div class="form-group row main-label-row">
+        <label class="col-sm-2 form-control-label">Upoważnienie dla: </label>
+        <div class="col-sm-8">
+          <label class="form-control" name="worker_name">{$fullname}</label>
+        </div>
+      </div>
+      <input
+        type="hidden"
+        name="registry_entry_id"
+        value="{$registry_entry_id}"
+      />
+      <input type="hidden" name="registry_id" value="{$registry_id}" />
+      <div class="form-group row">
+        <label class="col-sm-2 form-control-label">Powód:</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" name="reason_content" disabled>
+{$reason_content}</textarea
+          >
+        </div>
+      </div>
+      <div class="form-group row main-label-row">
+        <label class="col-sm-2 form-control-label">Wycofaj date: </label>
+        <div class="col-sm-8">
+          <label class="form-control" name="worker_name"
+            >{$withdrawal_date_time}</label
+          >
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>

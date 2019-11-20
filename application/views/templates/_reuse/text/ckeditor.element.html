@@ -1,0 +1,14 @@
+{if empty($id)}
+    {assign var="id" value=$name}
+{/if}
+
+<div class="form-group row">
+
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}:</label>
+    <div class="col-sm-8">
+    	{foreach $params.attributes.value as $value}
+            {strip_tags(html_entity_decode($value))}
+        {/foreach}
+        
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered example">
+    <thead>
+    <tr>
+        <th data-filter-type="string">Data</th>
+        <th data-filter-type="string" class="text-right">Kwota wpłaty</th>
+        <th data-filter-type="select">Metoda płatności</th>
+        <th data-filter-type="string">Tytuł płatności</th>
+    </tr>
+    </thead>
+    <tbody class="js-checkbox-container">
+    {foreach $paginator as $d}
+    <tr>
+        <td>{$d.created_at}</td>
+        <td class="text-right">{$d.amount} {$d.currency_code}</td>
+        <td>{$d.payment_method|ucfirst}</td>
+        <td>{$d.description}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+<div class="hiddenElement">
+    {foreach $paginator as $d}
+    <input type="hidden" name="id[{$d.id}]" class="js-checkbox-target">
+    {/foreach}
+</div>

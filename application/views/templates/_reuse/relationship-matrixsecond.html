@@ -1,0 +1,58 @@
+{assign var="matrixIndex" value=$matrixIndex+1 scope="global"}
+<div class="matrix-values matrix-values-{$matrixIndex}">
+  {if $config.registry_id and $config.registry2_id} {assign var="relations"
+  value=Application_Service_RelationshipMatrixSecond::getInstance()->getItemsList($values,$excludes,$multiformData)}
+  {assign var="relationsTree"
+  value=Application_Service_RelationshipMatrixSecond::getInstance()->getItemsTree($values,$excludes,$multiformData)}
+  <div class="short-view">
+    <!-- <pre>{var_dump($relationsTree)}</pre> -->
+    <div
+      class="content"
+      style="max-height: 336px; overflow: hidden; margin-bottom: 10px;"
+    >
+      {strip} {foreach $relationsTree as $item} {$item.title}: {assign
+      var="firstInGroup" value=true} {foreach $item.children as $item2} {if not
+      $firstInGroup}, {/if}{$item2.title} {assign var="firstInGroup"
+      value=false} {if count($item2.children)} ({implode(',
+      ',$item2.children)}){/if} {/foreach}
+      <br />
+      {/foreach} {/strip}
+    </div>
+    {if count($relationsTree)}
+    <div class="controls">
+      <a class="btn btn-default btn-xs js-more-link" href="#">Więcej</a>
+    </div>
+    {/if}
+  </div>
+  <div class="full-view" style="display: none;">
+    {foreach $relationsTree as $item} {$item.title}:
+    <ul>
+      {foreach $item.children as $item2}
+      <li>
+        {$item2.title} {if count($item2.children)}
+        <ul>
+          {foreach $item2.children as $item3}
+          <li>{$item3}</li>
+          {/foreach}
+        </ul>
+        {/if}
+      </li>
+      {/foreach}
+    </ul>
+    {/foreach}
+  </div>
+  {else} {foreach
+  Application_Service_RelationshipMatrixSecond::getInstance()->getItemsList($values,$excludes)
+  as $relation} {foreach $relation as $entity name=entities} {$entity.title} {if
+  not $smarty.foreach.entities.last}-{/if} {/foreach} {/foreach} {/if}
+</div>
+<script>
+  $(".matrix-values-{$matrixIndex} .js-more-link").click(function() {
+    $(this).blur();
+    $(this)
+      .parents(".matrix-values:first")
+      .find(".short-view, .full-view")
+      .toggle();
+    return false;
+  });
+</script>

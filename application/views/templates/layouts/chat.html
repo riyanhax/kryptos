@@ -1,0 +1,116 @@
+<link rel="stylesheet" type="text/css" href="/assets/css/slack/slack-chat.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/slack/demo.css">
+<script src="/assets/js/slack/script.js"></script>
+<script src="/assets/js/slack/slack-chat.js"></script>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+		<script type="text/javascript" src="/assets/js/slack/slack-chat.js"></script>
+<div class="chat-container watson" data-init-message="{$watson_init_phrase}" data-context="" data-initialized="0">
+    <div class="chat-header">
+        <div class="row">
+		    
+			<div class="message-box" data-toggle="tooltip">
+				<a href="javascript:void(0);" class="message-box-icon simplifie" title=
+				"Talk to Real Agent">
+				<!--i class="fa fa-slack" aria-hidden="true"></i-->
+					<i class="fa fa-user-plus"></i>
+					<div class="badge badge-danger slack-message-count"></div>
+				</a>
+				
+			</div>
+
+            <div class="col-sm-10">
+                <strong>Pomoc konsultanta</strong>
+				<!--div class="chat_icon">
+				<span class="fa fa-comments simple"></span>
+				</div-->
+            </div>
+            <div class="col-sm-2 text-right">
+                <a href="" class="watson-close"><span class="fa fa-close"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="chat-messages watson-message-box">
+        
+    </div>
+		
+	
+    <div class="chat-input">
+        <form action="" method="POST">
+            <div class="input-group">
+                <input type="text" name="chat_message" autocomplete="off" class="watson-input form-control" placeholder="Wpisz wiadomość..." />
+                
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="fa fa-comment"></span></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="chat-container-minimized watson-folded watson-open">
+    <div class="row">
+        <div class="col-sm-8">
+            <strong>Pomoc</strong>
+        </div>
+        <div class="col-sm-4 text-right">
+            <span class="fa fa-comments"></span>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class='row rowTop'>
+				<div class='col-sm-12'>
+					<form class="form-horizontal" id="demoForm">
+					  <div class="form-group">
+					 
+					    <div class="col-sm-9">
+					      <input type="hidden" class="form-control" id="apiToken" placeholder="apiToken" required="required" value="xoxp-626474211910-624319058560-624358803125-460273d155366190963f66f15bb32870" />
+					     
+					    </div>
+					  </div>
+
+					  <div class="form-group">
+					
+					    <div class="col-sm-9">
+					      <input type="hidden" class="form-control" id="channelId"  class="channel" placeholder="Required"  required="required" value="{$user_session->user->channelid}">
+					 
+					    </div>
+					  </div>
+					  
+					
+					
+					 
+					
+
+					  <div class="form-group">
+					  
+					    <div class="col-sm-9">
+					      <input type="hidden" class="form-control" id="user" placeholder="Required"  required="required" value="{$user_session->user->login}">
+					    </div>
+					  </div>
+
+					 
+					      <input type="hidden" class="form-control" id="sysUser" placeholder="Required"  required="required" value="aanchal.khera.st">
+					
+					
+
+				
+					    <div class="col-sm-9">
+					      <input type="hidden" class="form-control" id="botUser" placeholder="Required"  required="required" value="DemoBot">
+					 
+					  
+					 
+				</div>
+				
+			</div>
+			</div>
+			
+			
+		
+			
+
+
+

@@ -1,0 +1,109 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a class="toggle-collapse" data-target="#accordion4">
+                {$params.attributes.label} &nbsp;
+
+                <button id="add_registry" class="btn btn-xs btn-info choose-from-dial" data-dial-url="/registry-entries/datagrid-modal/id/{$params.attributes.registry_id}?useProcess=1" data-dial-ready-fn="filterRegistryPopup" data-dial-process-fn="configAddRegistry" type="button">Dodaj</button>
+            </a>
+        </h4>
+    </div>
+    <div id="accordion4" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div id="registry_entries">
+				{assign var=registry_id value=0}
+				{foreach $params.attributes.options as $each_key=>$each_entry}
+					<h5><strong>{$registryData[$each_key]}</strong></h5> 
+					<table id="registry_id{$each_key}" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+					{if $registry_id !=$each_key}
+						<tr>
+							{assign var=registry_id value=$each_key}
+							{foreach $each_entry as $each_value}
+								{foreach $each_value as $key=>$value}
+									<th>{$value.title}</th>	
+								{/foreach}
+								{break}
+							{/foreach}	
+							<th>Operacje</th>
+						</tr>
+					{/if}
+
+					{foreach $each_entry as $entry_id=>$each_value}
+						<tr class="selregistry">
+							{foreach $each_value as $key=>$value}
+								<td>{$value.value}</td>	
+							{/foreach}
+							<td>
+								<a href="/registry-entries/update/id/{$entry_id}/registry_id/{$registry_id}" class="glyphicon glyphicon-pencil" title="Edytuj"></a>
+								<a href="javascript:removeRegitryEntry({$entry_id}, {$registry_id});" class="glyphicon glyphicon-trash" title="Usuń"></a>
+								<input type="hidden" name="{$params.attributes.name}[]" value="{$entry_id}">
+							</td>									    
+						</tr>									    	
+					{/foreach}	
+					</table>
+					<div>&nbsp;</div>
+				{/foreach}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	function filterRegistryPopup() {    		
+        $('#registry_entries').find('input').each(function() {    			
+            $('.registry-entries').find('#id'+this.value).addClass('checked');
+        });
+	}
+	function configAddRegistry(id, object, status) {
+	    if (status) {
+	        if($('#registry_id'+object.registry_id).length == 0) {
+				var title = $('<h5><strong>'+object.registry_title+'</strong></h5>');
+				$('#registry_entries').append(title);
+		        	var newTag = $('<table id="registry_id'+object.registry_id+'" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">');
+				var head = '';
+				$.each(object.registry_fields, function (index, value)  
+                {  
+					head += '<th>value</th>';	
+		        }); 
+				head += '<th>Operacje</th>';	
+				newTag.append('<thead>').children('thead').append('<tr />').children('tr').append(head);
+				var body = '';
+				$('#id'+id).closest('tr').find('.registry_data').each(function() {
+		            body += '<td>'+$(this).text()+'</td>';
+		        });
+				newTag.append('<tbody />').children('tbody').append('<tr class="selregistry" />').children('tr:last').append(body+'<td><a href="/registry-entries/update/id/'+object.id+'/registry_id/'+object.registry_id+'" class="glyphicon glyphicon-pencil" title="Edytuj"></a><a href="javascript:removeRegitryEntry('+object.id+','+object.registry_id+');" class="glyphicon glyphicon-trash" title="Usuń"></a><input type="hidden" name="{$params.attributes.name}[]" value="'+object.id+'"></td>');
+			} else {
+				var newTag = $('<tr class="selregistry">');
+				$('#id'+id).closest('tr').find('.registry_data').each(function() {
+			            newTag.append($('<td></td>').text($(this).text()));
+			        });
+			        newTag.append($('<td><a href="/registry-entries/update/id/'+object.id+'/registry_id/'+object.registry_id+'" class="glyphicon glyphicon-pencil" title="Edytuj"></a><a  href="javascript:removeRegitryEntry('+object.id+','+object.registry_id+');" class="glyphicon glyphicon-trash" title="Usuń"></a>'));
+			        newTag.append($('<input type="hidden" name="{$params.attributes.name}[]" value="'+object.id+'"></td></tr>'));
+			}
+			if($('#registry_id'+object.registry_id).length == 0) {
+				$('#registry_entries').append(newTag);
+			} else {
+	        	$('#registry_id'+object.registry_id).append(newTag);
+			}
+	        systemAssignHandlers();
+	    } else {
+	    	removeRegitryEntry(object.id, object.registry_id);	    	
+	    }
+	}
+	function removeRegitryEntry(id, registry_id){
+		if($('#registry_id'+registry_id).find('input[name*="{$params.attributes.name}"]').length == 1){
+	    	$('#registry_entries').find('input[value="'+id+'"]').closest('table').prev('h5').remove();
+	    	$('#registry_entries').find('input[value="'+id+'"]').closest('table').remove();			
+		} else {
+        	$('#registry_entries').find('input[value="'+id+'"]').closest('.selregistry').remove();
+		}
+	}
+	function selectRegistry() {
+		showDial('/registry-entries/datagrid-modal/id/'+$("#registries").val()+'?useProcess=1','modal-lg','');
+    }
+
+</script>

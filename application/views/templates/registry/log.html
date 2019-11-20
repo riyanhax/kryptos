@@ -1,0 +1,86 @@
+<div class="table-operations-header">
+  {element tag='a' route='registry/audit' routeParams=['registry_id' => $registryId] attributes=[
+      'class' => 'btn btn-success',
+      'icon' => 'view',
+      'tooltip' => 'Zobacz audyt'|translate,
+      'innerHtml' => 'Zobacz audyt'|translate
+  ]}
+</div>
+ <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered example" id="register_dataTable">
+    <thead>
+     <th>Informacje dotyczące rejestru</th>  
+     <th>widok</th>
+    </thead>
+  <tbody class="ui-widget-content js-checkbox-container">
+
+{foreach $logAction as $entity}
+           
+            
+            <tr>
+                <td>
+                    
+                     {if $entity.action == 'update value'}
+                         {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                       zmienił wartość {$entity.action_on} 
+                       <b>{$entity.action_name}</b> 
+                       {if $entity.previous_value != ""}
+                       stara wartość
+                       <b>{$entity.previous_value}</b>
+                       {/if}
+                       {if $entity.previous_value != ""}
+                       do nowej wartości
+                       <b>{$entity.new_value}</b>
+                       {/if}
+                    
+                    {elseif $entity.action == 'wstaw wiersz'}
+                     {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                       wstawione wartości w rzędzie 
+                       <b> {$entity.action_name} </b>
+                       
+                    
+                    {elseif $entity.action == 'usuń wiersz'}
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                      edytować identyfikator wiersza 
+                       <b>{$entity.action_name}</b>
+                       
+
+                    {elseif $entity.action == 'delete'}
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                      usuń identyfikator wiersza
+                       <b>{$entity.action_name}</b>
+                        
+                    
+                    {elseif $entity.action == 'Utwórz pole'}
+                     {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                     Dodaj pole
+                       <b>{$entity.action_name}</b>
+                        in form 
+                     
+                    {elseif $entity.action == 'usuń pole'}
+
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                      usuń pole
+                       <b>{$entity.action_name}</b>
+                        z formularza 
+                    {elseif $entity.action == 'field update'}
+
+                       {$entity.insert_date}  : 
+                       {$entity.f_name} &nbsp; {$entity.l_name}
+                      pole aktualizacji
+                       <b>{$entity.action_name}</b>
+                        in form  
+                       
+                    {/if} 
+                </td>
+                <td><a href="{$entity.link}" style="color:#7CFC00">widok</a></td>
+            </tr>
+                   
+            {/foreach}
+    </tbody>
+</table>

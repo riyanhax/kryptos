@@ -1,0 +1,26 @@
+<h1>{$dialogTitle}</h1>
+
+<div class="row view-render">
+    <div class="col-sm-12">
+
+            <div class="form-group row main-label-row">
+                <label class="col-sm-4"><strong>NAZWY PÓL</strong></label>
+                <div class="col-sm-8">
+                    <label><strong>ZAWARTOŚĆ</strong></label>
+                </div>
+            </div>
+
+            <div class="form-group row ">
+                <label for="element_9_Y5Mzk2OC4yNjYzOTEzMA" class="col-sm-4">Autor</label>
+                <div class="col-sm-8">
+                    <p>{$autor}</p>
+                </div>
+            </div>
+            {foreach from=$data.registry.entities item=registryEntity name=registryEntities}
+                <div class="{if $smarty.foreach.registryEntities.index is odd by 1}grey{else}white{/if}">
+                    {Application_Service_Entities::renderText($registryEntity, $data) nofilter}
+                </div>
+            {/foreach}
+    </div>
+</div>
+

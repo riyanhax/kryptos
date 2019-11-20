@@ -1,0 +1,32 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter}  data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4"></label>
+    <div class="col-sm-8" id="{$id}">
+        <p class="row-value {$attributes.class}">
+            {$params.attributes.label}
+            <button type="button" class="btn btn-info btn-xs js-more-info" data-toggle="modal" data-target="#{$id}-modal">More Info</button>
+        </p>
+    </div>
+    <div class="modal fade" id="{$id}-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{$params.attributes.label}</h4>
+                </div>
+                <div class="modal-body">
+                    {$params.attributes.description}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $('#{$id} .js-more-info').clich
+</script>

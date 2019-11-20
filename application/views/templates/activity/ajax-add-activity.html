@@ -1,0 +1,184 @@
+<h1>{$dialogTitle}</h1>
+        
+          <div class="row">
+             <div class="col-md-5 col-sm-6 col-xs-12">
+                <div class="col-md-12 col-lg-12">
+                                <div class="widget widget-calendar widget-calendar-home">
+                                    <div class="widget-header transparent">
+                                        <h2><strong>{'Kalendarz'|translate}</strong></h2>
+                                    </div>
+                                    <div class="widget-content col-sm-12">
+                                        <div class="row">
+                                            <h3 class="col-sm-12">
+                                                <span class="calendar-info-day">Sierpień rok 2016</span>
+                                                <span class="pull-right">
+                                    {element tag='span' route='messages/ajax-add-calendar-note' routeParams=[] attributes=[
+                                        'dialog' => true,
+                                        'class' => 'btn btn-info btn-xs',
+                                        'icon' => 'add',
+                                        'tooltip' => 'Dodaj nową notatkę'|translate,
+                                        'innerHtml' => 'Notatka'|translate,
+                                        'data' => [
+                                            'new-dialog' => 0
+                                        ]
+                                    ]}
+                                    {* element tag='span' route='tasks/mini-add-storage-task' routeParams=[] attributes=[
+                                        'dialog' => true,
+                                        'class' => 'btn btn-success btn-xs',
+                                        'icon' => 'add',
+                                        'tooltip' => 'Dodaj nowe zadanie',
+                                        'innerHtml' => 'Zadanie'
+                                    ]*}
+                                </span>
+                                            </h3>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 text-right">
+                                                <div class="btn-group pull-left">
+                                                    <button class="btn btn-default" data-calendar-nav="prev"><i class="icon-left-open-1"></i></button>
+                                                    <button class="btn" data-calendar-nav="today">{'Dziś'|translate}</button>
+                                                    <button class="btn btn-default" data-calendar-nav="next"><i class="icon-right-open-1"></i></button>
+                                                </div>
+
+                                                <div class="btn-group">
+                                                    <button class="btn btn-warning" data-calendar-view="year">{'Rok'|translate}</button>
+                                                    <button class="btn btn-warning" data-calendar-view="month">{'Miesiąc'|translate}</button>
+                                                    <button class="btn btn-warning" data-calendar-view="week">{'Tydzień'|translate}</button>
+                                                    <button class="btn btn-warning active" data-calendar-view="day">{'Dzień'|translate}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="calendar-max"></div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+            
+            <div class="col-md-7 col-sm-6 col-xs-12 pull-right">
+              <form name="f_profile" id="f_profile" action="/activity/save-activity" class="ajax-form form-horizontal" role="form" data-process-fn="formProcessDialModal">
+                <div class="radio-t-btn"> 
+                  <div class="btn-group radio-btn-t" data-toggle="buttons">
+
+                    {foreach $activityTypes as $activity=>$icon}
+                      <label class="btn btn-activity">
+                        <input type="radio" class="radio_activity" name="parameter[options]" value="{$activity}" autocomplete="off" checked="">
+                        <i class="fa {$icon}"></i>&nbsp;<span>{$activity}</span>
+                      </label>
+                    {/foreach}
+
+                  </div>
+                </div>
+                <div class="input-txt">
+                  <input type="text" name="parameter[activity_name]" placeholder="Subject" class="for-all col-sm-12 any-input">
+                </div>
+                <div class="row date-time-d">
+                  <div class="col-sm-4">
+                    <p>Date</p>
+                    <input type="text" name="parameter[date]" class="form-control datepicker-input">
+                  </div>
+                  <div class="col-sm-4">
+                    <p>Time</p>
+                    <input type="time" name="parameter[time]" id="time" class="date-pic for-all">
+                  </div>
+                  <div class="col-sm-4">
+                    <p>Duration</p>
+                    <select name="parameter[duration]" class="date-pic sel for-all">
+                      <option value = "00:15">00:15</option>
+                      <option value = "00:30">00:30</option>
+                      <option value = "00:45">00:45</option>
+                      <option value = "01:00">01:00</option>
+                      <option value = "01:15">01:15</option>
+                      <option value = "01:30">01:30</option>
+                      <option value = "01:45">01:45</option>
+                      <option value = "02:00">02:00</option>
+                      <option value = "02:15">02:15</option>
+                      <option value = "02:30">02:30</option>
+                      <option value = "02:45">02:45</option>
+                      <option value = "03:00">03:00</option>
+                      <option value = "03:15">03:15</option>
+                      <option value = "03:30">03:30</option>
+                      <option value = "03:45">03:45</option>
+                      <option value = "04:00">04:00</option>
+                      <option value = "04:15">04:15</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 text-area">
+                    <textarea class="txt-are for-all summernote" name="parameter[notes]" placeholder="Notes"></textarea>
+                  </div>
+                  <div class="col-sm-12 date-time-d">
+                    <p>Assigned To</p>
+                    <select name="parameter[user]" class="date-pic sel for-all">
+                      <option value="{$userlogged}" selected>{$userlogged}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 date-pic mt-10">
+                    <p>Linked To</p>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                      <input type="text" placeholder="Deal" name="parameter[linked]" class=" form-control for-all col-sm-12 any-input">
+                    </div>
+                  </div>
+		  <div class="col-sm-12 text-area"><div class="input-group">
+		    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><div class="input-group col-sm-12">
+                    <input type="text" placeholder="Attendees Login IDs (Seperated by Semicolon ';')" name="attendees" class=" form-control for-all col-sm-12 any-input">
+                  </div></div></div>
+                  <div class="col-sm-6 mt-10">
+                    <div class="input-group">
+                       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <div class="input-group">
+                            <input type="text" id="author_id_typeahead" name="parameter[people]" class="form-control typeaheadElement validate[required]" data-source-variable="storageUsers" data-target-element="#author_id"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default choose-from-dial" data-target-element="#author_id_typeahead" data-dial-url="/osoby/addmini/?useProcess=true" type="button">Wybierz</button>
+                            </span>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 mt-10">
+                    <div class="input-group">
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></span>
+                      <input type="text" placeholder="Organization" name="parameter[organization]" class=" form-control for-all col-sm-12 any-input">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 mt-10">
+                    <input type="checkbox" name="parameter[done]" value="1">
+                    Mark as done 
+                  </div>
+                </div> 
+                <div class="modal-footer">
+                  <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                  <button type="submit" class="btn btn-success" onclick="show()">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      <script type="text/javascript">
+/* this code was preventing the data to save.
+         // function show()
+         //   {
+         //       window.location.reload();
+         //   }
+*/
+              jQuery(".radio-btn-t label:first").addClass("active");
+              jQuery('.btn-activity').click(function(){
+              jQuery('.btn-activity').removeClass('active')
+              jQuery(this).addClass('active')
+              });
+
+              jQuery(function(){  
+                              jQuery('input[type="time"][id="time"]').each(function(){    
+                                var d = new Date(),        
+                                    h = d.getHours(),
+                                    m = d.getMinutes();
+                                if(h < 10) h = '0' + h; 
+                                if(m < 10) m = '0' + m; 
+                                jQuery(this).attr({
+                                  'value': h + ':' + m
+                                });
+                              });
+                            });
+      </script>
+
+
+<script src="/assets/plugins/fullcalendar/fullcalendar.min.js"></script> 
+<script src="/assets/plugins/pages/calendar.js"></script>

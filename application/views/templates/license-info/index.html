@@ -1,0 +1,18 @@
+<form name="form_buy_kryptos" id="form_buy_kryptos" action="/license-info/update-counts" method="post" class="form-horizontal" role="form" data-process-fn="formProcessCloseModal">
+<table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example js-licences-table">
+    <tbody class="ui-widget-content">
+        {foreach $getLicenseInfo as $info}
+            <tr>
+                <td class="text-left"><label class="col-sm-4" style="text-transform: uppercase;">11111{$info.name}</label></td>
+                <td class="text-left"><input type="number" name="license_cost[]" value="{$info.cost}"></td>
+            </tr>
+            <tr>
+            	<td><input type="hidden" name="license_cost_id[]" value="{$info.id}"></td>
+            </tr>
+        {/foreach}
+        <tr>
+        	<input type="submit" class="btn btn-info pull-right dialog-form-submit" name="update_counts" value="{'Update Cost'|translate}">
+        </tr>
+    </tbody>
+</table>
+</form>

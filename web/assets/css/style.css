@@ -1,0 +1,122 @@
+.radio-btn-t {
+    background-color: #efefef;
+    
+}
+.radio-btn-t label {
+    border: 1px solid #777;
+}
+.for-all{
+    border-radius: 6px;
+    border: 1px solid #777;
+    display: inline-block;
+    height: 35px;
+}
+
+.form-group.row.text-1537429305848{
+    display: none !important;
+}
+
+.radio-t-btn {
+	font-weight: 300;
+	padding-left: 2px;
+}
+.radio-t-btn span {
+	color: #777;
+}
+.radio-t-btn i {
+	font-size: 14px;
+	color: #555;
+}
+.input-txt {
+	padding: 10px 0px;
+}
+.any-input {
+	margin-top: 10px;
+}
+.date-time-d p {
+	margin: 0;
+	padding: 10px 0px 0px 0px;
+}
+.date-pic {
+	width: 100%;
+}
+.sel {
+	padding: 3px 0px;
+}
+.txt-are {
+	margin: 10px 0px 0px 0px;
+	width: 569px;
+	height: 70px;
+}
+.iradio_square-aero.hover
+{
+	    display: none !important;
+}
+.iradio_square-aero
+{
+	display: none !important;
+}
+
+.radio-btn-t {
+    background-color: #efefef;
+    
+}
+.radio-btn-t label {
+    border: 1px solid #777;
+}
+.for-all{
+    border-radius: 6px;
+    border: 1px solid #777;
+    display: inline-block;
+    height: 35px;
+}
+
+.radio-t-btn {
+	font-weight: 300;
+	padding-left: 2px;
+}
+.radio-t-btn span {
+	color: #777;
+}
+.radio-t-btn i {
+	font-size: 14px;
+	color: #555;
+}
+.input-txt {
+	padding: 10px 0px;
+}
+.any-input {
+	margin-top: 10px;
+}
+.date-time-d p {
+	margin: 0;
+	padding: 10px 0px 0px 0px;
+}
+.date-pic {
+	width: 100%;
+}
+.sel {
+	padding: 3px 0px;
+}
+.txt-are {
+	margin: 10px 0px 0px 0px;
+	width: 569px;
+	height: 70px;
+}
+/*custom css*/
+.radio-t-btn label.btn.active{background:#3498db!important;-webkit-box-shadow:none!important;box-shadow:none!important;}.radio-t-btn label.btn.active i, .radio-t-btn label.btn.active span{color:#fff}.icheckbox_square-aero{margin:10px 0!important;}.radio-t-btn .txt-are, .radio-t-btn input{padding-left:5px;}.modal-body{padding:20px 20px 10px!important;}.modal-footer{padding:10px !important;}
+.mt-10{margin-top:10px;}
+.radio-t-btn label{background-color: #efefef; margin-top: 0px!important;}
+.fc-text-arrow{vertical-align: inherit;font-size: 1em!important;color: #777;}
+input, button, select, textarea{padding-left:5px!important;}
+input{margin:0px!important}
+.fc-header-title {
+    display: none !important;
+}
+input[type=date] {
+    padding: 6px 0 !important;
+}
+
+input[type=time] {
+    padding: 6px 0 !important;
+}

@@ -1,0 +1,7 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<input type="hidden" id="{$id}" name="{$attributes.name}"  value="{$attributes.value}"/>

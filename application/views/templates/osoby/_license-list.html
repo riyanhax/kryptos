@@ -1,0 +1,33 @@
+<table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example js-licences-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th data-filter-type="select">Licencja</th>
+        <th data-filter-type="select-items">Status</th>
+        <th data-filter-type="date-range">Data aktywacji</th>
+        <th data-filter-type="date-range">Data ważności</th>
+        <th>opcje</th>
+    </tr>
+    </thead>
+    <tbody class="ui-widget-content">
+    {foreach $licenseSubscriptions as $subscription}
+    <tr data-license-id="{$subscription.license.id}" data-end-date="{$subscription.end_date|date_format:'Y-m-d'}" data-status="{$subscription.status}">
+        <td class="text-right">{$subscription@iteration}</td>
+        <td class="text-left">{$subscription.license.name}</td>
+        <td class="text-center">
+            {if $subscription.status == Application_Model_LicenseSubscription::STATUS_ACTIVATED}
+            <i class="fa fa-circle" style="color:#00cc00;" title="Active"><span class="select-item hiddenElement">Active</span></i>
+            {else}
+            <i class="fa fa-circle" style="color:#cc0000;" title="Inactive"><span class="select-item hiddenElement">Inactive</span></i>
+            {/if}
+        </td>
+        <td class="text-center">{smart_date value=$subscription.created_at}</td>
+        <td class="text-center">{smart_date value=$subscription.end_date}</td>
+        <td class="operations">
+            <a class="fa fa-info-circle" href="/license-subscriptions/view/id/{$subscription.id}" data-toggle="tooltip" title="Szczegółowe informacje"></a>
+            <a class="glyphicon glyphicon-pencil js-edit" href="/license-subscriptions/view/id/{$subscription.id}" data-toggle="tooltip" title="Edytuj"></a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>

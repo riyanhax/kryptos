@@ -1,0 +1,24 @@
+<table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example js-licences-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th data-filter-type="string">Email</th>
+        <th data-filter-type="string">Phone</th>
+        <th data-filter-type="string">Confirmation Code</th>
+        <th data-filter-type="string">Status</th>
+        <th>opcje</th>
+    </tr>
+    </thead>
+    <tbody class="ui-widget-content">
+        {foreach $paginator as $d}
+            <tr>
+                <td class="text-left">{$d.id}</td>
+                <td class="text-left">{$d.email}</td>
+                <td class="text-left">{$d.phone}</td>
+                <td class="text-left">{$d.confirmation_code}</td>
+                <td class="text-left">{$d.status}</td>
+                <td class="text-left">{smart_date value=$d.created_at}</td>
+            </tr>
+        {/foreach}
+    </tbody>
+</table>

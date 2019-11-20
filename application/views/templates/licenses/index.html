@@ -1,0 +1,71 @@
+<div class="table-operations-header">
+  <a
+    class="btn btn-success"
+    href="/licenses/update"
+    data-title="Dodaj nowy szablon"
+    data-toggle="tooltip"
+    ><i class="fa fa-plus"></i> &nbsp;Dodaj</a
+  >
+</div>
+<table
+  cellpadding="0"
+  cellspacing="0"
+  border="0"
+  class="table large-table table-striped table-bordered example js-licences-table"
+>
+  <thead>
+    <tr>
+      <th></th>
+      <th data-filter-type="string">nazwa</th>
+      <th data-filter-type="select-items">aktywny</th>
+      <th data-filter-type="date-range">data utworzenia</th>
+      <th data-filter-type="date-range">data edycji</th>
+      <th>opcje</th>
+    </tr>
+  </thead>
+  <tbody class="ui-widget-content">
+    {foreach $paginator as $d}
+    <tr>
+      <td class="text-right">{$d@iteration}</td>
+      <td>{$d.name}</td>
+      <td class="text-center">
+        {if $d.status == Application_Model_License::STATUS_ACTIVATED}
+        <i class="fa fa-circle" style="color:#00cc00;" title="{$d.usednames}"
+          ><span class="select-item hiddenElement">TAK</span></i
+        >
+        {else}
+        <i class="fa fa-circle" style="color:#cc0000;" title="nie"
+          ><span class="select-item hiddenElement">NIE</span></i
+        >
+        {/if}
+      </td>
+      <td class="text-center">{smart_date value=$d.created_at}</td>
+      <td class="text-center">{smart_date value=$d.updated_at}</td>
+      <td class="operations">
+        <a
+          class="glyphicon glyphicon-pencil"
+          href="/licenses/update/id/{$d.id}"
+          data-toggle="tooltip"
+          title="Edytuj"
+        ></a>
+        <a
+          class="glyphicon glyphicon-trash js-license-delete"
+          href="/licenses/delete/id/{$d.id}"
+          data-toggle="tooltip"
+          title="Usuń"
+        ></a>
+      </td>
+    </tr>
+    {/foreach}
+  </tbody>
+</table>
+
+<br />
+<script>
+  (function() {
+    var table = $(".js-licences-table");
+    table.on("click", ".js-license-delete", function() {
+      return window.confirm("Delete license?");
+    });
+  })();
+</script>

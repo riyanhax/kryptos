@@ -1,0 +1,23 @@
+{if empty($attributes.id)}
+    {assign var="id" value=$attributes.name|set_id}
+{else}
+    {assign var="id" value=$attributes.id}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter} data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        <input type="text"
+               id="{$id}"
+               name="{$attributes.name}"
+               class="row-value form-control {$attributes.class} longlatval hidden"
+               value="{$attributes.value}"
+        >
+        <input type="text" id="google-map-address" placeholder="Search Box" class="row-value form-control">
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <div id="google-map"></div>
+            </div>
+        </div>
+    </div>
+</div>

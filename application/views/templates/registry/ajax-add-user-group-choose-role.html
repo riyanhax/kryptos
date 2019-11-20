@@ -1,0 +1,74 @@
+<h1>Add Role to User Group</h1>
+<form name="f_assignee" id="f_assignee" action="/registry/ajax-add-role-to-user-group/id/{$registry.id}/group_id/{$group.id}" class="ajax-form form-horizontal" role="form" data-process-fn="processAddRoleToUserGroup">
+    <div class="row">
+        <label for="user_label" class="col-sm-4">Pracownik</label>
+        <div class="col-sm-8">
+            {$group.name|upper}
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="role_id" class="col-sm-4">Rola</label>
+        <div class="col-sm-8">
+            <select name="role_id" id="role_id" class="form-control">
+                {foreach $roles as $role}
+                    <option value="{$role.id}" data-role-permissions="{','|implode:$registryPermissions.{$role.id}}">{$role.title}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-4">Uprawnienia</label>
+        <div class="col-sm-8 checkout-list">
+            <div class="row">
+                {foreach $permissions as $permission}
+                    <label class="col-sm-12">
+                        <div class="icheckbox_square-aero js-checkbox" aria-checked="false" aria-disabled="false" data-target-id="permissions[{$permission.id}]">
+                            <ins class="iCheck-helper"></ins>
+                            <span class="hidden text-indicator"></span>
+                        </div>
+                        {$permission.title}
+                    </label>
+                {/foreach}
+            </div>
+
+            {foreach $permissions as $permission}
+                <input value="" type="hidden" class="registry_permission" data-id="permissions[{$permission.id}]" name="permissions[{$permission.id}]" data-permission-id="{$permission.id}">
+            {/foreach}
+        </div>
+    </div>
+
+    
+</form>
+
+<div class="footer-actions">
+    <a class="btn btn-success pull-right dialog-form-submit">Dodaj</a>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $('#role_id').change(function(){
+            console.log($(this));
+            var rold_id = $(this).val();
+            var role_permissions = $(this).find('option:selected').attr('data-role-permissions');
+            console.log('rold_id', rold_id, role_permissions);
+            role_permissions = role_permissions.trim().split(',').map(Number).filter(Boolean);
+            console.log(role_permissions);
+            $('#f_assignee').find('.registry_permission').each(function(index, ele){
+                var permission_id = parseInt($(ele).attr('data-permission-id'));
+                //console.log(permission_id, role_permissions.indexOf(permission_id));
+                var chkBoxEle = $('#f_assignee').find('div[data-target-id="permissions['+permission_id+']"]');
+                if (role_permissions.indexOf(permission_id) != -1) {
+                    $(ele).val(1);
+                    chkBoxEle.addClass('checked').addClass('disabled');
+                } else {
+                    $(ele).val(0);
+                    chkBoxEle.removeClass('checked').removeClass('disabled');
+                }
+            });
+        })
+        $('#role_id').change();
+    })
+</script>

@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form name="form_buy_kryptos" id="form_buy_kryptos" action="/payments/submit-upgrade-version" method="post" class="form-horizontal" role="form" data-process-fn="formProcessCloseModal">
+            You are using <strong>{$license.version}</strong> version.
+            <div class="form-group row">
+                <label class="col-sm-4">Upgrade your Kryptos version to:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="version" name="version" value="3" class="toggle-relative clear-relative"/>
+                    <div class="form-inline">
+                        {foreach from=$higherVersions item=version}
+                        <div class="radio iradio">
+                            <label>
+                                <input type="radio" data-value="{$version.version}" name="radio_version" data-target="#version" class="transfer-value">
+                                {$version.version} - {Application_Service_Products::getPriceByProductId($version.id)} {constant('Application_Service_Products::PRICE_CURRENCY')}/month
+                            </label>
+                        </div>
+                        <br>
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="payment_method" name="payment_method" value="paypal"/>
+
+            <div class="body-action">
+                <button type="submit" class="btn btn-info pull-right dialog-form-submit">{'Pay with PayPal'|translate}</button>
+            </div>
+
+        </form>
+    </div>
+</div>

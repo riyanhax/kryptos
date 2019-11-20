@@ -1,0 +1,33 @@
+<div class="col-md-12 portlets">
+	<!-- Your awesome content goes here -->
+	<div class="widget animated fadeInDown">
+		<form id="myWizard" name="f_data" method="POST" action="/registry-entries/save" enctype="multipart/form-data">
+			{if $data.id}<input type="hidden" name="id" value="{$data.id}"/>{/if}
+                <input type="hidden" name="registry_id" value="{$data.registry.id}"/>
+
+        {$x = 0}
+         {while $x <= $maxstep+1 }
+         	{if isset($tab_names[$x]) && !empty($tab_names[$x])}
+         	<section class="step" data-step-title="{$tab_names[$x]}">
+           {else}
+           <section class="step" data-step-title="Step {$x+1}">
+           {/if}
+				<div class="row">
+					<div class="col-sm-12">
+						
+						{foreach $data.registry.entities as $registryEntity}
+						  {if $registryEntity->config[7]==$x}
+						    <div style="{if in_array($registryEntity.entity_id, $todisable)} pointer-events: none; {/if}">
+                                {Application_Service_Entities::render($registryEntity, $data) nofilter}
+                            </div>
+                          {/if}
+                        {/foreach}
+                    </div>
+				</div>
+			</section>
+            {$x++}
+       {/while} 
+		</form>
+	</div>
+</div>
+	

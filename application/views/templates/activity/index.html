@@ -1,0 +1,95 @@
+{include file='modals/modal.tpl' title='Rejestry - co to jest?' content='Już znasz moje możliwości całkiem dobrze, jednak opracowano mnie po to by Ci służyć i realnie ułatwiać pracę. Czy potrzebujesz wsparcia w prowadzeniu różnych rejestrów i ewidencji? Powiem Ci jak dostosować zeszyty, listy, spisy oraz ewidencje, tak by były one zgodne obowiązującym prawem oraz zmianami jakie zaczną obowiązywać od roku 2018. Czy wiesz, że na liście kontrolnej inspektorów GIODO znajduje się weryfikacja prowadzonych rejestrów pod kątem ewidencjowania zmian? Czy zgodnie z zaleceniami GIODO prowadzisz dla każdego piku Excel, indywidualny arkusz z wpisywaniem kto kiedy go modyfikował i w jakim celu?  Poznaj mój kolejny moduł o nazwie Rejestry. On jest odpowiedzią na wszystkie zadane przed chwilą pytania. Pozwala na stworzenie dowolnej dodatkowej ewidencji np. rejestr delegacji, rejestr wydawanych zaświadczeń, ewidencja pamięci USB, a nawet rejestr dostępu do monitoringu. To Ty decydujesz jakie pola ma zawierać, jakiego typu oraz określasz uprawnienia, czyli kto może tylko i wyłącznie podglądać wpisy, a kto je może edytować. Tylko Kryptos24 posiada zarządzanie uprawnieniami na najniższym poziomie. Oznacza to, że masz możliwość ustalenia, że użytkownicy wprowadzający rekordy widzą tylko te swoje, a np. przełożony ma dostęp do rejestru całościowego. Dodatkowo rejestry zintegrowane są z pozostałymi modułami aplikacji, więc istnieje możliwość np. szybkiego wyboru pracowników, pomieszczeń, a nawet elementów zbiorów. Kreator rejestrów został opracowany tak by wesprzeć administratorów danych. Niejednokrotnie potrzebujemy zinformatyzować pewną ewidencję. Przydałby się nam program, ale tak naprawdę zależy nam tylko na jednym elemencie. Z Kryptos24 oszczędzasz i nie zaśmiecasz komputera setką aplikacji. Masz możliwość zastąpić większość programów do ewidencjonowania, aplikacją Kryptos24. Zobacz sam!'}
+<div class="table-operations-header">
+{if $showCalendar}
+    {element tag='a' route='activity/ajax-add-activity' routeParams=[] attributes=[
+        'dialog' => [
+            'process' => 'locationReload',
+            'new-dialog' => true
+        ],
+        'icon' => 'plus',
+        'class' => 'btn btn-success',
+        'tooltip' => 'Dodaj aktywność',
+        'innerHtml' => 'Dodaj aktywność'
+    ]}
+
+   <a class="btn btn-success" href="activity/actlog" data-title="Dodaj nową osobę" data-toggle="tooltip"><i class="fa fa-plus"></i> &nbsp;Activity History</a>
+{else}<a class="btn btn-top btn-error red-button" id="top-block-btn-back" href="/google/handler">
+	<i class="icon-google-plus"></i>
+    {'Zaloguj się aby uzyskać dostęp do kalendarza'|translate}
+	    </a>
+{/if}
+</div>
+<table cellpadding="0" cellspacing="0" border="0" id="table_activity" class="table large-table table-striped table-bordered example">
+    <thead>
+    <tr>
+        <th>Done</th>
+        <th data-filter-type="string">Activity</th>
+        <th data-filter-type="string">Subject</th>
+        <th data-filter-type="string">Deal</th>
+        <th data-filter-type="string">Contact Person</th>
+        <th data-filter-type="string">Email</th>
+        <th data-filter-type="string">Phone</th>
+        <th data-filter-type="string">Organization</th>
+        <th data-filter-type="string">Due Date</th>
+        <th data-filter-type="string">Time</th>
+        <th data-filter-type="string">Duration</th>
+        <th data-filter-type="string">Assigned to user</th>
+        <th data-filter-type="string">Date Created</th>
+		<th>Operacje</th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $paginator as $d}
+        <tr id="{$d.id}" {if (date("l, F d", strtotime($d.due_date)) == date("l, F d"))}
+   style="color:red;" {/if}>
+            <td><input type="checkbox" class="done" name="done"></td>
+            <td><a href="#" class="act_list" data-name="activity_type_id" data-type="select" data-pk="{$d.id}" data-url="/activity/update/" data-title="select activity type">{$d.activity_type_id}</a></td>
+            <td>    <i class="fa fa-phone"></i>
+                {element tag='a' route='activity/ajax-edit-activity' routeParams=['id' => $d.id] attributes=[
+                    'dialog' => [
+                        'process' => 'locationReload',
+                        'new-dialog' => true
+                    ],
+                    'innerHtml' => $d.subject
+                ]}
+            </td>
+            <td><a href="#" class="act_edit" data-name="deal" data-type="text" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter deal">{$d.deal}</a></td>
+            <td>
+                <a href="#" class="act_people" data-name="contact_person" data-type="select" data-pk="{$d.id}" data-url="/activity/update/" data-title="Select People">
+                    {$d.contact_person}
+                </a>
+            </td>
+            <td><a href="#" class="act_edit" data-name="email" data-type="email" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter Email">{$d.email}</a></td>
+            <td><a href="#" class="act_edit" data-name="phone" data-type="text" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter Phone">{$d.phone}</a></td>
+            <td><a href="#" class="act_edit" data-name="organization" data-type="text" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter Organization">{$d.organization}</a></td>
+            <td><a href="#" class="act_edit" data-name="due_date" data-type="date" data-placement="right" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter Due Date">{$d.due_date}</a></td>
+            <td><a href="#" class="act_edit" data-name="time" data-type="time" data-pk="{$d.id}" data-url="/activity/update/" data-title="Enter time">{$d.time}</td>
+            <td>
+                <a href="#" class="act_duration" data-name="duration" data-type="select" data-pk="{$d.id}" data-url="/activity/update/" data-title="select duration">
+                    {$d.duration}
+                </a>
+            </td>
+            <td>{$d.assigned_user_id}</td>
+            <td>{$d.created_date}</td>
+			<td class="operations nowrap">
+                    {if $auth->isGranted('node/activity/update', ['id' => $d.id])}
+					{element tag='a' route='activity/ajax-edit-activity' routeParams=['id' => $d.id] attributes=[
+                    'dialog' => [
+                        'process' => 'locationReload',
+                        'new-dialog' => true
+                    ],
+                    'innerHtml' => '<i class="glyphicon glyphicon-pencil"></i>'
+                ]}
+                    {/if}
+                    {if $auth->isGranted('node/activity/remove', ['id' => $d.id])}
+                    <a class="glyphicon glyphicon-trash modal-confirm" data-href="/activity/remove/id/{$d.id}" data-confirmation-class="singleDelete" data-toggle="tooltip" title="Usuń"></a>
+                    {/if}
+                </td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+<script src="/assets/plugins/fullcalendar/fullcalendar.min.js"></script> 
+<script src="/assets/plugins/pages/calendar.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>

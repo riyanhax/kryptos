@@ -1,0 +1,73 @@
+{if empty($id)} {assign var="id" value=$name} {/if}
+
+<div
+  class="form-group row {$wrapper.class nofilter}"
+  data-enable-if="{$params.attributes.widget.enableIf}"
+  data-visible-if="{$params.attributes.widget.visibleIf}"
+>
+  <label for="{$id}" class="col-sm-4">{$params.attributes.label}:</label>
+  <div class="col-sm-8">
+    <textarea
+      name="{$params.attributes.name}"
+      id="{$id}"
+      class="form-control {if !empty($params.attributes.ckeditor_class)}{$params.attributes.ckeditor_class}{else}ckeditor-default{/if} {$class}"
+    >
+{$params.attributes.value}</textarea
+    >
+  </div>
+</div>
+
+<!-- Previous Code is like this -->
+<!-- {if empty($id)} {assign var="id" value=$name} {/if}
+
+<div
+  class="form-group row {$wrapper.class nofilter}"
+  data-enable-if="{$params.attributes.widget.enableIf}"
+  data-visible-if="{$params.attributes.widget.visibleIf}"
+  style="margin-top: 125px"
+>
+  <label for="{$id}" class="col-sm-4">{$params.attributes.label}:</label>
+  <div class="col-sm-8">
+    <textarea name="{$params.attributes.name}" class="form-control">
+{$params.attributes.value}</textarea
+    >
+  </div>
+</div> -->
+
+<!-- {if !empty($params.attributes.ckeditor_class)}{$params.attributes.ckeditor_class}{else}ckeditor-default{/if} {$class}" -->
+<!-- <script src="/assets/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+  ckeditorDefaults = {
+    filebrowserBrowseUrl: "/elfinder/browser",
+    fullPage: false,
+    entities_additional: "",
+    filebrowserImageBrowseUrl: "/elfinder/browser?type=image",
+    removeDialogTabs: "link:upload;image:upload",
+    toolbarGroups: [
+      { name: "basicstyles", groups: ["basicstyles", "cleanup"] },
+      { name: "colors" },
+      { name: "clipboard", groups: ["clipboard", "undo"] },
+      { name: "paragraph", groups: ["list", "indent", "blocks", "align"] },
+      { name: "links" },
+      { name: "insert" },
+      { name: "styles" },
+      { name: "tools" },
+      { name: "others" },
+      { name: "document", groups: ["mode"] }
+    ],
+    extraPlugins: "autogrow",
+    removeButtons: "Flash,Iframe,Fullscren",
+    height: 80,
+    autoGrow_minHeight: 80,
+    autoGrow_maxHeight: 300,
+    autoGrow_onStartup: true,
+
+    skin: "office2013",
+    language: uiLanguage,
+    toolbarCanCollapse: false,
+    sharedSpaces: { top: "tahighlightsTBdiv" }
+  };
+  $(document).ready(function() {
+    CKEDITOR.replace("{$params.attributes.name}", ckeditorDefaults);
+  });
+</script> -->

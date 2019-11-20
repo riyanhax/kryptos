@@ -1,0 +1,37 @@
+<div style="padding-bottom: 5px;" class="row-fluid">
+    <div class="span12">
+        <h3 class="page-title">
+            <a class="btn btn-top btn-warning" id="top-block-btn-back">
+                <span class="glyphicon glyphicon-share-alt rotate invert"></span>             
+                {'Powrót'|translate}
+            </a>
+            &nbsp;
+			
+            {if $section_url}
+                <a class="home_href" href="/home">Home</a> -> <a href="/registry-entries/index/registry_id/{$section_url['registryId']}">{$section_url['title']|translate}</a>{$section_url['section']|translate}
+            {else}
+                {if $layout->sectionDetailed}
+            <a class="home_href" href="/home">Home</a> -> <a href="{Zend_Controller_Front::getInstance()->getRequest()->getRequestUri()}">{$layout->sectionDetailed|translate}</a>
+                {else}
+
+            <a class="home_href" href="/home">Home</a> -> <a href="{Zend_Controller_Front::getInstance()->getRequest()->getRequestUri()}">{$layout->section|translate}</a>
+                {/if}
+            {/if}
+            &nbsp;
+        </h3>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var elem = $('a.active');
+    if (elem && elem.length) {
+      //for (var i = 0; i < elem.length; i++) {
+         //var classes = elem[0].text;
+         //$('a.home_href').text(classes);
+         //alert(classes);
+         //console.log( classes );
+      //}
+    }
+  });
+</script>

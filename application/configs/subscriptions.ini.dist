@@ -1,0 +1,10 @@
+[subscriptions]
+adapter = chargebee
+
+[free_trials]
+api_salt = op2mooM5Rui9vioH
+api_url = http://localhost/api/
+
+[chargebee]
+url = https://kryptos72-test.chargebee.com/
+api_key = test_LLi4Ru8q8cpNmvmYL5Tj7kJDw0fbYCOV

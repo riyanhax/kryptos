@@ -1,0 +1,65 @@
+{include file='modals/modal.tpl' title='Dysk online - co to jest?' content='Kryptos24 pozwala na integrację z dowolną platformą hostingową poprzez podłączenie konta FTP. Dbając o bezpieczeństwo i wydajność Systemu, wszystkie załączone pliki znajdują się na serwerze należącym do Klienta, do którego masz nieustanny dostęp. Wszystko zależy od Twoich wymagań. By zarządzać dodanymi plikami można albo skonfigurować Klienta sFTP/FTP lub przejść do zakładki Dysk online. Mamy możliwość skopiowania całej struktury lokalnej, którą posiadamy wraz z plikami. Dodatkowo sami możemy tworzyć foldery, a dla wygody wgrywanie plików odbywa się metodą przeciągnij i opuść.'}
+<form method="post" action="/file-sources">
+	<div class="table-operations-header">
+		<select class="form-control sourceid1">
+			<option value="{$nowsource.id}">{$nowsource.name}</option>
+			{foreach $sources as $key => $source}
+				{if $source.id == $nowsource.id } {continue}
+				{else} <option value="{$source.id}">{$source.name}</option>
+				{/if}
+			{/foreach}
+		</select>
+	</div>
+    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered example">
+    <thead>
+    <tr>
+        <th data-filter-type="string">Name</th>
+        <th data-filter-type="string">Type</th>
+        <th data-filter-type="string">Description</th>
+        <th data-filter-type="string">Date</th>
+        <th data-filter-type="string">Download</th>
+        <th data-filter-type="string">Storage</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $filelists as $filelist}
+    	{foreach $filelist as $f}
+        	<tr>
+	            <td>{$f.realname}</td> 
+	            <td>{$f.type}</td>
+	            <td></td>
+	            <td>{$f.date}</td>
+	            <td></td>
+	            <td>{$f.storage}</td>
+	            <td class="operations">
+	                {element tag='a' route='file-sources/storage-update' routeParams=['storage_id' => $f.storage_id, 'filename'=>$f.name, 'ext' =>$f.ext, 'type' => $f.type] attributes=[
+                        'dialog' => [
+                            'process' => 'refreshSection',
+                            'new-dialog' => true
+                        ],
+                        'class' => 'glyphicon glyphicon-pencil',
+                        'data' => [
+                           'refresh-element' => '.section-base-info'
+                        ],
+                        'tooltip' => 'Edit'
+                    ]}
+	                {if $auth->isGranted('node/file-sources/remove', ['id' => $f.id])}
+	                <a class="glyphicon glyphicon-trash modal-confirm" data-href="/file-sources/remove/id/" data-confirmation-class="singleDelete" data-toggle="tooltip" title="Delete"></a>
+	                {/if}                
+	            </td>
+	        </tr>
+	    {/foreach}
+    {/foreach}
+    </tbody>
+</table>
+</form>
+
+<script>
+	$(document).ready(function(){
+		$(".sourceid1").change(function(){
+			var sourceid1 = $(this).val();
+			window.location.href = "{$baseUrl}/file-sources/list/sourceid/"+sourceid1;
+		});	
+	});
+</script>

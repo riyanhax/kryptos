@@ -1,0 +1,42 @@
+<html>
+<head>
+<meta id='metaFileNameId' name='id' content='30948' />
+<title>What's New in this Release</title>
+<link type='text/css' href='xstyle.css' rel='stylesheet' media='all' />
+<script src='script.js' language='javascript' type='text/javascript'> </script>
+<script src='common.js' language='javascript' type='text/javascript'> </script>
+<xml>
+<MSHelp:Attr Name="Product" Value="JsDiagram">
+</xml>
+</head>
+<body style='margin: 0;'>
+<img src='collapse.png' title='Collapse Section' id='collapseImage' style='display: none; height: 0; width: 0;' /><img src='expand.png' title='Expand Section' id='expandImage' style='display: none; height: 0; width: 0;' /><img src='collapsesmall.png' title='Collapse All' id='collapseAllImage' style='display: none; height: 0; width: 0;' /><img src='expandsmall.png' title='Expand All' id='expandAllImage' style='display: none; height: 0; width: 0;' /><input type="hidden" id="userDataCache" class="userDataStyle"><img src='arrow.png' title='DropDown image' id='dropDownImage' style='display: none; height: 0; width: 0;' /><img src='arrowh.png' title='DropDown image' id='dropDownHoverImage' style='display: none; height: 0; width: 0;' /><img src='copycode.png' title='Copy Code' id='copyCodeImage' style='display: none; height: 0; width: 0;' /><img src='copycodeh.png' title='Copy Code' id='copyCodeHoverImage' style='display: none; height: 0; width: 0;' /><div id='nsbanner'>
+<table class='bannerparthead' cellspacing='0'>
+<tr>
+<td><span class='gtitle'>MindFusion.Diagramming for JavaScript Programmer's Guide</span></td>
+</tr>
+<tr>
+<td style='border-bottom: solid 1px #C8CDDE;'><span class='title'>What's New in this Release</span></td>
+</tr>
+</table>
+</div>
+<div id='nstext'>
+<p>The list below describes recent changes and additions to JsDiagram:</p><h2>New in version 3.2</h2><h3>Export to SVG</h3>The <a id='82733' href='T_MindFusion_Diagramming_SvgExporter.htm' title=''>SvgExporter</a> class creates a Scalable Vector Graphics (SVG) drawing from the content of a <a id='32377' href='CC_T_MindFusion_Diagramming_Diagram_0.htm' title=''>Diagram</a>. The <a id='82737' href='M_MindFusion_Diagramming_SvgExporter_exportElement_1_Diagram.htm' title=''>exportElement</a> method returns a DOM &lt;svg&gt; element that can be directly added to the page. The <a id='82738' href='M_MindFusion_Diagramming_SvgExporter_exportString_1_Diagram.htm' title=''>exportString</a> method returns an SVG string that can be saved in&#160;local storage&#160;or submitted to server.<p><table class='syntax' codeLanguage='CSharp' cellspacing='0'><tr><th><span style='float: left;'>C#</span>
+<span class='copyCode' onclick='CopyCode(this);' onkeypress='CopyCode_CheckKey(this);' onmouseover='ChangeCopyCodeIcon(this, true);' onmouseout='ChangeCopyCodeIcon(this, false);'>
+<img src='copycode.png' title='Copy Code' style='border-width: 0;' />&#160;Copy Code</span>
+</th></tr><tr><td><p>function onExportSvg()<br/>{<br/>&#160;&#160;&#160; <span class="codeKeyword">var</span> diagram = $find(<span class="codeString">"diagram"</span>);<br/>&#160;&#160;&#160; <span class="codeKeyword">var</span> exporter = <span class="codeKeyword">new</span> MindFusion.Diagramming.SvgExporter();<br/>&#160;&#160;&#160; <span class="codeKeyword">var</span> svgElement = exporter.exportElement(diagram);<br/>&#160;&#160;&#160; document.body.appendChild(svgElement);<br/>&#160;&#160;&#160; svgElement.style.position = '<span class="codeKeyword">fixed</span>';<br/>&#160;&#160;&#160; svgElement.style.zIndex = <span class="codeNumber">100</span>;<br/>}</p></td></tr></table></p><h3>AMD module</h3>The diagramming.js script can be loaded as an AMD module now. If it detects an AMD loader during startup, it will list common.js as its dependency, so it is enough to require only diagramming.js as application's direct dependency:<p><table class='syntax' codeLanguage='CSharp' cellspacing='0'><tr><th><span style='float: left;'>C#</span>
+<span class='copyCode' onclick='CopyCode(this);' onkeypress='CopyCode_CheckKey(this);' onmouseover='ChangeCopyCodeIcon(this, true);' onmouseout='ChangeCopyCodeIcon(this, false);'>
+<img src='copycode.png' title='Copy Code' style='border-width: 0;' />&#160;Copy Code</span>
+</th></tr><tr><td><p>MindFusionImpl = <span class="codeString">"StandAlone"</span>;<br/><br/>requirejs([<span class="codeString">"MindFusion.Diagramming"</span>],<br/>&#160;&#160;&#160; function(MindFusion)<br/>&#160;&#160;&#160; {<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="codeComment">// create a Diagram component that wraps the "diagram" canvas</span><br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="codeKeyword">var</span> Diagram = MindFusion.Diagramming.Diagram;<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="codeKeyword">var</span> element = document.getElementById(<span class="codeString">"diagram"</span>);<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="codeKeyword">var</span> diagram = Diagram.create(element);<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="codeKeyword">var</span> node = diagram.factory.createShapeNode(<span class="codeNumber">10</span>, <span class="codeNumber">10</span>, <span class="codeNumber">40</span>, <span class="codeNumber">30</span>);<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160; node.setText(<span class="codeString">"Hello, world!"</span>);<br/>&#160;&#160;&#160; }<br/>);</p></td></tr></table></p><h3>Miscellaneous</h3><ul><li>Arc definitions in custom shapes now follow correct SVG syntax (A rx ry x-axis-rotation large-arc-flag sweep-flag x y) instead of specifying bounding box and angles.</li><li>ShapeNode's <a id='21956' href='M_MindFusion_Diagramming_DiagramItem_setStroke_1_String.htm' title=''>Stroke</a> attribute is now also applied to shape decoration elements.</li><li>Underlined fonts can be applied to the text of links.</li><li><a id='82732' href='M_MindFusion_Diagramming_TableNode_setRowCount_1_Number.htm' title=''>RowCount</a> and <a id='82731' href='M_MindFusion_Diagramming_TableNode_setColumnCount_1_Number.htm' title=''>ColumnCount</a> properties now&#160;exposed&#160;by <a id='41624' href='CC_T_MindFusion_Diagramming_TableNode_0.htm' title=''>TableNode</a>.</li></ul>
+</div>
+<div id='nsfooter'>
+<table class='footer' cellspacing='0'>
+<tr>
+<td valign='middle'>
+<span class='copyright'>© 2017 MindFusion</span>
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

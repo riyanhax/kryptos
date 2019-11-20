@@ -1,0 +1,140 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form name="form_buy_kryptos" id="form_buy_kryptos" action="/payments/submit-buy" method="post" class="form-horizontal" role="form" data-process-fn="formProcessCloseModal">
+            <div class="form-group row">
+<input type="hidden" id="purchase_type" name="purchase_type" value="3" class="toggle-relative clear-relative"/>
+<div class="radio iradio">
+    <label>
+<button onclick="showver()" class="btn btn-info dialog-form-submit processed-dialog-form-submit">
+	<input type="radio" data-value="packages" name="purchase-type" data-target="#purchase_type" class="transfer-value" checked="checked" value="packages">
+            Choose from Packages
+    </label>
+</div>
+<br>
+<div id="version" class="desc">
+                <label class="col-sm-4">Choose a Kryptos version:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="kryptos_version" name="kryptos_version" value="3" class="toggle-relative clear-relative"/>
+                    <div class="form-inline">
+                        <div class="radio iradio">
+                            <label>
+                                <input type="radio" data-value="{constant('Application_Service_Products::PRODUCT_KRYPTOS_BASIC_ID')}" name="radio_kryptos_version" data-target="#kryptos_version" class="transfer-value">
+                                {constant('Application_Service_Products::PRODUCT_KRYPTOS_BASIC_NAME')} - {Application_Service_Products::getPriceByProductId('1')} {constant('Application_Service_Products::PRICE_CURRENCY')}/month (1 ADMIN user, 3 Normal Users, 5 Mini users)
+                            </label>
+                        </div>
+                        <br>
+
+                        <div class="radio iradio">
+                            <label>
+                                <input type="radio" data-value="{constant('Application_Service_Products::PRODUCT_KRYPTOS_STANDARD_ID')}" name="radio_kryptos_version" data-target="#kryptos_version" class="transfer-value">
+                                {constant('Application_Service_Products::PRODUCT_KRYPTOS_STANDARD_NAME')} - {Application_Service_Products::getPriceByProductId('2')} {constant('Application_Service_Products::PRICE_CURRENCY')}/month (1 ADMIN user, 7 Normal Users, 10 Mini users)
+                            </label>
+                        </div>
+                        <br>
+
+                        <div class="radio iradio">
+                            <label>
+                                <input type="radio" data-value="{constant('Application_Service_Products::PRODUCT_KRYPTOS_PROFESSIONAL_ID')}" name="radio_kryptos_version" data-target="#kryptos_version" class="transfer-value" checked="checked">
+                                {constant('Application_Service_Products::PRODUCT_KRYPTOS_PROFESSIONAL_NAME')} - {Application_Service_Products::getPriceByProductId('3')} {constant('Application_Service_Products::PRICE_CURRENCY')}/month (1 ADMIN user, 15 Normal Users, 20 Mini users)
+                            </label>
+                        </div>
+                        <br>
+
+                        <div class="radio iradio">
+                            <label>
+                                <input type="radio" data-value="{constant('Application_Service_Products::PRODUCT_KRYPTOS_ENTERPRISE_ID')}" name="radio_kryptos_version" data-target="#kryptos_version" class="transfer-value">
+                                {constant('Application_Service_Products::PRODUCT_KRYPTOS_ENTERPRISE_NAME')} - {Application_Service_Products::getPriceByProductId('4')} {constant('Application_Service_Products::PRICE_CURRENCY')}/month (1 ADMIN user, 35 Normal Users, 50 Mini users)
+                            </label>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+</div>
+
+<div class="radio iradio">
+    <label>
+<button onclick="showindi()" class="btn btn-info dialog-form-submit processed-dialog-form-submit">
+	<input type="radio" data-value="individual" name="purchase-type" data-target="#purchase_type" class="transfer-value" value="individual" />
+            Buy individual account
+    </label>
+</div>
+<br>
+<div id="individual" class="desc" style="display: none;">
+<label class="col-sm-4">Select Users:</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="kryptos_version" name="kryptos_version" value="3" class="toggle-relative clear-relative"/>
+                    <div class="form-inline">
+
+                	    <div class="col-sm-8 version">
+	                        <label class="col-sm-4">Mini</label>
+				<input type="text" id="mini_user" name="mini_user" value="3" class="toggle-relative clear-relative"/>
+               	 	    </div>
+
+                       <div class="clearfix"></div>
+
+
+                	    <div class="col-sm-8 version">
+                        	<label class="col-sm-4">Standard</label>
+				<input type="text" id="standard_user" name="standard_user" value="3" class="toggle-relative clear-relative"/>
+               	 	    </div>
+                        <br>
+
+                    </div>
+                </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function showindi(){
+  $("div.desc").hide();
+  $('#individual').show();  
+}
+
+function showver(){
+  $("div.desc").hide();
+  $('#version').show();  
+}
+</script>
+<style>
+.col-sm-8.version {
+    margin-bottom: 10px;
+}
+.version input {
+    background: #fff !important;
+    border: 1px solid #ccc;
+    box-shadow: none !important;
+    padding: 0px 10px;
+    height: 30px;
+    line-height: 30px;
+}
+.iradio_square-aero.hover {
+    display: inline-block !important;
+}
+
+.iradio_square-aero {
+    display: inline-block !important;
+}
+</style>
+            </div>
+
+            <div class="form-group row">
+                <label for="contract_type" class="col-sm-4">Choose a contract:</label>
+                <div class="col-sm-2">
+                    <select name="contract_type" id="contract_type" class="form-control">
+                        <option value="1">1 year</option>
+                        <option value="1.5">1.5 years</option>
+                        <option value="2">2 years</option>
+                        <option value="5">5 years</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" id="payment_method" name="payment_method" value="paypal"/>
+
+            <div class="body-action">
+                <button type="submit" class="btn btn-info pull-right dialog-form-submit">{'Pay with PayPal'|translate}</button>
+            </div>
+
+        </form>
+    </div>
+</div>

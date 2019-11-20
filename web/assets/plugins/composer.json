@@ -1,0 +1,13 @@
+{
+    "require": {
+	    "studio-42/elfinder": "2.1.28",
+        "dropbox/dropbox-sdk": "dev-master@dev",
+        "dropbox-php/dropbox-php": "dev-master@dev",
+        "kunalvarma05/dropbox-php-sdk": "dev-master@dev",
+        "nao-pon/flysystem-google-drive": "dev-master@dev",
+        "google/apiclient":"dev-master@dev",
+        "barryvdh/elfinder-flysystem-driver":"dev-master@dev",
+        "nao-pon/flysystem-google-drive":"1.1",
+        "krizalys/onedrive-php-sdk":"dev-master@dev"
+    }
+}

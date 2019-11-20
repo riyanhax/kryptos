@@ -1,0 +1,136 @@
+<h1>{$dialogTitle}</h1>
+        
+          <div class="row">
+             <div class="col-md-4 col-sm-6 col-xs-12">
+                <div id="calendar">                               
+                </div>
+            </div>
+            
+            <div class="col-md-8 col-sm-6 col-xs-12 pull-right">
+              <form name="f_profile" id="f_profile" action="/activity/save-activity" class="ajax-form form-horizontal" role="form" data-process-fn="formProcessDialModal">
+                <input type="hidden" name="parameter[activityid]" value={$data.id}>
+                <div class="radio-t-btn"> 
+                  <div class="btn-group radio-btn-t" data-toggle="buttons">
+                                        
+                    {foreach $activityTypes as $activity=>$icon}
+                      <label class="btn btn-activity  {if $data.activity_type_id == $activity} active {/if}">
+                        <input type="radio" name="parameter[options]" value="{$activity}" autocomplete="off"  {if $data.activity_type_id == $activity} checked="true" {/if} >
+                        <i class="fa {$icon}"></i>&nbsp;<span>{$activity}</span>
+                      </label>
+                    {/foreach}
+
+                  </div>
+                </div>
+                <div class="input-txt">
+                  <input type="text" name="parameter[activity_name]" placeholder="Call" class="for-all col-sm-12 any-input" value="{$data.subject}">
+                </div>
+                <div class="row date-time-d">
+                  <div class="col-sm-4">
+                    <p>Date</p>
+                    <input type="text" name="parameter[date]" class="form-control datepicker-input" value="{$data.due_date}">
+                  </div>
+                  <div class="col-sm-4">
+                    <p>Time</p>
+                    <input type="time" name="parameter[time]" value="{$data.time}" class="date-pic for-all">
+                  </div>
+                  <div class="col-sm-4">
+                    <p>Duration</p>
+                    <select name="parameter[duration]" class="date-pic sel for-all">
+                      <option value = "00:15">00:15</option>
+                      <option value = "00:30">00:30</option>
+                      <option value = "00:45">00:45</option>
+                      <option value = "01:00">01:00</option>
+                      <option value = "01:15">01:15</option>
+                      <option value = "01:30">01:30</option>
+                      <option value = "01:45">01:45</option>
+                      <option value = "02:00">02:00</option>
+                      <option value = "02:15">02:15</option>
+                      <option value = "02:30">02:30</option>
+                      <option value = "02:45">02:45</option>
+                      <option value = "03:00">03:00</option>
+                      <option value = "03:15">03:15</option>
+                      <option value = "03:30">03:30</option>
+                      <option value = "03:45">03:45</option>
+                      <option value = "04:00">04:00</option>
+                      <option value = "04:15">04:15</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 text-ara">
+                    <textarea class="txt-are for-all summernote" name="parameter[notes]" placeholder="Notes"> {$data.notes} </textarea>
+                  </div>
+                  <div class="col-sm-12 date-time-d">
+                    <p>Assigned To</p>
+                    <select name="parameter[user]" class="date-pic sel for-all">
+                      <option value="{$userlogged}" selected>{$userlogged}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 date-pic mt-10">
+                    <p>Linked To</p>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                      <input type="text" placeholder="Deal" name="parameter[linked]" value="{$data.deal}" class=" form-control for-all col-sm-12 any-input">
+                    </div>
+                  </div>
+                  <div class="col-sm-6 mt-10">
+                    <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                       <input type="hidden" name="parameter[people]" id="author_id" value="{$data.contact_person}" data-target-element="#author_id_typeahead"/>
+                        <div class="input-group">
+                            <input type="text" id="author_id_typeahead" class="form-control typeaheadElement validate[required]" value="{$data.contact_person}" placeholder="{$data.contact_person}" data-source-variable="storageUsers" data-target-element="#author_id"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default choose-from-dial" data-target-element="#author_id" data-dial-url="/osoby/addmini/?useProcess=true" type="button">Wybierz</button>
+                            </span>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <h3>
+                          Link Registry
+
+                          {element tag='a' route='activity/ajax-add-param' routeParams=['regid' => '27', 'actid' => $data.id] attributes=[
+                              'dialog' => [
+                                  'process' => 'refreshSection',
+                                  'new-dialog' => true
+                              ],
+                              'data' => [
+                                  'refresh-element' => '.section-parameters'
+                              ],
+                              'icon' => 'add',
+                              'class' => 'btn btn-xs btn-success',
+                              'tooltip' => 'Dodaj parametr',
+                              'innerHtml' => 'Dodaj'
+                          ]}
+                      </h3>
+                  </div>
+                  <div class="col-sm-12 mt-10">
+                    <div class="input-group">
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></span>
+                      <input type="text" placeholder="Organization" name="parameter[organization]" class=" form-control for-all col-sm-12 any-input" value="{$data.organization}">
+                    </div>
+                  </div>
+                  <div class="col-sm-12 mt-10">
+                    <input type="checkbox" name="parameter[done]" value="1">
+                    Mark as done 
+                  </div>
+                </div> 
+                <div class="modal-footer">
+                  <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                  <button type="submit" class="btn btn-success" onclick="show()">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      <script type="text/javascript">
+              function show()
+            {
+                window.location.reload();
+            }
+
+              jQuery('.btn-activity').click(function(){
+              jQuery('.btn-activity').removeClass('active')
+              jQuery(this).addClass('active')
+              });
+      </script>
+
+<script src="/assets/plugins/fullcalendar/fullcalendar.min.js"></script> 
+<script src="/assets/plugins/pages/calendar.js"></script>

@@ -1,0 +1,163 @@
+{include file='modals/modal.tpl' title='Wszystkie dokumenty - co to jest?' content='Jeśli jakieś dokumenty tracą ważność, to mamy możliwość ich wycofania specjalnie do tego przeznaczonym formularzem, w tej zakładce. Również w tej zakładce mamy dostęp do wszystkich dokumentów jakie zostały wygenerowane w systemie.'}
+<form method="GET" action="/documents/all" class="hidden">
+    <div class="row">
+        <div class="col-sm-3">
+            <select name="active" class="form-control">
+                <option value="all">WSZYSTKIE DOKUMENTY</option>
+                <option value="0" {if $p_active === '0'}selected="selected"{/if}>ARCHIWUM</option>
+                <option value="1" {if $p_active === '1'}selected="selected"{/if}>AKTYWNE</option>
+                <option value="2" {if $p_active === '2'}selected="selected"{/if}>AKTYWNE - drobne zmiany</option>
+                <option value="3" {if $p_active === '3'}selected="selected"{/if}>NIE AKTYWNE</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input type="submit" class="btn" value="Filtruj"/>
+        </div>
+    </div>
+</form>
+
+<form method="post" action="/documents/bulk-operations" style="margin-top:20px">
+    <input type="hidden" name="redirect" value="/documents"/>
+    <table cellpadding="0" cellspacing="0" border="0" class="table large-table table-striped table-bordered example">
+        <thead>
+        <tr>
+            
+            <th></th>
+            <th>{'Kolejność'|translate}</th>
+            <th>{'ID'|translate}</th>
+            <th data-filter-type="string">{'Imię'|translate}</th>
+            <th data-filter-type="string">{'Nazwisko'|translate}</th>
+            <th data-filter-type="select">{'Typ dokumentu'|translate}</th>
+            <th data-filter-type="date-range" class="text-center">{'Wprowadzono'|translate}</th>
+            <th data-filter-type="date-range" class="text-center">{'Zarchiwizowano'|translate}</th>
+            <th data-filter-type="select">{'Unikalny numer'|translate}</th>
+            <th>{'Informacje o podpisie'|translate}</th>
+            <th data-filter-type="select">{'Status'|translate}</th>
+            <th>podgląd</th>
+        </tr>
+        </thead>
+        <tbody class="ui-widget-content js-checkbox-container">
+            {assign var=val value=0}
+        {foreach $paginator as $d}
+        {assign var=val value=$val+1}
+        <tr{if $d@iteration > 10} style="display:none"{/if}>
+        <td>
+                    <div class="icheckbox_square-aero js-checkbox-from-container" data-target-id="id[{$d.id}]">
+                        <ins class="iCheck-helper"></ins>
+                        <span class="hidden text-indicator"></span>
+                    </div>
+                </td>
+        <td>
+            {$val}
+        </td>
+        <td>
+            {$d.id}
+        </td>
+        <td class="text-center">
+            {if $d.re_id > 0}
+            {assign var=name value=$d.worker_name}
+            {assign var=iname value=","|explode:$name}
+                {if $iname[0]}
+                    {$iname[0]}
+                    <span class="hiddenElement">{$iname[0]|ucfirst}</span>
+                {/if}
+            {/if}  
+        </td>
+        <td>
+            {if $d.re_id > 0}            
+            {if name != ''}
+                {$iname[1]}
+                <span class="hiddenElement">{$iname[1]|ucfirst}</span>
+            {/if}
+            {/if}    
+
+
+            </td>
+        
+        <td class="text-center">{if $d.template_type == 0}INNE{/if}{if $d.template_type == 1}OŚWIADCZENIE{/if}{if $d.template_type == 2}UPOWAŻNIENIE DO POMIESZCZEŃ{/if}{if $d.template_type == 3}UPOWAŻNIENIE DO ZBIORÓW{/if}</td>
+        
+        <td class="text-center">{$d.created_at}</td>
+        <!-- comagom code start 2019.3.20 -->
+        {if $d.active != 1 && $d.active != 3}
+            <td class="text-center">{$d.archived_at}</td>
+        {else}
+            <td class="text-center"></td>
+        {/if}
+        <!-- comagom code end 2019.3.20 -->
+        <td class="text-center">{$d.numbertxt}</td>
+        
+        <td class="text-center">
+            {assign var=sign value=$d->loadData(['attachments', 'signature'])}
+            {assign var=sign_id value=Application_Service_DocumentsPrinter::getInstance()->isDocSigned($d.signature.osoba_id, $d.id)}
+            
+            {if $sign_id}
+            <a class="choose-from-dial" data-toggle="tooltip" data-dial-url="/documents/preview-signature/id/{$d.id}">
+                <i class="fa fa-circle" data-toggle="tooltip"
+                style="color:#00cc00;" title="{'Dokument podpisany'|translate}"></i>
+            </a>
+            {else}
+                <i class="fa fa-circle" data-toggle="tooltip" style="color:#000000;" title="{'Dokument niepodpisany'|translate}" ></i>
+            {/if}
+        </td>
+        <td>
+            {if $d.active == 0}
+             {if $d.archived_at != ''}
+                {assign var="archived_text" value='Zarchiwizowany at'|cat:'-'|cat:$d.archived_at}
+            {else}
+                {assign var="archived_text" value='Zarchiwizowany'}
+            {/if}
+            <i class="fa fa-circle" data-toggle="tooltip" style="color:#d43b14;" title="{$archived_text}" ></i>
+            {/if}
+            {if $d.active == 1}
+                <input type="hidden" value="1">
+                <i class="fa fa-circle" data-toggle="tooltip" style="color:#00cc00;" title="{'Aktywny'|translate}" ></i>
+            {/if}
+            {if $d.active == 2}
+            <input type="hidden" value="2">
+                <i class="fa fa-circle" data-toggle="tooltip" style="color:#ced418;" title="{'Permissible'|translate}" ></i>
+            {/if}
+            {if $d.active == 3}
+            <input type="hidden" value="3">
+                <i class="fa fa-circle" data-toggle="tooltip" style="color:#cc0000;" title="{'Outdated'|translate}" ></i>
+            {/if}            
+        </td>
+        <td class="operations">
+            {if $auth->isGranted('node/documents/getpdf', ['id' => $d.id])}
+            <a href="#"
+               class="choose-from-dial"
+               data-dial-url="/documents/get-choice/id/{$d.id}/print/1"
+               data-dial-class="modal-lg modal-max"
+               data-toggle="tooltip"
+               data-title="Podgląd dokumentu"
+            ><i class="fa fa-eye"></i></a>
+            {/if}
+            {if $auth->isGranted('node/documents/recall-document', ['id' => $d.id]) && $d.active != 0}
+            <a href="#"
+               class="choose-from-dial"
+               data-dial-url="/documents/recall-document/id/{$d.id}"
+               data-dial-class="modal-lg modal-max"
+               data-toggle="tooltip"
+               data-title="Wycofaj dokument"
+               data-new-dialog="1"
+            ><i class="fa fa-trash"></i></a>
+            {/if}
+        </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    <div class="table-operations-footer">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-default table-row-action" data-toggle="tooltip" data-title="Wydrukuj zaznaczone" name="rowsAction" value="print"><i class="fa fa-print"></i></button>
+            <button type="submit" class="btn btn-default table-row-action" data-toggle="tooltip" data-title="Pobierz zaznaczone" name="rowsAction" value="download"><i class="fa fa-download"></i></button>
+            <span class="btn btn-default dt-select-all-button" data-toggle="tooltip" data-title="Zaznacz / odznacz wszystkie"><i class="fa fa-check"></i></span>
+        </div>
+    </div>
+
+    <div class="hiddenElement">
+        {foreach $paginator as $d}
+        <input type="hidden" name="id[{$d.id}]" class="js-checkbox-target">
+        {/foreach}
+    </div>
+</form>

@@ -1,0 +1,55 @@
+<div class="osoba-license-block">
+  <div class="form-group row">
+    <label class="col-sm-2">Lista subskrypcji:</label>
+    <div class="col-md-8">
+      <select name="license_id" class="form-control" id="license_id">
+        <option value="" style="font-style: italic;"
+          >Nie przypisano licencji</option
+        >
+        {foreach from=$licenses item=license }
+        <option
+          value="{$license.id}"
+          data-end-date="{$licenseTrialDates[$license.id]|date_format:'Y-m-d'}"
+          >{$license.name}</option
+        >
+        {/foreach}
+      </select>
+    </div>
+  </div>
+  <div class="form-group row js-license-additional-block hidden">
+    <label class="col-sm-2">End date:</label>
+    <div class="col-md-8">
+      <input
+        type="date"
+        name="license_end_date"
+        value=""
+        class="form-control"
+        placeholder="End date"
+      />
+    </div>
+  </div>
+  <div class="form-group row js-license-additional-block hidden">
+    <label class="col-sm-2">Active:</label>
+    <div class="col-md-8">
+      <input type="checkbox" name="license_status" value="1" />
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    var container = $(".osoba-license-block:last"),
+      select = container.find(":input[name=license_id]"),
+      endDate = container.find(":input[name=license_end_date]"),
+      additionalBlocks = container.find(".js-license-additional-block");
+    select
+      .change(function() {
+        if (!select.val().length) {
+          additionalBlocks.addClass("hidden");
+          return;
+        }
+        endDate.val(select.find("option:selected").data("end-date"));
+        additionalBlocks.removeClass("hidden");
+      })
+      .change();
+  })();
+</script>

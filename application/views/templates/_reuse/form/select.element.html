@@ -1,0 +1,37 @@
+{assign var="options" value=$params.attributes.options}
+{assign var="isMultiple" value=$params.attributes.multiple=='1'}
+{assign var="fieldName" value=$params.attributes.name}
+{assign var="fieldValues" value=array_values($params.attributes.value)}
+{if empty($params.attributes.id)}
+    {assign var="fieldId" value=$params.attributes.name|set_id}
+{else}
+    {assign var="fieldId" value=$params.attributes.id}
+{/if}
+{if !empty($params.attributes.inline)}
+    {$inline = 'display:inline;'}
+{else}
+    {$inline = ''}
+{/if}
+
+<div class="form-group row {$wrapper.class nofilter} {$wrapper.class nofilter}" {$wrapper.attributes_string nofilter} data-enable-if="{$params.attributes.widget.enableIf}" data-visible-if="{$params.attributes.widget.visibleIf}">
+    <label for="{$id}" class="col-sm-4">{$params.attributes.label}</label>
+    <div class="col-sm-8">
+        {if $isMultiple}
+            {foreach from=$options key="optionId" item="optionTitle"}
+                <div style="{$inline}">
+                    <label>
+                        <input type="checkbox" name="{$fieldName}[]" value="{$optionId}" {if in_array($optionId, $fieldValues)}checked="checked"{/if}/>
+                        {$optionTitle}
+                    </label>
+                </div>
+            {/foreach}
+        {else}
+            <select name="{$fieldName}[]" id="{$fieldId}" class="form-control {$attributes.class}">
+                <option value="">-- Wybierz --</option>
+                {foreach from=$options key="optionId" item="optionTitle"}
+                    <option value="{$optionId}" {if in_array($optionId, $fieldValues)}selected="selected"{/if}>{$optionTitle}</option>
+                {/foreach}
+            </select>
+        {/if}
+    </div>
+</div>
